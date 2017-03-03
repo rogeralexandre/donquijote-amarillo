@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://tempuri.org/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://tempuri.org/">
+      <s:element name="IntegracaoRateio">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Rateio" type="tns:DadosContratoXmlRateio" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="DadosContratoXmlRateio">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Empresa" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ClienteComercial" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ObjetivoComercial" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ListaDoRateio" type="tns:ArrayOfDadosListaRateio" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfDadosListaRateio">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="DadosListaRateio" nillable="true" type="tns:DadosListaRateio" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="DadosListaRateio">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="ClienteFaturar" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ObjetivoFaturar" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ClienteCobranca" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ObjetivoCobranca" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Percentual" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="IntegracaoRateioResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="IntegracaoRateioResult" type="tns:Retorno" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="Retorno">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="CodigoRetorno" nillable="true" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="Lista_Retorno" type="tns:ArrayOfMensagens" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfMensagens">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Mensagens" nillable="true" type="tns:Mensagens" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="Mensagens">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Codigo" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Mensagem" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Detalhe" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="IntegracaoRateioSoapIn">
+    <wsdl:part name="parameters" element="tns:IntegracaoRateio" />
+  </wsdl:message>
+  <wsdl:message name="IntegracaoRateioSoapOut">
+    <wsdl:part name="parameters" element="tns:IntegracaoRateioResponse" />
+  </wsdl:message>
+  <wsdl:portType name="RateioOTSoap">
+    <wsdl:operation name="IntegracaoRateio">
+      <wsdl:input message="tns:IntegracaoRateioSoapIn" />
+      <wsdl:output message="tns:IntegracaoRateioSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="RateioOTSoap" type="tns:RateioOTSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="IntegracaoRateio">
+      <soap:operation soapAction="http://tempuri.org/IntegracaoRateio" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="RateioOTSoap12" type="tns:RateioOTSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="IntegracaoRateio">
+      <soap12:operation soapAction="http://tempuri.org/IntegracaoRateio" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="RateioOT">
+    <wsdl:port name="RateioOTSoap" binding="tns:RateioOTSoap">
+      <soap:address location="http://10.80.48.91/Prosegur.Profat.WS_Versao13/IntegracaoRateioOT.asmx" />
+    </wsdl:port>
+    <wsdl:port name="RateioOTSoap12" binding="tns:RateioOTSoap12">
+      <soap12:address location="http://10.80.48.91/Prosegur.Profat.WS_Versao13/IntegracaoRateioOT.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
