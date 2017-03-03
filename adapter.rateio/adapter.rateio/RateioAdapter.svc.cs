@@ -45,18 +45,24 @@ namespace adapter.rateio
                 GravarLog("ObjetivoComercial = " + strObjetivoComercial, nomeArquivo);
 
                 // Chamada ao WS do PROFAT.
-                WsIntegracaoRateioOT.RateioOT WSProfat = new WsIntegracaoRateioOT.RateioOT();
-                // TODO: Fazer a busca no Web.config.
-                WSProfat.Url = "http://10.80.48.91/Prosegur.Profat.WS_Versao13/IntegracaoRateioOT.asmx";
-                
-                // Preparação para o request
-                WsRequest.Empresa = strEmpresa;
-                WsRequest.ClienteComercial = strClienteComercial;
-                WsRequest.ObjetivoComercial = strObjetivoComercial;
-                WsRequest.ListaDoRateio = ListadoRateo.ToArray();
+                //WsIntegracaoRateioOT.RateioOT WSProfat = new WsIntegracaoRateioOT.RateioOT();
+                using (var WSProfat = new WsIntegracaoRateioOT.RateioOT())
+                {
+                    // TODO: Fazer a busca no Web.config.
+                    //WSProfat.Url = "http://10.80.48.91/Prosegur.Profat.WS_Versao13/IntegracaoRateioOT.asmx";
+                    GravarLog("Preparando chamada ao WSPROFAT localizado em :" + WSProfat.Url, nomeArquivo);
 
-                WsResponse = WSProfat.IntegracaoRateio(WsRequest);
+                    // Preparação para o request
+                    WsRequest.Empresa = strEmpresa;
+                    WsRequest.ClienteComercial = strClienteComercial;
+                    WsRequest.ObjetivoComercial = strObjetivoComercial;
+                    WsRequest.ListaDoRateio = ListadoRateo.ToArray();
 
+                    GravarLog("Executando WSProfat", nomeArquivo);
+                    WsResponse = WSProfat.IntegracaoRateio(WsRequest);
+                    GravarLog("WSProfat foi executado com sucesso!", nomeArquivo);
+                }
+                    
                 // obtendo o retorno
                 GravarLog("Gerando o retorno", nomeArquivo);
                 var r = new tempuri.org.Retorno();
@@ -78,6 +84,10 @@ namespace adapter.rateio
                 var retorno = new IntegracaoRateioResponse(retornoCorpo);
 
                 GravarLog("Finalizando o serviço.", nomeArquivo);
+
+                // TODO: verificar sobre DI Framework [http://stackoverflow.com/questions/429478/do-i-need-to-dispose-a-web-service-reference-in-asp-net]
+                // WSProfat.Dispose();
+                
                 return retorno;
             }
             catch (Exception ex)
