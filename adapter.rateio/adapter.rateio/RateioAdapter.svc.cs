@@ -17,6 +17,7 @@ namespace adapter.rateio
         
         public IntegracaoRateioResponse IntegracaoRateio(IntegracaoRateioRequest request) 
         {
+            bool alterarCodigoRetorno;
             String strEmpresa;
             String strClienteComercial;
             String strObjetivoComercial;
@@ -38,11 +39,28 @@ namespace adapter.rateio
                 strEmpresa = request.Body.Rateio.Empresa;
                 strClienteComercial = request.Body.Rateio.ClienteComercial;
                 strObjetivoComercial = request.Body.Rateio.ObjetivoComercial;
-                ListadoRateo.Add(new WsIntegracaoRateioOT.DadosListaRateio(request.Body.Rateio.ListaDoRateio));
-                                
+
                 GravarLog("Empresa = " + strEmpresa, nomeArquivo);
                 GravarLog("ClienteComercial = " + strClienteComercial, nomeArquivo);
                 GravarLog("ObjetivoComercial = " + strObjetivoComercial, nomeArquivo);
+
+                GravarLog("Lendo o listado rateio" , nomeArquivo);
+                for (int i = 0; i < request.Body.Rateio.ListaDoRateio.Length; i++)
+                {
+                    ListadoRateo.Add(new WsIntegracaoRateioOT.DadosListaRateio(request.Body.Rateio.ListaDoRateio));
+                    ListadoRateo[i].ClienteCobranca = request.Body.Rateio.ListaDoRateio[i].ClienteCobranca;
+                    ListadoRateo[i].ObjetivoCobranca = request.Body.Rateio.ListaDoRateio[i].ObjetivoCobranca;
+                    ListadoRateo[i].ClienteFaturar = request.Body.Rateio.ListaDoRateio[i].ClienteFaturar;
+                    ListadoRateo[i].ObjetivoFaturar = request.Body.Rateio.ListaDoRateio[i].ObjetivoFaturar;
+                    ListadoRateo[i].Percentual = request.Body.Rateio.ListaDoRateio[i].Percentual;
+
+                    GravarLog("Listado rateio Item[" + i.ToString() + "]", nomeArquivo);
+                    GravarLog("  Cliente Cobranca=" + ListadoRateo[i].ClienteCobranca.ToString() , nomeArquivo);
+                    GravarLog("  Objetivo Cobranca=" + ListadoRateo[i].ObjetivoCobranca.ToString(), nomeArquivo);
+                    GravarLog("  Cliente Faturar=" + ListadoRateo[i].ClienteFaturar.ToString(), nomeArquivo);
+                    GravarLog("  Objetivo Faturar=" + ListadoRateo[i].ObjetivoFaturar.ToString(), nomeArquivo);
+                    GravarLog("  Percentual=" + ListadoRateo[i].Percentual.ToString(), nomeArquivo);
+                }
 
                 // Chamada ao WS do PROFAT.
                 //WsIntegracaoRateioOT.RateioOT WSProfat = new WsIntegracaoRateioOT.RateioOT();
@@ -57,7 +75,7 @@ namespace adapter.rateio
                     WsRequest.ClienteComercial = strClienteComercial;
                     WsRequest.ObjetivoComercial = strObjetivoComercial;
                     WsRequest.ListaDoRateio = ListadoRateo.ToArray();
-
+                    
                     GravarLog("Executando WSProfat", nomeArquivo);
                     WsResponse = WSProfat.IntegracaoRateio(WsRequest);
                     GravarLog("WSProfat foi executado com sucesso!", nomeArquivo);
@@ -69,6 +87,8 @@ namespace adapter.rateio
                 r.Lista_Retorno = new tempuri.org.Mensagens[WsResponse.Lista_Retorno.Length];
                 
                 r.CodigoRetorno = WsResponse.CodigoRetorno;
+                GravarLog("CodigoRetorno recebido do PROFAT = " + r.CodigoRetorno.ToString(), nomeArquivo);
+                alterarCodigoRetorno = false;
 
                 for (int i = 0; i < WsResponse.Lista_Retorno.Length; i++)
                 {
@@ -76,18 +96,41 @@ namespace adapter.rateio
                     r.Lista_Retorno[i].Codigo = WsResponse.Lista_Retorno[i].Codigo;
                     r.Lista_Retorno[i].Detalhe = WsResponse.Lista_Retorno[i].Detalhe;
                     r.Lista_Retorno[i].Mensagem = WsResponse.Lista_Retorno[i].Mensagem;
-                }             
 
-                GravarLog("CodigoRetorno = " + r.CodigoRetorno.ToString(), nomeArquivo);
+                    if (r.Lista_Retorno[i].Codigo != null)
+                    {
+                        GravarLog("Código da mensagem do retorno linha-" + i.ToString() + " = " + r.Lista_Retorno[i].Codigo.ToString(), nomeArquivo);
+                        if (r.Lista_Retorno[i].Codigo == "ID008") 
+                        {
+                            alterarCodigoRetorno = true;
+                        }
+                    }
 
+                    if (r.Lista_Retorno[i].Detalhe != null)
+                    {
+                        GravarLog("Detalhe da mensagem do retorno linha-" + i.ToString() + " = " + r.Lista_Retorno[i].Detalhe.ToString(), nomeArquivo);
+                    }
+
+                    if (r.Lista_Retorno[i].Mensagem != null)
+                    {
+                        GravarLog("Mensagem da mensagem do retorno linha-" + i.ToString() + " = " + r.Lista_Retorno[i].Mensagem.ToString(), nomeArquivo);
+                    }
+                    
+                }
+
+                if (alterarCodigoRetorno)
+                {
+                    GravarLog("Alterando o código retornado pelo PROFAT", nomeArquivo);
+                    // alterando o código para OK/SUCESSO.
+                    r.CodigoRetorno = 1;
+                    GravarLog("CodigoRetorno alterado para " + r.CodigoRetorno.ToString(), nomeArquivo);
+                }
+                
+                // Retornos do WS
                 var retornoCorpo = new IntegracaoRateioResponseBody(r);
                 var retorno = new IntegracaoRateioResponse(retornoCorpo);
-
+                                
                 GravarLog("Finalizando o serviço.", nomeArquivo);
-
-                // TODO: verificar sobre DI Framework [http://stackoverflow.com/questions/429478/do-i-need-to-dispose-a-web-service-reference-in-asp-net]
-                // WSProfat.Dispose();
-                
                 return retorno;
             }
             catch (Exception ex)
