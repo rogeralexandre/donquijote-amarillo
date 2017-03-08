@@ -100,7 +100,7 @@ namespace adapter.rateio
                     if (r.Lista_Retorno[i].Codigo != null)
                     {
                         GravarLog("Código da mensagem do retorno linha-" + i.ToString() + " = " + r.Lista_Retorno[i].Codigo.ToString(), nomeArquivo);
-                        if (r.Lista_Retorno[i].Codigo == "ID008") 
+                        if (r.Lista_Retorno[i].Codigo == "ID008" || r.Lista_Retorno[i].Codigo == "ID009" || r.Lista_Retorno[i].Codigo == "ID011" || r.Lista_Retorno[i].Codigo == "ID012" || r.Lista_Retorno[i].Codigo == "ID013" || r.Lista_Retorno[i].Codigo == "ID014") 
                         {
                             alterarCodigoRetorno = true;
                         }
