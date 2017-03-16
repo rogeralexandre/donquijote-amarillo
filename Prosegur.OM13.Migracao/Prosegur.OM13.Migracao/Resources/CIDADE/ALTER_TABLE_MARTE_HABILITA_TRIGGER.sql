@@ -1,0 +1,1 @@
+﻿alter table "MARTE"."COPR_TCIUDAD" enable all triggers

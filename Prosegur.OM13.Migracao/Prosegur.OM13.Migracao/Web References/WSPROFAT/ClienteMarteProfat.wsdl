@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://tempuri.org/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://tempuri.org/">
+      <s:element name="AtualizarDadosClienteVA">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="oDados" type="tns:DadosWsCliente" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="DadosWsCliente">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="CodigoClientePROFAT" nillable="true" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="IndicacaoCpfCnpj" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CnpjCpf" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="SituacaoCliente" nillable="true" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="RazaoSocial" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="NomeAbreviado" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CEP" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Endereco" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="NumeroEndereco" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="TipoLogradouro" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Complemento" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Bairro" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Cidade" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="UF" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="AtualizarDadosClienteVAResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="AtualizarDadosClienteVAResult" type="tns:Retorno" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="Retorno">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="CodigoRetorno" nillable="true" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="CodigoClientePROFAT" nillable="true" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="IndicacaoCpfCnpj" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CnpjCpf" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="SituacaoCliente" nillable="true" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="RazaoSocial" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="NomeAbreviado" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CEP" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Endereco" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="NumeroEndereco" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="TipoLogradouro" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Complemento" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Bairro" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Cidade" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="UF" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Lista_Retorno" type="tns:ArrayOfMensagens" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfMensagens">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Mensagens" nillable="true" type="tns:Mensagens" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="Mensagens">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Codigo" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Mensagem" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Detalhe" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="ConsultaCnpjCpfClienteSubClienteVA">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="IndicacaoCpfCnpj" type="s:long" />
+            <s:element minOccurs="0" maxOccurs="1" name="CnpjCpf" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ConsultaCnpjCpfClienteSubClienteVAResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ConsultaCnpjCpfClienteSubClienteVAResult" type="tns:RetornoConsulta" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="RetornoConsulta">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="CodigoRetorno" nillable="true" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="CodigoCliente" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CodigoSitCliente" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CodigoNfEmitida" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CodPonAte" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CodSitPon" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CodTipPon" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CodigoNfEmitidaSubCliente" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Lista_Retorno" type="tns:ArrayOfMensagens" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="AtualizarDadosSubClienteVA">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="oDados" type="tns:DadosWsSubCliente" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="DadosWsSubCliente">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="CodigoPontoAtendimento" nillable="true" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="IndicacaoCpfCnpj" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CnpjCpf" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="InsEst" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="InsMun" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="SituacaoPonto" nillable="true" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="TipoPonto" nillable="true" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="RazaoSocial" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CEP" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Endereco" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="NumeroEndereco" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="TipoLogradouro" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Bairro" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Cidade" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="UF" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Complemento" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Email" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Destinatario" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Departamento" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="NomeResponsavelEmail" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="AtualizarDadosSubClienteVAResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="AtualizarDadosSubClienteVAResult" type="tns:RetornoSubCliente" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="RetornoSubCliente">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="CodigoRetorno" nillable="true" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="CodigoPontoAtendimento" nillable="true" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="IndicacaoCpfCnpj" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CnpjCpf" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="InsEst" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="InsMun" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="SituacaoPonto" nillable="true" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="TipoPonto" nillable="true" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="RazaoSocial" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CEP" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Endereco" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="NumeroEndereco" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="TipoLogradouro" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Bairro" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Cidade" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="UF" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Complemento" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Email" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Destinatario" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Departamento" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="NomeResponsavelEmail" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Lista_Retorno" type="tns:ArrayOfMensagens" />
+        </s:sequence>
+      </s:complexType>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="AtualizarDadosClienteVASoapIn">
+    <wsdl:part name="parameters" element="tns:AtualizarDadosClienteVA" />
+  </wsdl:message>
+  <wsdl:message name="AtualizarDadosClienteVASoapOut">
+    <wsdl:part name="parameters" element="tns:AtualizarDadosClienteVAResponse" />
+  </wsdl:message>
+  <wsdl:message name="ConsultaCnpjCpfClienteSubClienteVASoapIn">
+    <wsdl:part name="parameters" element="tns:ConsultaCnpjCpfClienteSubClienteVA" />
+  </wsdl:message>
+  <wsdl:message name="ConsultaCnpjCpfClienteSubClienteVASoapOut">
+    <wsdl:part name="parameters" element="tns:ConsultaCnpjCpfClienteSubClienteVAResponse" />
+  </wsdl:message>
+  <wsdl:message name="AtualizarDadosSubClienteVASoapIn">
+    <wsdl:part name="parameters" element="tns:AtualizarDadosSubClienteVA" />
+  </wsdl:message>
+  <wsdl:message name="AtualizarDadosSubClienteVASoapOut">
+    <wsdl:part name="parameters" element="tns:AtualizarDadosSubClienteVAResponse" />
+  </wsdl:message>
+  <wsdl:portType name="ClienteMarteProfatSoap">
+    <wsdl:operation name="AtualizarDadosClienteVA">
+      <wsdl:input message="tns:AtualizarDadosClienteVASoapIn" />
+      <wsdl:output message="tns:AtualizarDadosClienteVASoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ConsultaCnpjCpfClienteSubClienteVA">
+      <wsdl:input message="tns:ConsultaCnpjCpfClienteSubClienteVASoapIn" />
+      <wsdl:output message="tns:ConsultaCnpjCpfClienteSubClienteVASoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AtualizarDadosSubClienteVA">
+      <wsdl:input message="tns:AtualizarDadosSubClienteVASoapIn" />
+      <wsdl:output message="tns:AtualizarDadosSubClienteVASoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="ClienteMarteProfatSoap" type="tns:ClienteMarteProfatSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="AtualizarDadosClienteVA">
+      <soap:operation soapAction="http://tempuri.org/AtualizarDadosClienteVA" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ConsultaCnpjCpfClienteSubClienteVA">
+      <soap:operation soapAction="http://tempuri.org/ConsultaCnpjCpfClienteSubClienteVA" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AtualizarDadosSubClienteVA">
+      <soap:operation soapAction="http://tempuri.org/AtualizarDadosSubClienteVA" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="ClienteMarteProfatSoap12" type="tns:ClienteMarteProfatSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="AtualizarDadosClienteVA">
+      <soap12:operation soapAction="http://tempuri.org/AtualizarDadosClienteVA" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ConsultaCnpjCpfClienteSubClienteVA">
+      <soap12:operation soapAction="http://tempuri.org/ConsultaCnpjCpfClienteSubClienteVA" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AtualizarDadosSubClienteVA">
+      <soap12:operation soapAction="http://tempuri.org/AtualizarDadosSubClienteVA" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="ClienteMarteProfat">
+    <wsdl:port name="ClienteMarteProfatSoap" binding="tns:ClienteMarteProfatSoap">
+      <soap:address location="http://10.80.48.91/Prosegur.Profat.WS/ClienteMarteProfat.asmx" />
+    </wsdl:port>
+    <wsdl:port name="ClienteMarteProfatSoap12" binding="tns:ClienteMarteProfatSoap12">
+      <soap12:address location="http://10.80.48.91/Prosegur.Profat.WS/ClienteMarteProfat.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

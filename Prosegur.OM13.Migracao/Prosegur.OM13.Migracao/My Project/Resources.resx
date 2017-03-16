@@ -1,0 +1,391 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="ALTER_TABLE_MARTE_DESABILITA_TRIGGER" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\CIDADE\ALTER_TABLE_MARTE_DESABILITA_TRIGGER.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="ALTER_TABLE_MARTE_HABILITA_TRIGGER" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\CIDADE\ALTER_TABLE_MARTE_HABILITA_TRIGGER.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="ATUALIZA_NOVI_ATUALIZACLIENTE" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\CLIENTE\ATUALIZA_NOVI_ATUALIZACLIENTE.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="ATUALIZA_NOVI_DIVISAOCODCOMERCIAL" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\DIVISAO\ATUALIZA_NOVI_DIVISAOCODCOMERCIAL.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="ATUALIZA_NOVI_SUBCLIENTE" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\SUBCLIENTE\ATUALIZA_NOVI_SUBCLIENTE.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="ATUALIZA_PROFAT_ATUALIZACLIENTE" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\CLIENTE\ATUALIZA_PROFAT_ATUALIZACLIENTE.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="ATUALIZA_PROFAT_DIVISAOCODCOMERCIAL" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\DIVISAO\ATUALIZA_PROFAT_DIVISAOCODCOMERCIAL.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="ATUALIZA_PROFAT_SUBCLIENTE" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\SUBCLIENTE\ATUALIZA_PROFAT_SUBCLIENTE.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="DELETE_DEPARA_CIDADESEMDEPARA" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\CIDADE\DELETE_DEPARA_CIDADESEMDEPARA.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="DELETE_DEPARA_DELETADELEGACAO" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\DELEGACAO\DELETE_DEPARA_DELETADELEGACAO.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="DELETE_DEPARA_DELETATIPOLOGRADOURO" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\TIPOLOGRADOURO\DELETE_DEPARA_DELETATIPOLOGRADOURO.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="DELETE_DEPARA_SEGMENTO_SUB" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\SEGMENTO\DELETE_DEPARA_SEGMENTO_SUB.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="DELETE_MARTE_DELETACLIENTEDUPLICADO" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\CLIENTE\DELETE_MARTE_DELETACLIENTEDUPLICADO.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="DELETE_MARTE_DELETADELEGACAO" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\DELEGACAO\DELETE_MARTE_DELETADELEGACAO.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="DELETE_MARTE_DELETALOGRADOURODUPLICADO" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\TIPOLOGRADOURO\DELETE_MARTE_DELETALOGRADOURODUPLICADO.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="DELETE_NOVI_CIDADESEMDEPARA" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\CIDADE\DELETE_NOVI_CIDADESEMDEPARA.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="DELETE_NOVI_DELETACLIENTEDUPLICADO" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\CLIENTE\DELETE_NOVI_DELETACLIENTEDUPLICADO.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="DELETE_NOVI_DELETADELEGACAO" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\DELEGACAO\DELETE_NOVI_DELETADELEGACAO.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="DELETE_NOVI_DELETATIPOLOG" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\TIPOLOGRADOURO\DELETE_NOVI_DELETATIPOLOG.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="DELETE_NOVI_ODERE" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FILIAL\DELETE_NOVI_ODERE.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="DELETE_PROFAT_DELETACLIENTEDUPLICADO" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\CLIENTE\DELETE_PROFAT_DELETACLIENTEDUPLICADO.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="DELETE_PROFAT_DELETACLIENTEDUPLICADO_CPF" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\CLIENTE\DELETE_PROFAT_DELETACLIENTEDUPLICADO_CPF.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="DELETE_PROFAT_DELETALOGRADOURODUPLICADO" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\TIPOLOGRADOURO\DELETE_PROFAT_DELETALOGRADOURODUPLICADO.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="INSERT_DEPARA_CIDADE" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\CIDADE\INSERT_DEPARA_CIDADE.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="INSERT_DEPARA_NORMALIZADELEGACAO" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\DELEGACAO\INSERT_DEPARA_NORMALIZADELEGACAO.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="INSERT_DEPARA_NORMALIZATIPOLOGRADOURO" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\TIPOLOGRADOURO\INSERT_DEPARA_NORMALIZATIPOLOGRADOURO.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="INSERT_DEPARA_SEGMENTO_SUB" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\SEGMENTO\INSERT_DEPARA_SEGMENTO_SUB.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="INSERT_MARTE_INSEREDELEGACAO" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\DELEGACAO\INSERT_MARTE_INSEREDELEGACAO.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="INSERT_MARTE_INSEREDEPARAFILIALFAT" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FILIAL\INSERT_MARTE_INSEREDEPARAFILIALFAT.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="INSERT_MARTE_INSEREESPELHOFILIALFAT" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FILIAL\INSERT_MARTE_INSEREESPELHOFILIALFAT.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="INSERT_MARTE_INSERETIPOLOG" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\TIPOLOGRADOURO\INSERT_MARTE_INSERETIPOLOG.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="INSERT_NOVI_CIDADE" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\CIDADE\INSERT_NOVI_CIDADE.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="INSERT_NOVI_DIVISAO" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\DIVISAO\INSERT_NOVI_DIVISAO.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="INSERT_NOVI_INSEREDELEGACAO" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\DELEGACAO\INSERT_NOVI_INSEREDELEGACAO.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="INSERT_NOVI_INSERETIPOLOG" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\TIPOLOGRADOURO\INSERT_NOVI_INSERETIPOLOG.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="INSERT_NOVI_ODERE" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FILIAL\INSERT_NOVI_ODERE.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="INSERT_PROFAT_INSERETIPOLOG" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\TIPOLOGRADOURO\INSERT_PROFAT_INSERETIPOLOG.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="INSERT_PROFAT_MERGETIPOPOSTO" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\TIPOPOSTO\INSERT_PROFAT_MERGETIPOPOSTO.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="MERGE_MARTE_SEGMENTO" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\SEGMENTO\MERGE_MARTE_SEGMENTO.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="MERGE_MARTE_SUBSEGMENTO" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\SEGMENTO\MERGE_MARTE_SUBSEGMENTO.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="SELECT_DEPARA_SEGMENTO" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\SEGMENTO\SELECT_DEPARA_SEGMENTO.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="SELECT_DEPARA_SUBSEGMENTO" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\SEGMENTO\SELECT_DEPARA_SUBSEGMENTO.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="SELECT_MARTE_BUSCARFILIAIS" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FILIAL\SELECT_MARTE_BUSCARFILIAIS.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="SELECT_MARTE_BUSCARTIPOLOG" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\TIPOLOGRADOURO\SELECT_MARTE_BUSCARTIPOLOG.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="SELECT_MARTE_CIDADESEMDEPARA" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\CIDADE\SELECT_MARTE_CIDADESEMDEPARA.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="SELECT_MARTE_COUNTTIPOLOG" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\TIPOLOGRADOURO\SELECT_MARTE_COUNTTIPOLOG.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="SELECT_MARTE_DADOSCIDADE" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\CIDADE\SELECT_MARTE_DADOSCIDADE.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="SELECT_MARTE_DADOSCLIENTE" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\CLIENTE\SELECT_MARTE_DADOSCLIENTE.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="SELECT_MARTE_DADOSDIVISAO" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\DIVISAO\SELECT_MARTE_DADOSDIVISAO.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="SELECT_MARTE_DADOSRESPFAT" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\SUBCLIENTE\SELECT_MARTE_DADOSRESPFAT.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="SELECT_MARTE_DADOSSUBCLIENTE" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\SUBCLIENTE\SELECT_MARTE_DADOSSUBCLIENTE.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="SELECT_MARTE_DADOSTIPOPOSTO" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\TIPOPOSTO\SELECT_MARTE_DADOSTIPOPOSTO.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="SELECT_MARTE_SEGSUBSEG" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\SEGMENTO\SELECT_MARTE_SEGSUBSEG.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="SELECT_MARTE_ULTIMOCODIGOLOGRADOURO" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\TIPOLOGRADOURO\SELECT_MARTE_ULTIMOCODIGOLOGRADOURO.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="SELECT_MARTE_VERIFICADUPLICIDADE" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\CLIENTE\SELECT_MARTE_VERIFICADUPLICIDADE.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="SELECT_MARTE_VERIFICADUPLICIDADETIPOLOGRADOURO" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\TIPOLOGRADOURO\SELECT_MARTE_VERIFICADUPLICIDADETIPOLOGRADOURO.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="SELECT_MARTE_VERIFICANIFNULO" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\SUBCLIENTE\SELECT_MARTE_VERIFICANIFNULO.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="SELECT_MARTE_VERIFICANIFSUPLICADO" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\SUBCLIENTE\SELECT_MARTE_VERIFICANIFSUPLICADO.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="SELECT_MARTE_VERIFICARAZAONIF" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\SUBCLIENTE\SELECT_MARTE_VERIFICARAZAONIF.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="SELECT_NOVI_BUSCACODVIA" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\CLIENTE\SELECT_NOVI_BUSCACODVIA.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="SELECT_NOVI_VERIFICADUPLICIDADE" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\CLIENTE\SELECT_NOVI_VERIFICADUPLICIDADE.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="SELECT_NOVI_VERIFICAFISCALNULO" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\CLIENTE\SELECT_NOVI_VERIFICAFISCALNULO.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="SELECT_PROFAT_BUSCACODFILIAL" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FILIAL\SELECT_PROFAT_BUSCACODFILIAL.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="SELECT_PROFAT_BUSCAFILIAL" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FILIAL\SELECT_PROFAT_BUSCAFILIAL.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="SELECT_PROFAT_BUSCARDELEGACAO" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\DELEGACAO\SELECT_PROFAT_BUSCARDELEGACAO.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="SELECT_PROFAT_BUSCARFILIAIS" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FILIAL\SELECT_PROFAT_BUSCARFILIAIS.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="SELECT_PROFAT_BUSCARTIPOLOG" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\TIPOLOGRADOURO\SELECT_PROFAT_BUSCARTIPOLOG.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="SELECT_PROFAT_COUNTTIPOLOG" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\TIPOLOGRADOURO\SELECT_PROFAT_COUNTTIPOLOG.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="SELECT_PROFAT_DADOSCIDADE" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\CIDADE\SELECT_PROFAT_DADOSCIDADE.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="SELECT_PROFAT_DADOSDIVISAO" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\DIVISAO\SELECT_PROFAT_DADOSDIVISAO.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="SELECT_PROFAT_DADOSSEG_SUB" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\SEGMENTO\SELECT_PROFAT_DADOSSEG_SUB.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="SELECT_PROFAT_SEGMENTO" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\SEGMENTO\SELECT_PROFAT_SEGMENTO.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="SELECT_PROFAT_SUBSEGMENTO" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\SEGMENTO\SELECT_PROFAT_SUBSEGMENTO.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="SELECT_PROFAT_ULTIMOCODIGOLOGRADOURO" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\TIPOLOGRADOURO\SELECT_PROFAT_ULTIMOCODIGOLOGRADOURO.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="SELECT_PROFAT_VERIFICADUPLICIDADE" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\CLIENTE\SELECT_PROFAT_VERIFICADUPLICIDADE.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="SELECT_PROFAT_VERIFICADUPLICIDADETIPOLOGRADOURO" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\TIPOLOGRADOURO\SELECT_PROFAT_VERIFICADUPLICIDADETIPOLOGRADOURO.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="SELECT_PROFAT_VERIFICADUPLICIDADE_CPF" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\CLIENTE\SELECT_PROFAT_VERIFICADUPLICIDADE_CPF.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="UPDATE_MARTE_ATUALIZACIDADE" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\CIDADE\UPDATE_MARTE_ATUALIZACIDADE.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="UPDATE_MARTE_ATUALIZACODDELEGACAO" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\DELEGACAO\UPDATE_MARTE_ATUALIZACODDELEGACAO.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="UPDATE_MARTE_ATUALIZACODDELEGACAO_AJUSTE" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\DELEGACAO\UPDATE_MARTE_ATUALIZACODDELEGACAO_AJUSTE.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="UPDATE_MARTE_TIPOLOG" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\TIPOLOGRADOURO\UPDATE_MARTE_TIPOLOG.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="UPDATE_MARTE_TIPOLOGTEMP" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\TIPOLOGRADOURO\UPDATE_MARTE_TIPOLOGTEMP.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="UPDATE_NOVI_ATUALIZACIDADE" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\CIDADE\UPDATE_NOVI_ATUALIZACIDADE.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="UPDATE_NOVI_ATUALIZACODCOMERCIAL" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FILIAL\UPDATE_NOVI_ATUALIZACODCOMERCIAL.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="UPDATE_NOVI_ATUALIZACODCOMERCIAL1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\TIPOPOSTO\UPDATE_NOVI_ATUALIZACODCOMERCIAL.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="UPDATE_NOVI_ATUALIZACODDELEGACAO" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\DELEGACAO\UPDATE_NOVI_ATUALIZACODDELEGACAO.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="UPDATE_NOVI_ATUALIZACODDELEGACAO_AJUSTE" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\DELEGACAO\UPDATE_NOVI_ATUALIZACODDELEGACAO_AJUSTE.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="UPDATE_NOVI_ATUALIZACODDELEGACAO_REFERENCIA" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\DELEGACAO\UPDATE_NOVI_ATUALIZACODDELEGACAO_REFERENCIA.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="UPDATE_NOVI_TIPOLOG" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\TIPOLOGRADOURO\UPDATE_NOVI_TIPOLOG.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="UPDATE_PROFAT_TIPOLOG" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\TIPOLOGRADOURO\UPDATE_PROFAT_TIPOLOG.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+</root>
