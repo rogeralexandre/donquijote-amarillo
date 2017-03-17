@@ -122,7 +122,7 @@ Partial Class frmMigracao
         Me.btnDelegacao.Name = "btnDelegacao"
         Me.btnDelegacao.Size = New System.Drawing.Size(102, 55)
         Me.btnDelegacao.TabIndex = 0
-        Me.btnDelegacao.Text = "DELEGAÇÃO"
+        Me.btnDelegacao.Text = "REGIONAL"
         Me.btnDelegacao.UseVisualStyleBackColor = True
         '
         'btnTipoPosto

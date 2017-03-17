@@ -350,7 +350,7 @@ Public Class Normalizacao
 
 #End Region
 
-#Region "DELEGAÇÃO"
+#Region "REGIONAL"
 
     Public Shared Function NormalizaDelegacao(ByVal pNomeArquivoLog As String) As Boolean
 
@@ -549,7 +549,7 @@ Public Class Normalizacao
             AlteraStatusProcessamento("PROCESSANDO...")
             For Each dr As DataRow In dt.Rows
                 Dados.AtualizaFilialNOVI(dr.Item("COMERCIAL"), dr.Item("NOVI"), objtransacao_NOVI)
-                Log.GravarLog("ATUALIZOU A TABELA ODELE NO NOVI COM O COD COMERCIAL = " & dr.Item("COMERCIAL"), pNomeArquivoLog)
+                Log.GravarLog("ATUALIZOU A TABELA ODELE NO NOVI COM O CAMPO COD_FILIAL_COMERCIAL = " & dr.Item("COMERCIAL"), pNomeArquivoLog)
 
                 dtCodProfat = Dados.RetornaCODFilialPROFAT(dr.Item("COMERCIAL"))
                 Log.GravarLog("BUSCOU DADOS DO PROFAT NA TABELA DE DEPARA COM O CODIGO = " & dr.Item("COMERCIAL"), pNomeArquivoLog)
@@ -562,6 +562,8 @@ Public Class Normalizacao
 
                         Log.GravarLog("INSERIU DADOS NA TABELA DEPARA DE FATURAMENTO COPR_TFILIAL_COM_X_FAT COMERCIAL = " & dr.Item("COMERCIAL") & " CODEMP = " & dtaux.Rows(0).Item("CODEMP") & " CODFIL = " & dtaux.Rows(0).Item("CODFIL"), pNomeArquivoLog)
                         Dados.InsereDeParaFaturamento(dr.Item("COMERCIAL"), drProfat.Item("COD_PARAM_TAB").ToString, dtaux.Rows(0).Item("CODFIL"), objtransacao_MARTE)
+                    Else
+                        Log.GravarLog("NÃO FOI ENCONTRADO VALOR DO CAMPO COD_PROFAT DO DE-PARA PARA A FILIAL COMERCIAL " & dr.Item("COMERCIAL") & " PARA O COD_PARAM_TAB=" & dr.Item("COD_PARAM_TAB"), pNomeArquivoLog)
                     End If
                 Next
 
@@ -569,13 +571,17 @@ Public Class Normalizacao
                 AlteraStatusProcessamento("PROCESSANDO... " & vbNewLine & " Item " & cont & " de " & dt.Rows.Count)
             Next
 
-            AlteraStatusProcessamento("DELETANDO DADOS DA TABELA ODERE")
-            Log.GravarLog("DELETANDO DADOS DA TABELA ODERE", pNomeArquivoLog)
-            Dados.DeleteOdere(objtransacao_NOVI)
+            '**** 
+            'ESTE BLOCO FOI DESLIGADO PORQUE NÃO VAMOS FAZER NORMALIZAÇÃO DE REGIONAL
+            '****
+            'AlteraStatusProcessamento("DELETANDO DADOS DA TABELA ODERE")
+            'Log.GravarLog("DELETANDO DADOS DA TABELA ODERE", pNomeArquivoLog)
+            'Dados.DeleteOdere(objtransacao_NOVI)
 
-            AlteraStatusProcessamento("INSERINDO DADOS NA TABELA ODERE A PARTIR DO DEPARA")
-            Log.GravarLog("INSERINDO DADOS NA TABELA ODERE A PARTIR DO DEPARA", pNomeArquivoLog)
-            Dados.InsereOdere(objtransacao_NOVI)
+            'AlteraStatusProcessamento("INSERINDO DADOS NA TABELA ODERE A PARTIR DO DEPARA")
+            'Log.GravarLog("INSERINDO DADOS NA TABELA ODERE A PARTIR DO DEPARA", pNomeArquivoLog)
+            'Dados.InsereOdere(objtransacao_NOVI)
+            '********
 
             objtransacao_NOVI.Commit()
             objtransacao_MARTE.Commit()
@@ -627,7 +633,7 @@ Public Class Normalizacao
                 Dados.AtualizaCodComercialTipoPostoNOVI(dr.Item("COD_COMERCIAL"), dr.Item("COD_NOVI"), objtransacao_NOVI)
                 Log.GravarLog("ATUALIZOU A TABELA XELEM COD_TABLA = 73 E COD_ELEMENTO = '" & dr.Item("COD_NOVI") & "', COM INFORMAÇÕES DO TIPO DE POSTO COMERCIAL NO CAMPO COD_COMERCIAL = " & dr.Item("COD_COMERCIAL"), pNomeArquivoLog)
 
-                Dados.MergeTipoPostoPROFAT(dr.Item("COD_NOVI"), dr.Item("DES_TIPO_PUESTO"), dr.Item("COD_COMERCIAL"), objtransacao_PROFAT)
+                        Dados.MergeTipoPostoPROFAT(dr.Item("COD_NOVI"), dr.Item("DES_TIPO_PUESTO"), dr.Item("COD_COMERCIAL"), objtransacao_PROFAT)
                 Log.GravarLog("VERIFICANDO SE O TIPO DE POSTO JÁ EXISTE NO PROFAT COD = '" & dr.Item("COD_COMERCIAL") & "', SE SIM ATUALIZOU O CAMPO CODFUNPATCOM COM TAL CODIGO, SENÃO CRIOU O ITEM " & dr.Item("COD_NOVI"), pNomeArquivoLog)
 
                 cont = cont + 1
