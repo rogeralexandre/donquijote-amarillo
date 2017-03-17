@@ -846,6 +846,7 @@ Public Class Dados
                 cmd.Transaction = objtransacao
                 Dim sSql As String = My.Resources.INSERT_MARTE_INSEREDEPARAFILIALFAT
 
+                'APESAR DO NOME AQUI É NA VERDADE O COD_PARAM_TAB QUE ESTÁ TRADUZINDO PARA EMPRESA B13 OU B20.
                 If pCodEmpresaComercial = "4" Then
                     pCodEmpresaComercial = "B13"
                 Else

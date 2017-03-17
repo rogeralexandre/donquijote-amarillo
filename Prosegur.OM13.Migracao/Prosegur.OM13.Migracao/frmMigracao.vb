@@ -46,14 +46,20 @@
 
     End Sub
 
+    ' BOTÃO DE REGIONAL
     Private Sub btnDelegacao_Click(sender As Object, e As EventArgs) Handles btnDelegacao.Click
 
-        Try
-            Dim sNomeArquivoLog As String = "ValidacaoDelegacao_" & Date.Now.ToString.Replace("/", "").Replace(":", "")
-            Normalizacao.NormalizaDelegacao(sNomeArquivoLog)
-        Catch ex As Exception
-            MsgBox(ex.Message & vbNewLine & ex.StackTrace, MsgBoxStyle.Critical, "NORMALIZAÇÃO DELEGAÇÃO")
-        End Try
+        MsgBox("ESTA NORMALIZAÇÃO FOI DESATIVADA, NÃO IREMOS NORMALIZAR REGIONAIS.", MsgBoxStyle.Information, "NORMALIZAÇÃO REGIONAL")
+
+        ' DESLIGANDO
+        If (False) Then
+            Try
+                Dim sNomeArquivoLog As String = "ValidacaoDelegacao_" & Date.Now.ToString.Replace("/", "").Replace(":", "")
+                Normalizacao.NormalizaDelegacao(sNomeArquivoLog)
+            Catch ex As Exception
+                MsgBox(ex.Message & vbNewLine & ex.StackTrace, MsgBoxStyle.Critical, "NORMALIZAÇÃO DELEGAÇÃO")
+            End Try
+        End If
 
     End Sub
 
