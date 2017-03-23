@@ -309,23 +309,33 @@ Public Class Normalizacao
 
             'Limpa a tabela de tipo de logradouro do NOVI e DePara
             'Dados.DeletaTipoLogradouroNOVI(objtransacao_NOVI)
-            Log.GravarLog("LIMPOU A TABELA DE LOGRADOURO DO NOVI", pNomeArquivoLog)
-            Dados.DeletaTipoLogradouroDEPARA(objtransacao_NOVI)
-            Log.GravarLog("LIMPOU A TABELA DE LOGRADOURO DE DEPARA", pNomeArquivoLog)
-            Dados.AtualizaTipoLogradouroMARTE_TEMP(objtransacao_NOVI)
+            'Log.GravarLog("LIMPOU A TABELA DE LOGRADOURO DO NOVI", pNomeArquivoLog)
+
+            'ROGER: Desliguei este BLOCO porque não tem porque mudar o DE_PARA e os códigos dos logradouros do MARTE.
+            'Dados.DeletaTipoLogradouroDEPARA(objtransacao_NOVI)
+            'Log.GravarLog("LIMPOU A TABELA DE LOGRADOURO DE DEPARA", pNomeArquivoLog)
+            'Dados.AtualizaTipoLogradouroMARTE_TEMP(objtransacao_NOVI)
 
             For Each dr As DataRow In DadosMaestro.Rows
 
-                Log.GravarLog("ATUALIZOU O CODIGO DO COMERCIAL NO PROFAT --- COD:" & dr("COD_TIPO_CALLE"), pNomeArquivoLog)
-                Dados.AtualizaTipoLogradouroMARTE(dr.Item("COD_PROFAT"), dr.Item("COD_TIPO_CALLE"), objtransacao_NOVI)
+                'ROGER: Não vamos trocar os códigos do MARTE para serem iguais ao do PROFAT.
+                'Log.GravarLog("ATUALIZOU O CODIGO DO PROFAT NO MARTE --- CODMARTE:" & dr("COD_TIPO_CALLE") & "PASSOU A SER CODPROFAT:" & dr.Item("COD_PROFAT"), pNomeArquivoLog)
+                'Dados.AtualizaTipoLogradouroMARTE(dr.Item("COD_PROFAT"), dr.Item("COD_TIPO_CALLE"), objtransacao_NOVI)
 
+                Log.GravarLog("INSERIU OS DADOS DE TIPO DE LOGRADOURO NO NOVI, COD_COMERCIAL recebeu o DES_TIPO_CALLE do MARTE. COD_NOVI:" & dr("COD_NOVI") & " COD_COMERCIAL=" & dr("DES_TIPO_CALLE"), pNomeArquivoLog)
                 Dados.AtualizaTipoLogradouroNOVI(dr("COD_NOVI"), dr("DES_TIPO_CALLE"), objtransacao_NOVI)
-                Log.GravarLog("INSERIU OS DADOS DE TIPO DE LOGRADOURO NO NOVI", pNomeArquivoLog)
-                Dados.InsereTipoLogradouroDEPARA(dr("COD_PROFAT"), dr("COD_NOVI"), dr.Item("COD_PROFAT"), objtransacao_NOVI)
-                Log.GravarLog("INSERIU OS DADOS DE TIPO DE LOGRADOURO NA TABELA DE DEPARA --", pNomeArquivoLog)
-                Log.GravarLog("COD MARTE --" & dr("COD_PROFAT"), pNomeArquivoLog)
-                Log.GravarLog("COD PROFAT --" & dr.Item("COD_PROFAT"), pNomeArquivoLog)
-                Log.GravarLog("COD NOVI --" & dr("COD_NOVI"), pNomeArquivoLog)
+
+                ' FALTA NORMALIZAR A DESCRIÇÃO DO TIPO CALLE ENTRE MARTE E PROFAT (COM OU SEM ACENTUAÇÃO E CEDILHA?)
+                Log.GravarLog("NORMALIZANDO A DESCRIÇÃO DO TIPO DE LOGRADOURO NO PROFAT. CODPROFAT=" & dr("COD_PROFAT") & " DESCRIÇÃO=" & dr("DES_TIPO_CALLE"), pNomeArquivoLog)
+                ' Aguardando o Demetrius para validar e fazer a normalização.
+                ' TODO: normalizar a descrição do PROFAT.
+
+                'ROGER: Se eu não destrui o DE-PARA não tem porque reconstruí-lo.
+                'Dados.InsereTipoLogradouroDEPARA(dr("COD_PROFAT"), dr("COD_NOVI"), dr.Item("COD_PROFAT"), objtransacao_NOVI)
+                'Log.GravarLog("INSERIU OS DADOS DE TIPO DE LOGRADOURO NA TABELA DE DEPARA --", pNomeArquivoLog)
+                'Log.GravarLog("COD MARTE --" & dr("COD_PROFAT"), pNomeArquivoLog)
+                'Log.GravarLog("COD PROFAT --" & dr.Item("COD_PROFAT"), pNomeArquivoLog)
+                'Log.GravarLog("COD NOVI --" & dr("COD_NOVI"), pNomeArquivoLog)
 
                 cont = cont + 1
                 AlteraStatusProcessamento("PROCESSANDO... " & vbNewLine & " Item " & cont & " de " & DadosMaestro.Rows.Count)
@@ -633,7 +643,7 @@ Public Class Normalizacao
                 Dados.AtualizaCodComercialTipoPostoNOVI(dr.Item("COD_COMERCIAL"), dr.Item("COD_NOVI"), objtransacao_NOVI)
                 Log.GravarLog("ATUALIZOU A TABELA XELEM COD_TABLA = 73 E COD_ELEMENTO = '" & dr.Item("COD_NOVI") & "', COM INFORMAÇÕES DO TIPO DE POSTO COMERCIAL NO CAMPO COD_COMERCIAL = " & dr.Item("COD_COMERCIAL"), pNomeArquivoLog)
 
-                        Dados.MergeTipoPostoPROFAT(dr.Item("COD_NOVI"), dr.Item("DES_TIPO_PUESTO"), dr.Item("COD_COMERCIAL"), objtransacao_PROFAT)
+                Dados.MergeTipoPostoPROFAT(dr.Item("COD_NOVI"), dr.Item("DES_TIPO_PUESTO"), dr.Item("COD_COMERCIAL"), objtransacao_PROFAT)
                 Log.GravarLog("VERIFICANDO SE O TIPO DE POSTO JÁ EXISTE NO PROFAT COD = '" & dr.Item("COD_COMERCIAL") & "', SE SIM ATUALIZOU O CAMPO CODFUNPATCOM COM TAL CODIGO, SENÃO CRIOU O ITEM " & dr.Item("COD_NOVI"), pNomeArquivoLog)
 
                 cont = cont + 1
@@ -705,9 +715,9 @@ Public Class Normalizacao
                         sCodSeg = dr.Item("CODRAMATV").ToString
                         sOidSeg = String.Empty
                     End If
-                    sOidSegNOVO = Dados.MergeSegmentoMARTE(sCodSeg, dr.Item("DESRAMATV").ToString, dr.Item("CODRAMATV").ToString, sOidSeg, objtransacao_MARTE)
-                    Log.GravarLog("NORMALIZANDO O SEGMENTO '" & dr.Item("DESRAMATV").ToString & _
+                    Log.GravarLog("NORMALIZANDO O SEGMENTO '" & dr.Item("DESRAMATV").ToString &
                                   "' NO MARTE. O CODIGO MARTE ERA '" & sCodSeg & "' E PASSOU A SER '" & dr.Item("CODRAMATV").ToString & "'", pNomeArquivoLog)
+                    sOidSegNOVO = Dados.MergeSegmentoMARTE(sCodSeg, dr.Item("DESRAMATV").ToString, dr.Item("CODRAMATV").ToString, sOidSeg, objtransacao_MARTE)
 
                     Dados.InsereDeParaSegmentoSubSeg(sCodSeg, dr.Item("CODRAMATV").ToString, "1", objtransacao_MARTE)
                 End If
@@ -728,14 +738,16 @@ Public Class Normalizacao
                     sCodSubSeg = dr.Item("CODSUBRAMATV").ToString
                 End If
 
+                Log.GravarLog("NORMALIZANDO O SUBSEGMENTO '" & dr.Item("DESSUBRAMATV").ToString &
+                              "' NO MARTE. O CODIGO MARTE ERA '" & sCodSeg &
+                              "' E PASSOU A SER '" & dr.Item("CODSUBRAMATV") & "'", pNomeArquivoLog)
+
                 sOidSubSegNOVO = Dados.MergeSubSegmentoMARTE(sCodSubSeg, dr.Item("DESSUBRAMATV").ToString, _
                                                                  dr.Item("CODSUBRAMATV").ToString, sOidSeg, sOidSubSeg, objtransacao_MARTE)
 
-                Log.GravarLog("NORMALIZANDO O SUBSEGMENTO '" & dr.Item("DESSUBRAMATV").ToString & _
-                              "' NO MARTE. O CODIGO MARTE ERA '" & sCodSeg & _
-                              "' E PASSOU A SER '" & dr.Item("CODSUBRAMATV") & "'", pNomeArquivoLog)
-
                 If String.IsNullOrEmpty(sOidSubSeg) Then sOidSubSeg = sOidSubSegNOVO
+
+                Log.GravarLog("INSERINDO O DE-PARA DE SUBSEGMENTO, CODMARTE=" & sOidSubSeg & " CODPROFAT=" & dr.Item("CODSUBRAMATV").ToString, pNomeArquivoLog)
                 Dados.InsereDeParaSegmentoSubSeg(sOidSubSeg, dr.Item("CODSUBRAMATV").ToString, "2", objtransacao_MARTE)
 
                 cont = cont + 1
@@ -746,6 +758,9 @@ Public Class Normalizacao
 
             Log.GravarLog("FIM DA NORMALIZAÇÃO DE SUBSEGMENTO ----------------------------------------", pNomeArquivoLog)
             AlteraStatusProcessamento("FIM DA NORMALIZAÇÃO DE SUBSEGMENTO...")
+
+            'TODO: Colocar um msgbox para avisar que tem que rodar a normalização de cliente e subcliete para acertar os segmentos e subsegmentos.
+
 
         Catch ex As Exception
             objtransacao_MARTE.Rollback()
