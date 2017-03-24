@@ -534,6 +534,37 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized string similar to INSERT INTO MARTE.COPR_TSEGMENTO (OID_SEGMENTO, 
+        '''								  COD_SEGMENTO, 
+        '''								  DES_SEGMENTO, 
+        '''								  BOL_ACTIVO, 
+        '''								  FYH_CDATE, 
+        '''								  DES_CUID)
+        '''VALUES (&apos;0&apos;,
+        '''		&apos;0&apos;,
+        '''		&apos;SEGMENTO NÃO INFORMADO/CLASSIFICADO&apos;,
+        '''		1,
+        '''		SYSDATE,
+        '''		&apos;OM13&apos;)
+        '''.
+        '''</summary>
+        Friend ReadOnly Property INSERT_SEGMENTO_MARTE() As String
+            Get
+                Return ResourceManager.GetString("INSERT_SEGMENTO_MARTE", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to INSERT INTO MARTE.COPR_TSUBSEGMENTO (OID_SUBSEGMENTO, OID_SEGMENTO, COD_SUBSEGMENTO, DES_SUBSEGMENTO, BOL_ACTIVO)
+        '''VALUES (&apos;0&apos;,&apos;0&apos;, &apos;0&apos;, &apos;SUBSEGMENTO NÃO INFORMADO/CLASSIFICADO&apos;, 1).
+        '''</summary>
+        Friend ReadOnly Property INSERT_SUBSEGMENTO_MARTE() As String
+            Get
+                Return ResourceManager.GetString("INSERT_SUBSEGMENTO_MARTE", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized string similar to MERGE INTO MARTE.COPR_TSEGMENTO SEG1
         ''' USING (SELECT &apos;PAR1&apos; COD_SEGMENTO, &apos;PAR2&apos; DES_SEGMENTO , &apos;PAR3&apos; COD_SEGMENTO_PROFAT, &apos;PAR4&apos; OID_SEGMENTO FROM DUAL) SEG2 
         ''' ON (SEG1.OID_SEGMENTO = SEG2.OID_SEGMENTO)
@@ -1078,6 +1109,17 @@ Namespace My.Resources
         Friend ReadOnly Property SELECT_PROFAT_VERIFICADUPLICIDADETIPOLOGRADOURO() As String
             Get
                 Return ResourceManager.GetString("SELECT_PROFAT_VERIFICADUPLICIDADETIPOLOGRADOURO", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to UPDATE MARTE.COPR_TCLIENTE
+        '''   SET OID_SEGMENTO = &apos;0&apos;, OID_SUBSEGMENTO = &apos;0&apos;
+        '''.
+        '''</summary>
+        Friend ReadOnly Property UPDATE_CLIENTE_MARTE() As String
+            Get
+                Return ResourceManager.GetString("UPDATE_CLIENTE_MARTE", resourceCulture)
             End Get
         End Property
         

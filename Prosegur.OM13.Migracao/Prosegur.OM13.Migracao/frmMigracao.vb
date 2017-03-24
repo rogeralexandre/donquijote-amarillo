@@ -84,7 +84,8 @@
     Private Sub btnSegmento_Click(sender As Object, e As EventArgs) Handles btnSegmento.Click
         Try
             Dim sNomeArquivoLog As String = "ValidacaoSegmento_SubSeg_" & Date.Now.ToString.Replace("/", "").Replace(":", "")
-            Normalizacao.NormalizaSegmentoSubSeg(sNomeArquivoLog)
+            'Normalizacao.NormalizaSegmentoSubSeg(sNomeArquivoLog)
+            Normalizacao.NormalizaSegmentoSubSeg_2(sNomeArquivoLog)
         Catch ex As Exception
             MsgBox(ex.Message & vbNewLine & ex.StackTrace, MsgBoxStyle.Critical, "NORMALIZAÇÃO SEGMENTO/SUB SEGMENTO")
         End Try

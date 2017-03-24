@@ -232,6 +232,12 @@
   <data name="INSERT_PROFAT_MERGETIPOPOSTO" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\TIPOPOSTO\INSERT_PROFAT_MERGETIPOPOSTO.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
+  <data name="INSERT_SEGMENTO_MARTE" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\SEGMENTO\INSERT_SEGMENTO_MARTE.SQL;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="INSERT_SUBSEGMENTO_MARTE" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\SEGMENTO\INSERT_SUBSEGMENTO_MARTE.SQL;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
   <data name="MERGE_MARTE_SEGMENTO" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\SEGMENTO\MERGE_MARTE_SEGMENTO.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
@@ -348,6 +354,9 @@
   </data>
   <data name="SELECT_PROFAT_VERIFICADUPLICIDADE_CPF" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\CLIENTE\SELECT_PROFAT_VERIFICADUPLICIDADE_CPF.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="UPDATE_CLIENTE_MARTE" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\SEGMENTO\UPDATE_CLIENTE_MARTE.SQL;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="UPDATE_MARTE_ATUALIZACIDADE" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\CIDADE\UPDATE_MARTE_ATUALIZACIDADE.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
