@@ -406,10 +406,10 @@ Public Class Normalizacao
             Next
             Dados.DeletaDelegacaoMARTE(objtransacao_MARTE)
 
-            objtransacao_NOVI.Rollback()
-            objtransacao_MARTE.Rollback()
-            'objtransacao_NOVI.Commit()
-            'objtransacao_MARTE.Commit()
+            'objtransacao_NOVI.Rollback()
+            'objtransacao_MARTE.Rollback()
+            objtransacao_NOVI.Commit()
+            objtransacao_MARTE.Commit()
 
             Log.GravarLog("FIM DA NORMALIZAÇÃO DE DELEGAÇÃO ----------------------------------------", pNomeArquivoLog)
             AlteraStatusProcessamento("FIM DA NORMALIZAÇÃO DE DELEGAÇÃO..." & vbNewLine & " É NECESSÁRIO FAZER A NORMALIZAÇÃO DE CIDADES, SE AINDA NÃO FOI FEITA.")
@@ -674,6 +674,7 @@ Public Class Normalizacao
 
     Public Shared Function NormalizaSegmentoSubSeg(ByVal pNomeArquivoLog As String) As Boolean
 
+        'FUNÇÃO DESCONTINUADA, USAMOS A OUTRA QUE TEM O MESMO NOME MAS COM FINAL 2.
         Dim objtransacao_MARTE As IDbTransaction
 
         Try
@@ -753,6 +754,125 @@ Public Class Normalizacao
                 cont = cont + 1
                 AlteraStatusProcessamento("PROCESSANDO SEGMENTO... " & vbNewLine & " Item " & cont & " de " & dtSeg.Rows.Count)
             Next
+
+            objtransacao_MARTE.Commit()
+
+            Log.GravarLog("FIM DA NORMALIZAÇÃO DE SUBSEGMENTO ----------------------------------------", pNomeArquivoLog)
+            AlteraStatusProcessamento("FIM DA NORMALIZAÇÃO DE SUBSEGMENTO...")
+
+            'TODO: Colocar um msgbox para avisar que tem que rodar a normalização de cliente e subcliete para acertar os segmentos e subsegmentos.
+
+
+        Catch ex As Exception
+            objtransacao_MARTE.Rollback()
+
+            Log.GravarLog(ex.ToString, pNomeArquivoLog)
+            Throw ex
+        End Try
+
+        Return True
+    End Function
+
+    Public Shared Function NormalizaSegmentoSubSeg_2(ByVal pNomeArquivoLog As String) As Boolean
+
+        Dim objtransacao_MARTE As IDbTransaction
+
+        Try
+
+            Log.GravarLog("INICIO DA NORMALIZAÇÃO DE SEGMENTO E SUB SEGMENTO ----------------------------------------", pNomeArquivoLog)
+            AlteraStatusProcessamento("INICIO DA NORMALIZAÇÃO DE SEGMENTO E SUB SEGMENTO")
+
+            Dim cont As Integer = 0
+            Dim dtSegmentoMarte As DataTable
+            Dim dtSubSegmentoMarte As DataTable
+            Dim sCodSeg As String = String.Empty
+            Dim sCodSubSeg As String = String.Empty
+            Dim sOidSeg As String = String.Empty
+            Dim sOidSubSeg As String = String.Empty
+            Dim sOidSegNOVO As String = String.Empty
+            Dim sOidSubSegNOVO As String = String.Empty
+            Dim sCodAnterior As String = String.Empty
+
+            AlteraStatusProcessamento("PROCESSANDO SEGMENTO E SUB SEGMENTO...")
+
+            Dim dtSeg As DataTable = Dados.RetornaSegmentosPROFAT()
+            Log.GravarLog("RECUPEROU DADOS DO PROFAT PARA FAZER A NORMALIZAÇÃO", pNomeArquivoLog)
+
+            Log.GravarLog("ABRINDO CONEXÃO COM O MARTE", pNomeArquivoLog)
+            Dim conn_MARTE As IDbConnection = AcessoDados.Conectar(Dados.CONEXAO_MARTE)
+            objtransacao_MARTE = conn_MARTE.BeginTransaction()
+
+            Log.GravarLog("APAGANDO DE-PARA: SEGMENTO X RAMO", pNomeArquivoLog)
+            Dados.DeletaDeParaSegmentoSubSeg("1", objtransacao_MARTE)
+            Log.GravarLog("APAGANDO DE-PARA: SUBSEGMENTO X SUBRAMO", pNomeArquivoLog)
+            Dados.DeletaDeParaSegmentoSubSeg("2", objtransacao_MARTE)
+
+            'INCLUIR SEGMENTO "NÃO INFORMADO"
+            Log.GravarLog("INCLUIR SEGMENTO 'NÃO INFORMADO/CLASSIFICADO' NO MARTE", pNomeArquivoLog)
+            Dados.InsereSegmentoPadrao(objtransacao_MARTE)
+
+            'INCLUIR SUBSEGMENTO "NÃO INFORMADO"
+            Log.GravarLog("INCLUIR SUBSEGMENTO 'NÃO INFORMADO/CLASSIFICADO' NO MARTE", pNomeArquivoLog)
+            Dados.InsereSubSegmentoPadrao(objtransacao_MARTE)
+
+            'ALTERAR TODOS OS CLIENTES PARA APONTAR PARA O SEGMENTO E SUBSEGMENTO PADRÃO
+            Log.GravarLog("ALTERANDO TODOS OS CLIENTES PARA SEGMENTO E SUBSEGMENTO 'NÃO INFORMADO/CLASSIFICADO' NO MARTE", pNomeArquivoLog)
+            Dados.AtualizarSegmentoSubsegmentoCliente(objtransacao_MARTE)
+
+
+
+            'For Each dr As DataRow In dtSeg.Rows
+
+            '    'Verifica se já fez a normalização do codigo
+            '    If sCodAnterior <> dr.Item("CODRAMATV").ToString Then
+            '        dtSegmentoMarte = New DataTable
+            '        dtSegmentoMarte = Dados.RetornaSegmentosMARTE(dr.Item("CODRAMATV").ToString)
+
+            '        If Not dtSegmentoMarte Is Nothing AndAlso dtSegmentoMarte.Rows.Count > 0 Then
+            '            sCodSeg = dtSegmentoMarte.Rows(0).Item("COD_MARTE").ToString
+            '            sOidSeg = dtSegmentoMarte.Rows(0).Item("OID_SEGMENTO").ToString
+            '        Else
+            '            sCodSeg = dr.Item("CODRAMATV").ToString
+            '            sOidSeg = String.Empty
+            '        End If
+            '        Log.GravarLog("NORMALIZANDO O SEGMENTO '" & dr.Item("DESRAMATV").ToString &
+            '                      "' NO MARTE. O CODIGO MARTE ERA '" & sCodSeg & "' E PASSOU A SER '" & dr.Item("CODRAMATV").ToString & "'", pNomeArquivoLog)
+            '        sOidSegNOVO = Dados.MergeSegmentoMARTE(sCodSeg, dr.Item("DESRAMATV").ToString, dr.Item("CODRAMATV").ToString, sOidSeg, objtransacao_MARTE)
+
+            '        Dados.InsereDeParaSegmentoSubSeg(sCodSeg, dr.Item("CODRAMATV").ToString, "1", objtransacao_MARTE)
+            '    End If
+
+            '    'Armazena o codigo normalizado
+            '    sCodAnterior = dr.Item("CODRAMATV").ToString
+            '    dtSubSegmentoMarte = New DataTable
+
+            '    If Not String.IsNullOrEmpty(sOidSegNOVO) Then sOidSeg = sOidSegNOVO
+            '    dtSubSegmentoMarte = Dados.RetornaSubSegmentosMARTE(dr.Item("CODSUBRAMATV").ToString, sOidSeg)
+
+            '    If Not dtSubSegmentoMarte Is Nothing AndAlso dtSubSegmentoMarte.Rows.Count > 0 Then
+            '        sOidSubSeg = dtSubSegmentoMarte.Rows(0).Item("OID_SUBSEGMENTO").ToString
+            '        sCodSubSeg = dtSubSegmentoMarte.Rows(0).Item("COD_SUBSEGMENTO").ToString
+            '        sOidSeg = dtSubSegmentoMarte.Rows(0).Item("OID_SEGMENTO").ToString
+            '    Else
+            '        sOidSubSeg = String.Empty
+            '        sCodSubSeg = dr.Item("CODSUBRAMATV").ToString
+            '    End If
+
+            '    Log.GravarLog("NORMALIZANDO O SUBSEGMENTO '" & dr.Item("DESSUBRAMATV").ToString &
+            '                  "' NO MARTE. O CODIGO MARTE ERA '" & sCodSeg &
+            '                  "' E PASSOU A SER '" & dr.Item("CODSUBRAMATV") & "'", pNomeArquivoLog)
+
+            '    sOidSubSegNOVO = Dados.MergeSubSegmentoMARTE(sCodSubSeg, dr.Item("DESSUBRAMATV").ToString,
+            '                                                     dr.Item("CODSUBRAMATV").ToString, sOidSeg, sOidSubSeg, objtransacao_MARTE)
+
+            '    If String.IsNullOrEmpty(sOidSubSeg) Then sOidSubSeg = sOidSubSegNOVO
+
+            '    Log.GravarLog("INSERINDO O DE-PARA DE SUBSEGMENTO, CODMARTE=" & sOidSubSeg & " CODPROFAT=" & dr.Item("CODSUBRAMATV").ToString, pNomeArquivoLog)
+            '    Dados.InsereDeParaSegmentoSubSeg(sOidSubSeg, dr.Item("CODSUBRAMATV").ToString, "2", objtransacao_MARTE)
+
+            '    cont = cont + 1
+            '    AlteraStatusProcessamento("PROCESSANDO SEGMENTO... " & vbNewLine & " Item " & cont & " de " & dtSeg.Rows.Count)
+            'Next
 
             objtransacao_MARTE.Commit()
 

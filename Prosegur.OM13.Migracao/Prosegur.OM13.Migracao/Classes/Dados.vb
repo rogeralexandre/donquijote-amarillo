@@ -1182,6 +1182,39 @@ Public Class Dados
         End Using
     End Sub
 
+    Public Shared Sub InsereSegmentoPadrao(ByRef objTransacao As IDbTransaction)
+
+        Using cmd As IDbCommand = objTransacao.Connection.CreateCommand()
+            cmd.Transaction = objTransacao
+            cmd.CommandText = My.Resources.INSERT_SEGMENTO_MARTE
+
+            DbHelper.AcessoDados.ExecutarNonQuery(CONEXAO_MARTE, cmd)
+        End Using
+
+    End Sub
+
+    Public Shared Sub InsereSubSegmentoPadrao(ByRef objTransacao As IDbTransaction)
+
+        Using cmd As IDbCommand = objTransacao.Connection.CreateCommand()
+            cmd.Transaction = objTransacao
+            cmd.CommandText = My.Resources.INSERT_SUBSEGMENTO_MARTE
+
+            DbHelper.AcessoDados.ExecutarNonQuery(CONEXAO_MARTE, cmd)
+        End Using
+
+    End Sub
+
+    Public Shared Sub AtualizarSegmentoSubsegmentoCliente(ByRef objTransacao As IDbTransaction)
+
+        Using cmd As IDbCommand = objTransacao.Connection.CreateCommand()
+            cmd.Transaction = objTransacao
+            cmd.CommandText = My.Resources.UPDATE_CLIENTE_MARTE
+
+            DbHelper.AcessoDados.ExecutarNonQuery(CONEXAO_MARTE, cmd)
+        End Using
+
+    End Sub
+
 #End Region
 
 #Region "CIDADE"
