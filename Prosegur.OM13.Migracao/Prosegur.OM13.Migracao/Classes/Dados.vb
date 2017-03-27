@@ -1158,7 +1158,7 @@ Public Class Dados
             cmd.Transaction = objtransacao
             cmd.CommandText = My.Resources.INSERT_DEPARA_SEGMENTO_SUB
 
-            cmd.Parameters.Add(DbHelper.AcessoDados.CriarParametro(CONEXAO_MARTE, "COD_MARTE", DbType.String, pcodMarte))
+            cmd.Parameters.Add(DbHelper.AcessoDados.CriarParametro(CONEXAO_MARTE, "COD_MARTE", DbType.String, pcodMarte.Trim()))
             cmd.Parameters.Add(DbHelper.AcessoDados.CriarParametro(CONEXAO_MARTE, "COD_PROFAT", DbType.String, pcodProfat))
             cmd.Parameters.Add(DbHelper.AcessoDados.CriarParametro(CONEXAO_MARTE, "COD_PARAM_TAB", DbType.String, pcodParam))
 
@@ -1215,6 +1215,23 @@ Public Class Dados
 
     End Sub
 
+    Public Shared Sub ApagarSegmento(ByRef objTransacao As IDbTransaction)
+        Using cmd As IDbCommand = objTransacao.Connection.CreateCommand()
+            cmd.Transaction = objTransacao
+            cmd.CommandText = My.Resources.DELETE_MARTE_SEGMENTO
+
+            DbHelper.AcessoDados.ExecutarNonQuery(CONEXAO_MARTE, cmd)
+        End Using
+    End Sub
+
+    Public Shared Sub ApagarSubSegmento(ByRef objTransacao As IDbTransaction)
+        Using cmd As IDbCommand = objTransacao.Connection.CreateCommand()
+            cmd.Transaction = objTransacao
+            cmd.CommandText = My.Resources.DELETE_MARTE_SUBSEGMENTO
+
+            DbHelper.AcessoDados.ExecutarNonQuery(CONEXAO_MARTE, cmd)
+        End Using
+    End Sub
 #End Region
 
 #Region "CIDADE"

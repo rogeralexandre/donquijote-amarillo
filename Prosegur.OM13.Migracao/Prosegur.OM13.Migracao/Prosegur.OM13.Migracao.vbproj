@@ -401,6 +401,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="favicon.ico" />
+    <Content Include="Resources\SEGMENTO\DELETE_MARTE_SEGMENTO.SQL" />
+    <Content Include="Resources\SEGMENTO\DELETE_MARTE_SUBSEGMENTO.SQL" />
     <Content Include="Resources\SEGMENTO\INSERT_SEGMENTO_MARTE.SQL" />
     <Content Include="Resources\SEGMENTO\INSERT_SUBSEGMENTO_MARTE.SQL" />
     <Content Include="Resources\SEGMENTO\UPDATE_CLIENTE_MARTE.SQL" />

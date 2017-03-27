@@ -245,6 +245,26 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized string similar to DELETE FROM MARTE.COPR_TSEGMENTO
+        '''.
+        '''</summary>
+        Friend ReadOnly Property DELETE_MARTE_SEGMENTO() As String
+            Get
+                Return ResourceManager.GetString("DELETE_MARTE_SEGMENTO", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to DELETE FROM MARTE.COPR_TSUBSEGMENTO
+        '''.
+        '''</summary>
+        Friend ReadOnly Property DELETE_MARTE_SUBSEGMENTO() As String
+            Get
+                Return ResourceManager.GetString("DELETE_MARTE_SUBSEGMENTO", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized string similar to --DELETA LIXO DA TABELA DO NOVI
         '''DELETE FROM ADA_XELEM X
         '''WHERE X.XELEM_COD_TABLA = &apos;59&apos;
@@ -534,18 +554,12 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Looks up a localized string similar to INSERT INTO MARTE.COPR_TSEGMENTO (OID_SEGMENTO, 
-        '''								  COD_SEGMENTO, 
-        '''								  DES_SEGMENTO, 
-        '''								  BOL_ACTIVO, 
-        '''								  FYH_CDATE, 
-        '''								  DES_CUID)
-        '''VALUES (&apos;0&apos;,
-        '''		&apos;0&apos;,
-        '''		&apos;SEGMENTO NÃO INFORMADO/CLASSIFICADO&apos;,
-        '''		1,
-        '''		SYSDATE,
-        '''		&apos;OM13&apos;)
+        '''  Looks up a localized string similar to MERGE INTO MARTE.COPR_TSEGMENTO SEG1
+        '''USING (SELECT &apos;0&apos; OID_SEGMENTO FROM DUAL) SEG2 
+        '''ON (SEG1.OID_SEGMENTO = SEG2.OID_SEGMENTO)
+        '''WHEN NOT MATCHED THEN 
+        '''INSERT (OID_SEGMENTO, COD_SEGMENTO, DES_SEGMENTO, BOL_ACTIVO, FYH_CDATE, DES_CUID)
+        '''VALUES (&apos;0&apos;, &apos;0&apos;, &apos;SEGMENTO NÃO INFORMADO/CLASSIFICADO&apos;, 1,	SYSDATE, &apos;OM13&apos;)
         '''.
         '''</summary>
         Friend ReadOnly Property INSERT_SEGMENTO_MARTE() As String
@@ -555,8 +569,13 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Looks up a localized string similar to INSERT INTO MARTE.COPR_TSUBSEGMENTO (OID_SUBSEGMENTO, OID_SEGMENTO, COD_SUBSEGMENTO, DES_SUBSEGMENTO, BOL_ACTIVO)
-        '''VALUES (&apos;0&apos;,&apos;0&apos;, &apos;0&apos;, &apos;SUBSEGMENTO NÃO INFORMADO/CLASSIFICADO&apos;, 1).
+        '''  Looks up a localized string similar to MERGE INTO MARTE.COPR_TSUBSEGMENTO SSEG1
+        '''USING (SELECT &apos;0&apos; OID_SUBSEGMENTO FROM DUAL) SSEG2 
+        '''ON (SSEG1.OID_SUBSEGMENTO = SSEG2.OID_SUBSEGMENTO)
+        '''WHEN NOT MATCHED THEN 
+        '''INSERT (OID_SUBSEGMENTO, OID_SEGMENTO, COD_SUBSEGMENTO, DES_SUBSEGMENTO, BOL_ACTIVO)
+        '''VALUES (&apos;0&apos;,&apos;0&apos;, &apos;0&apos;, &apos;SUBSEGMENTO NÃO INFORMADO/CLASSIFICADO&apos;, 1)
+        '''.
         '''</summary>
         Friend ReadOnly Property INSERT_SUBSEGMENTO_MARTE() As String
             Get
