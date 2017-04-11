@@ -205,6 +205,9 @@
   <data name="INSERT_DEPARA_SEGMENTO_SUB" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\SEGMENTO\INSERT_DEPARA_SEGMENTO_SUB.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
+  <data name="INSERT_ESCALA_DEPARA" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ESCALA\INSERT_ESCALA_DEPARA.SQL;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
   <data name="INSERT_MARTE_INSEREDELEGACAO" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\DELEGACAO\INSERT_MARTE_INSEREDELEGACAO.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
@@ -244,6 +247,9 @@
   <data name="INSERT_SUBSEGMENTO_MARTE" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\SEGMENTO\INSERT_SUBSEGMENTO_MARTE.SQL;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
+  <data name="MERGE_ESCALA_PROFAT" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ESCALA\MERGE_ESCALA_PROFAT.SQL;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
   <data name="MERGE_MARTE_SEGMENTO" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\SEGMENTO\MERGE_MARTE_SEGMENTO.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
@@ -255,6 +261,9 @@
   </data>
   <data name="SELECT_DEPARA_SUBSEGMENTO" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\SEGMENTO\SELECT_DEPARA_SUBSEGMENTO.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="SELECT_ESCALA_MARTE" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ESCALA\SELECT_ESCALA_MARTE.SQL;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="SELECT_MARTE_BUSCARFILIAIS" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\FILIAL\SELECT_MARTE_BUSCARFILIAIS.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>

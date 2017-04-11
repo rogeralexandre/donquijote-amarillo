@@ -102,4 +102,13 @@
 
     End Sub
 
+    Private Sub btnEscala_Click(sender As Object, e As EventArgs) Handles btnEscala.Click
+        Try
+            Dim sNomeArquivoLog As String = "Normaliza_Escala" & Date.Now.ToString.Replace("/", "").Replace(":", "")
+
+            Normalizacao.NormalizaEscala(sNomeArquivoLog)
+        Catch ex As Exception
+            MsgBox(ex.Message & vbNewLine & ex.StackTrace, MsgBoxStyle.Critical, "NORMALIZAÇÃO ESCALA")
+        End Try
+    End Sub
 End Class

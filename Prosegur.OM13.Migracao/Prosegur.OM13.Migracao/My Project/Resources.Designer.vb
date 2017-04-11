@@ -245,7 +245,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Looks up a localized string similar to DELETE FROM MARTE.COPR_TSEGMENTO
+        '''  Looks up a localized string similar to DELETE FROM MARTE.COPR_TSEGMENTO WHERE COD_SEGMENTO &lt;&gt; &apos;0&apos;
         '''.
         '''</summary>
         Friend ReadOnly Property DELETE_MARTE_SEGMENTO() As String
@@ -255,7 +255,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Looks up a localized string similar to DELETE FROM MARTE.COPR_TSUBSEGMENTO
+        '''  Looks up a localized string similar to DELETE FROM MARTE.COPR_TSUBSEGMENTO WHERE COD_SUBSEGMENTO &lt;&gt; &apos;0&apos;
         '''.
         '''</summary>
         Friend ReadOnly Property DELETE_MARTE_SUBSEGMENTO() As String
@@ -402,6 +402,18 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized string similar to INSERT INTO MARTE.VABR_TDE_PARA_GERAL
+        '''(OID_TABELA, COD_PARAM_TAB, COD_MARTE  , COD_PROFAT, COD_NOVI, FEC_ALTA)
+        '''VALUES
+        '''(SYS_GUID(), 12           , :OID_MARTE, :COD_PROFAT, NULL, SYSDATE).
+        '''</summary>
+        Friend ReadOnly Property INSERT_ESCALA_DEPARA() As String
+            Get
+                Return ResourceManager.GetString("INSERT_ESCALA_DEPARA", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized string similar to INSERT INTO COPR_TDELEGACION
         '''(OID_DELEGACION, COD_DELEGACION, DES_DELEGACION, DES_CORTA_DELEGACION, BOL_ACTIVO, OID_ZONAGERENCIAL, OID_PAIS, FYH_CDATE, DES_CUID)
         '''VALUES
@@ -542,10 +554,10 @@ Namespace My.Resources
         ''' USING (SELECT &apos;PAR1&apos; CODFUNPAT, &apos;PAR2&apos; DESFUNPAT, &apos;PAR3&apos; CODFUNPATCOM) PAT2 
         ''' ON (PAT1.CODFUNPAT = PAT2.CODFUNPAT)
         ''' WHEN MATCHED THEN 
-        '''      UPDATE SET DATULTALT = GETDATE(), CODUSU = 1, DESFUNPAT = PAT2.DESFUNPAT, CODFUNPATCOM = PAT2.CODFUNPATCOM
+        '''      UPDATE SET DATULTALT = GETDATE(), CODUSU = 100, DESFUNPAT = PAT2.DESFUNPAT, CODFUNPATCOM = PAT2.CODFUNPATCOM
         ''' WHEN NOT MATCHED THEN 
         '''      INSERT (CODFUNPAT, DESFUNPAT, CODUSU, DATULTALT, CODFUNPATCOM)
-        '''      VALUES (PAT2.CODFUNPAT, PAT2.DESFUNPAT, 1, GETDATE(), PAT2.CODFUNPATCOM);.
+        '''      VALUES (PAT2.CODFUNPAT, PAT2.DESFUNPAT, 100, GETDATE(), PAT2.CODFUNPATCOM);.
         '''</summary>
         Friend ReadOnly Property INSERT_PROFAT_MERGETIPOPOSTO() As String
             Get
@@ -580,6 +592,23 @@ Namespace My.Resources
         Friend ReadOnly Property INSERT_SUBSEGMENTO_MARTE() As String
             Get
                 Return ResourceManager.GetString("INSERT_SUBSEGMENTO_MARTE", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to MERGE INTO dbo.fat_tcadesc ESC1
+        ''' USING (SELECT MAX(CODESC)+1 AS CODESC, &apos;PAR_CODESC&apos; CODESC from fat_tcadesc) ESC2
+        ''' ON (ESC1.CODESC = ESC2.CODESC)
+        ''' WHEN MATCHED THEN 
+        '''	UPDATE SET DATULTALT = GETDATE(), CODUSU = 1100 , CODMARTE = &apos;PAR_CODMARTE&apos;
+        ''' WHEN NOT MATCHED THEN
+        '''	INSERT (CODESC     , DESESC      , CODUSU, DATUTLALT, CODMARTE)
+        '''	VALUES (ESC2.CODESC, &apos;PAR_DESESC&apos;, 1100  , GETDATE(), &apos;PAR_CODMARTE&apos;);
+        '''.
+        '''</summary>
+        Friend ReadOnly Property MERGE_ESCALA_PROFAT() As String
+            Get
+                Return ResourceManager.GetString("MERGE_ESCALA_PROFAT", resourceCulture)
             End Get
         End Property
         
@@ -639,6 +668,18 @@ Namespace My.Resources
         Friend ReadOnly Property SELECT_DEPARA_SUBSEGMENTO() As String
             Get
                 Return ResourceManager.GetString("SELECT_DEPARA_SUBSEGMENTO", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to select e.oid_escala, e.cod_escala, e.des_escala, dp.cod_profat
+        '''from marte.copr_tescala e
+        '''left join marte.vabr_tde_para_geral dp on e.oid_escala = dp.cod_marte
+        '''where dp.cod_param_tab = 12.
+        '''</summary>
+        Friend ReadOnly Property SELECT_ESCALA_MARTE() As String
+            Get
+                Return ResourceManager.GetString("SELECT_ESCALA_MARTE", resourceCulture)
             End Get
         End Property
         
@@ -1302,9 +1343,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Looks up a localized string similar to UPDATE FAT_TTABTIPLOG
-        '''   SET CODTIPLOGCOM = @CODCOMERCIAL
-        '''WHERE CODTIPLOG = @COD_PROFAT  .
+        '''  Looks up a localized string similar to --UPDATE FAT_TTABTIPLOG
+        '''--   SET CODTIPLOGCOM = @CODCOMERCIAL
+        '''--WHERE CODTIPLOG = @COD_PROFAT  
+        '''UPDATE FAT_TTABTIPLOG
+        '''   SET DESTIPLOG = @CODCOMERCIAL,
+        '''       CODUSU = 1100,  -- INTEGRAÇÕES
+        '''	   DATULTALT = GETDATE()
+        '''WHERE CODTIPLOG = @COD_PROFAT  
+        '''.
         '''</summary>
         Friend ReadOnly Property UPDATE_PROFAT_TIPOLOG() As String
             Get

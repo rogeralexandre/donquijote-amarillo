@@ -66,8 +66,8 @@ Public Class Normalizacao
                             Log.GravarLog("-----------------------------------------------------------", pNomeArquivoLog)
                             Log.GravarLog("ERRO AO TENTAR ATUALIZAR O CLIENTE: " & dr.Item("COD_CLIENTE").ToString, pNomeArquivoLog)
                             For Each msgRet As WSPROFAT.Mensagens In wsRet.Lista_Retorno
-                                Log.GravarLog("Cod Retorno WSPROFAT = " & msgRet.Codigo & vbNewLine & _
-                                              "Mensagem retorno = " & msgRet.Mensagem & vbNewLine & _
+                                Log.GravarLog("Cod Retorno WSPROFAT = " & msgRet.Codigo & vbNewLine &
+                                              "Mensagem retorno = " & msgRet.Mensagem & vbNewLine &
                                               "Detalhe = " & msgRet.Detalhe, pNomeArquivoLog)
                             Next
                             Log.GravarLog("-----------------------------------------------------------", pNomeArquivoLog)
@@ -77,13 +77,13 @@ Public Class Normalizacao
 
                     End If
 
-                    Log.GravarLog("ATUALIZOU NA TABELA 'FAT_TCADCLI' CODCLICOM = " & dr.Item("COD_CLIENTE").ToString, pNomeArquivoLog)
+                    Log.GravarLog("ATUALIZOU NO PROFAT NA TABELA 'FAT_TCADCLI' O CLIENTE " & dr.Item("COD_PROFAT").ToString & " COM O CODCLICOM = " & dr.Item("COD_CLIENTE").ToString, pNomeArquivoLog)
                     Dados.AtualizaCodComercialClientePROFAT(dr.Item("COD_CLIENTE").ToString, dr.Item("COD_PROFAT").ToString, objtransacao_PROFAT)
                 End If
 
-                Log.GravarLog("ATUALIZOU NA TABELA 'DDLVIG.OCLTE' COD_COMERCIAL = " & dr.Item("COD_CLIENTE").ToString, pNomeArquivoLog)
-                Dados.AtualizaCodComercialClienteNOVI(dr.Item("COD_NOVI").ToString, dr.Item("COD_IDENTIFICACION_FISCAL").ToString, _
-                                                      dr.Item("DES_NOMBRE_FANTASIA").ToString, dr.Item("DES_RAZON_SOCIAL").ToString, _
+                Log.GravarLog("ATUALIZOU NA TABELA 'DDLVIG.OCLTE' O CLIENTE " & dr.Item("COD_NOVI").ToString & " COD_COMERCIAL = " & dr.Item("COD_CLIENTE").ToString, pNomeArquivoLog)
+                Dados.AtualizaCodComercialClienteNOVI(dr.Item("COD_NOVI").ToString, dr.Item("COD_IDENTIFICACION_FISCAL").ToString,
+                                                      dr.Item("DES_NOMBRE_FANTASIA").ToString, dr.Item("DES_RAZON_SOCIAL").ToString,
                                                       dr.Item("COD_NOVI").ToString, dr.Item("DES_TIPO_CALLE").ToString, objtransacao_NOVI)
 
                 cont = cont + 1
@@ -104,6 +104,8 @@ Public Class Normalizacao
                     msgInfo &= "COD CLIENTE:" & drDupli.Item("COD_CLIENTE").ToString & " NIF:" & drDupli.Item("COD_IDENTIFICACION_FISCAL").ToString & vbNewLine
                     Log.GravarLog("COD CLIENTE:" & drDupli.Item("COD_CLIENTE").ToString & " NIF:" & drDupli.Item("COD_IDENTIFICACION_FISCAL").ToString & vbNewLine, pNomeArquivoLog)
                 Next
+            Else
+                Log.GravarLog("BOA NOTÍCIA = NÃO FORAM ENCONTRADOS CLIENTES COM NIF DUPLICADOS NO MARTE." & vbNewLine, pNomeArquivoLog)
             End If
 
             dtAux = Dados.RetornaClientesComNIFNulo
@@ -115,16 +117,21 @@ Public Class Normalizacao
                     msgInfo &= "COD CLIENTE:" & drNulo.Item("COD_CLIENTE").ToString & " RAZÃO SOCIAL:" & drNulo.Item("DES_RAZON_SOCIAL").ToString & vbNewLine
                     Log.GravarLog("COD CLIENTE:" & drNulo.Item("COD_CLIENTE").ToString & " RAZÃO SOCIAL:" & drNulo.Item("DES_RAZON_SOCIAL").ToString & vbNewLine, pNomeArquivoLog)
                 Next
+            Else
+                Log.GravarLog("NÃO FORAM ENCONTRADOS CLIENTES COM NIF NULO NO MARTE:" & vbNewLine, pNomeArquivoLog)
             End If
 
             Log.GravarLog("FIM DA NORMALIZAÇÃO DE CLIENTE ----------------------------------------", pNomeArquivoLog)
             AlteraStatusProcessamento(msgInfo & vbNewLine & "FIM DA NORMALIZAÇÃO DE CLIENTE")
 
         Catch ex As Exception
+            Log.GravarLog(ex.ToString, pNomeArquivoLog)
+
+            Log.GravarLog("EXECUTANDO O ROLLBACK NAS BASES", pNomeArquivoLog)
             objtransacao_PROFAT.Rollback()
             objtransacao_NOVI.Rollback()
 
-            Log.GravarLog(ex.ToString, pNomeArquivoLog)
+            'Log.GravarLog(ex.ToString, pNomeArquivoLog)
             Throw ex
         End Try
 
@@ -300,23 +307,25 @@ Public Class Normalizacao
             MsgBox("Faça o backup da FAT_TTABTIPLOG antes de continuar, normalização cancelada!", MsgBoxStyle.Exclamation, "ATENÇÃO")
         Else
             Try
+
                 Log.GravarLog("INICIO DA NORMALIZAÇÃO DE TIPO DE LOGRADOURO ----------------------------------------", pNomeArquivoLog)
+
                 AlteraStatusProcessamento("INICIO DA NORMALIZAÇÃO DE TIPO DE LOGRADOURO")
+                AlteraStatusProcessamento("PROCESSANDO...")
 
                 Dim DadosMaestro As New DataTable
                 Dim cont As Integer = 0
 
+                Log.GravarLog("ABRINDO CONEXÃO COM NOVI E INICIANDO TRANSAÇÃO", pNomeArquivoLog)
                 Dim conn_NOVI As IDbConnection = AcessoDados.Conectar(Dados.CONEXAO_NOVI)
                 objtransacao_NOVI = conn_NOVI.BeginTransaction
 
+                Log.GravarLog("ABRINDO CONEXÃO COM PROFAT E INICIANDO TRANSAÇÃO", pNomeArquivoLog)
                 Dim conn_PROFAT As IDbConnection = AcessoDados.Conectar(Dados.CONEXAO_PROFAT)
                 objTransacao_PROFAT = conn_PROFAT.BeginTransaction
 
-                AlteraStatusProcessamento("PROCESSANDO...")
-                Log.GravarLog("DADOS MAESTROS PROVENIENTES DO MARTE ----------------------------------------", pNomeArquivoLog)
-
+                Log.GravarLog("BUSCAR DADOS DO MARTE PARA A MEMORIA", pNomeArquivoLog)
                 DadosMaestro = Dados.TipoLogradouroMARTE()
-                Log.GravarLog("BUSCOU DADOS DO MARTE PARA A MEMORIA", pNomeArquivoLog)
 
                 'Limpa a tabela de tipo de logradouro do NOVI e DePara
                 'Dados.DeletaTipoLogradouroNOVI(objtransacao_NOVI)
@@ -351,18 +360,21 @@ Public Class Normalizacao
                     AlteraStatusProcessamento("PROCESSANDO... " & vbNewLine & " Item " & cont & " de " & DadosMaestro.Rows.Count)
                 Next
 
+                Log.GravarLog("COMMIT NO NOVI", pNomeArquivoLog)
                 objtransacao_NOVI.Commit()
+                Log.GravarLog("COMMIT NO PROFAT", pNomeArquivoLog)
                 objTransacao_PROFAT.Commit()
 
                 Log.GravarLog("FIM DA NORMALIZAÇÃO DE TIPO DE LOGRADOURO ----------------------------------------", pNomeArquivoLog)
                 AlteraStatusProcessamento("FIM DA NORMALIZAÇÃO DE TIPO DE LOGRADOURO")
 
             Catch ex As Exception
+                Log.GravarLog(ex.ToString, pNomeArquivoLog)
 
+                Log.GravarLog("REALIZANDO ROLLBACKS", pNomeArquivoLog)
                 objtransacao_NOVI.Rollback()
                 objTransacao_PROFAT.Rollback()
 
-                Log.GravarLog(ex.ToString, pNomeArquivoLog)
                 Throw ex
             End Try
         End If
@@ -632,7 +644,7 @@ Public Class Normalizacao
     Public Shared Function NormalizaTipoPosto(ByVal pNomeArquivoLog As String) As Boolean
 
         Dim objtransacao_NOVI As IDbTransaction
-        Dim objtransacao_PROFAT As IDbTransaction
+        'Dim objtransacao_PROFAT As IDbTransaction
 
         Try
 
@@ -640,30 +652,34 @@ Public Class Normalizacao
             AlteraStatusProcessamento("INICIO DA NORMALIZAÇÃO DE TIPO DE POSTO")
 
             Dim cont As Integer = 0
+            Log.GravarLog("RECUPERAR DADOS DO MARTE PARA FAZER A NORMALIZAÇÃO", pNomeArquivoLog)
             Dim dtTipoPosto As DataTable = Dados.RetornaTipoPostoMARTE()
-            Log.GravarLog("RECUPEROU DADOS DO MARTE PARA FAZER A NORMALIZAÇÃO", pNomeArquivoLog)
 
+            Log.GravarLog("ABRINDO CONEXÃO COM O NOVI", pNomeArquivoLog)
             Dim conn_NOVI As IDbConnection = AcessoDados.Conectar(Dados.CONEXAO_NOVI)
-            Dim conn_PROFAT As New SqlConnection(AcessoDados.RecuperarStringConexao(Dados.CONEXAO_PROFAT))
+            'Log.GravarLog("ABRINDO CONEXÃO COM O PROFAT", pNomeArquivoLog)
+            'Dim conn_PROFAT As New SqlConnection(AcessoDados.RecuperarStringConexao(Dados.CONEXAO_PROFAT))
+            'conn_PROFAT.Open()
 
-            conn_PROFAT.Open()
-
-            objtransacao_PROFAT = conn_PROFAT.BeginTransaction
+            'objtransacao_PROFAT = conn_PROFAT.BeginTransaction
+            Log.GravarLog("INICIANDO TRANSAÇÃO NO NOVI", pNomeArquivoLog)
             objtransacao_NOVI = conn_NOVI.BeginTransaction
 
             AlteraStatusProcessamento("PROCESSANDO...")
             For Each dr As DataRow In dtTipoPosto.Rows
+                Log.GravarLog("ATUALIZANDO A TABELA XELEM COD_TABLA = 73, COD_ATRIBUTO (2,3,4) E COD_ELEMENTO = '" & dr.Item("COD_NOVI") & "', COM INFORMAÇÕES DO TIPO DE POSTO COMERCIAL NO CAMPO COD_COMERCIAL = " & dr.Item("COD_COMERCIAL"), pNomeArquivoLog)
                 Dados.AtualizaCodComercialTipoPostoNOVI(dr.Item("COD_COMERCIAL"), dr.Item("COD_NOVI"), objtransacao_NOVI)
-                Log.GravarLog("ATUALIZOU A TABELA XELEM COD_TABLA = 73 E COD_ELEMENTO = '" & dr.Item("COD_NOVI") & "', COM INFORMAÇÕES DO TIPO DE POSTO COMERCIAL NO CAMPO COD_COMERCIAL = " & dr.Item("COD_COMERCIAL"), pNomeArquivoLog)
 
-                Dados.MergeTipoPostoPROFAT(dr.Item("COD_NOVI"), dr.Item("DES_TIPO_PUESTO"), dr.Item("COD_COMERCIAL"), objtransacao_PROFAT)
-                Log.GravarLog("VERIFICANDO SE O TIPO DE POSTO JÁ EXISTE NO PROFAT COD = '" & dr.Item("COD_COMERCIAL") & "', SE SIM ATUALIZOU O CAMPO CODFUNPATCOM COM TAL CODIGO, SENÃO CRIOU O ITEM " & dr.Item("COD_NOVI"), pNomeArquivoLog)
+                'DESLIGADO: não existe de-para com o PROFAT do TIPO DE POSTO.
+                'Log.GravarLog("VERIFICANDO SE O TIPO DE POSTO JÁ EXISTE NO PROFAT COD = '" & dr.Item("COD_COMERCIAL") & "', SE SIM ATUALIZOU O CAMPO CODFUNPATCOM COM TAL CODIGO, SENÃO CRIOU O ITEM " & dr.Item("COD_NOVI"), pNomeArquivoLog)
+                'Dados.MergeTipoPostoPROFAT(dr.Item("COD_NOVI"), dr.Item("DES_TIPO_PUESTO"), dr.Item("COD_COMERCIAL"), objtransacao_PROFAT)
 
                 cont = cont + 1
                 AlteraStatusProcessamento("PROCESSANDO... " & vbNewLine & " Item " & cont & " de " & dtTipoPosto.Rows.Count)
             Next
 
-            objtransacao_PROFAT.Commit()
+            Log.GravarLog("COMMIT NO NOVI", pNomeArquivoLog)
+            'objtransacao_PROFAT.Commit()
             objtransacao_NOVI.Commit()
 
             Log.GravarLog("FIM DA NORMALIZAÇÃO DE TIPO DE POSTO ----------------------------------------", pNomeArquivoLog)
@@ -671,10 +687,12 @@ Public Class Normalizacao
 
         Catch ex As Exception
 
-            objtransacao_PROFAT.Rollback()
+            Log.GravarLog(ex.ToString, pNomeArquivoLog)
+
+            Log.GravarLog("ROLLBACK NO NOVI E PROFAT", pNomeArquivoLog)
+            'objtransacao_PROFAT.Rollback()
             objtransacao_NOVI.Rollback()
 
-            Log.GravarLog(ex.ToString, pNomeArquivoLog)
             Throw ex
         End Try
 
@@ -957,6 +975,55 @@ Public Class Normalizacao
     End Function
 
 #End Region
+
+#Region "ESCALA"
+    Public Shared Function NormalizaEscala(ByVal pNomeArquivoLog As String) As Boolean
+
+        Dim objtransacao_PROFAT As IDbTransaction
+        Dim DadosMaestro As New DataTable
+        Dim EscalaPROFAT As New DataTable
+
+        Try
+            Log.GravarLog("INICIO DA NORMALIZAÇÃO DE ESCALA ----------------------------------------", pNomeArquivoLog)
+            AlteraStatusProcessamento("INICIO DA NORMALIZAÇÃO DE ESCALA")
+
+            Log.GravarLog("BUSCAR DADOS DO MARTE PARA A MEMORIA", pNomeArquivoLog)
+            DadosMaestro = Dados.BuscarEscalaMARTE()
+
+            Log.GravarLog("ABRINDO CONEXÃO COM PROFAT E INICIANDO TRANSAÇÃO", pNomeArquivoLog)
+            Dim conn_PROFAT As IDbConnection = AcessoDados.Conectar(Dados.CONEXAO_PROFAT)
+            objtransacao_PROFAT = conn_PROFAT.BeginTransaction
+
+            'SERÁ FEITO SOMENTE PARA NOVAS ESCALAS NO MARTE QUE NÃO EXISTAM DIRETAMENTE NO PROFAT.
+            'O DE-PARA SERÁ ATUALIZADO PARA QUE O IVA FIQUE OK ENQUANTO EXISTIR.
+            For Each dr As DataRow In DadosMaestro.Rows
+                Log.GravarLog("REALIZAR O MERGE NO PROFAT DA ESCALA MARTE " & dr("COD_ESCALA").ToString(), pNomeArquivoLog)
+                Dados.MergeEscalaProfat(dr("COD_ESCALA"), dr("DES_ESCALA"), dr("COD_PROFAT"), objtransacao_PROFAT)
+            Next
+            'TODO ATUALIZAR O DE-PARA
+
+
+            Log.GravarLog("COMMIT NO PROFAT", pNomeArquivoLog)
+            'objtransacao_PROFAT.Commit()
+            objtransacao_PROFAT.Rollback()
+
+            Log.GravarLog("FIM DA NORMALIZAÇÃO DE ESCALA ----------------------------------------", pNomeArquivoLog)
+            AlteraStatusProcessamento("FIM DA NORMALIZAÇÃO DE ESCALA")
+        Catch ex As Exception
+            Log.GravarLog(ex.ToString, pNomeArquivoLog)
+
+            Log.GravarLog("Realizando o ROLLBACK no PROFAT", pNomeArquivoLog)
+            If (objtransacao_PROFAT IsNot Nothing) And (objtransacao_PROFAT.Connection.State = ConnectionState.Open) Then
+                objtransacao_PROFAT.Rollback()
+            End If
+
+            Throw ex
+        End Try
+
+        Return True
+    End Function
+#End Region
+
 
     Public Shared Sub AlteraStatusProcessamento(ByVal ptexto As String)
         frmMigracao.txtStatus.Text = ptexto

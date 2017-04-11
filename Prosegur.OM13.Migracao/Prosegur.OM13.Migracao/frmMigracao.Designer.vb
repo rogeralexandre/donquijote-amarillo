@@ -33,7 +33,7 @@ Partial Class frmMigracao
         Me.btnFilial = New System.Windows.Forms.Button()
         Me.btnDelegacao = New System.Windows.Forms.Button()
         Me.btnTipoPosto = New System.Windows.Forms.Button()
-        Me.btnSubSegmento = New System.Windows.Forms.Button()
+        Me.btnEscala = New System.Windows.Forms.Button()
         Me.btnSegmento = New System.Windows.Forms.Button()
         Me.btnLogradouro = New System.Windows.Forms.Button()
         Me.SuspendLayout()
@@ -45,7 +45,7 @@ Partial Class frmMigracao
         Me.btnCliente.Name = "btnCliente"
         Me.btnCliente.Size = New System.Drawing.Size(102, 47)
         Me.btnCliente.TabIndex = 0
-        Me.btnCliente.Text = "CLIENTE"
+        Me.btnCliente.Text = "CLIENTE (10)"
         Me.btnCliente.UseVisualStyleBackColor = True
         '
         'txtStatus
@@ -82,7 +82,7 @@ Partial Class frmMigracao
         Me.btnSubCliente.Name = "btnSubCliente"
         Me.btnSubCliente.Size = New System.Drawing.Size(102, 47)
         Me.btnSubCliente.TabIndex = 0
-        Me.btnSubCliente.Text = "SUBCLIENTE"
+        Me.btnSubCliente.Text = "SUBCLIENTE (11)"
         Me.btnSubCliente.UseVisualStyleBackColor = True
         '
         'btnCidade
@@ -92,7 +92,7 @@ Partial Class frmMigracao
         Me.btnCidade.Name = "btnCidade"
         Me.btnCidade.Size = New System.Drawing.Size(102, 47)
         Me.btnCidade.TabIndex = 0
-        Me.btnCidade.Text = "CIDADE"
+        Me.btnCidade.Text = "CIDADE (7)"
         Me.btnCidade.UseVisualStyleBackColor = True
         '
         'btnDivisao
@@ -102,7 +102,7 @@ Partial Class frmMigracao
         Me.btnDivisao.Name = "btnDivisao"
         Me.btnDivisao.Size = New System.Drawing.Size(102, 47)
         Me.btnDivisao.TabIndex = 0
-        Me.btnDivisao.Text = "DIVISÃO"
+        Me.btnDivisao.Text = "DIVISÃO (9) ??"
         Me.btnDivisao.UseVisualStyleBackColor = True
         '
         'btnFilial
@@ -112,7 +112,7 @@ Partial Class frmMigracao
         Me.btnFilial.Name = "btnFilial"
         Me.btnFilial.Size = New System.Drawing.Size(102, 47)
         Me.btnFilial.TabIndex = 0
-        Me.btnFilial.Text = "FILIAL"
+        Me.btnFilial.Text = "FILIAL (4,13)"
         Me.btnFilial.UseVisualStyleBackColor = True
         '
         'btnDelegacao
@@ -122,7 +122,7 @@ Partial Class frmMigracao
         Me.btnDelegacao.Name = "btnDelegacao"
         Me.btnDelegacao.Size = New System.Drawing.Size(102, 55)
         Me.btnDelegacao.TabIndex = 0
-        Me.btnDelegacao.Text = "REGIONAL"
+        Me.btnDelegacao.Text = "REGIONAL (9)"
         Me.btnDelegacao.UseVisualStyleBackColor = True
         '
         'btnTipoPosto
@@ -132,19 +132,18 @@ Partial Class frmMigracao
         Me.btnTipoPosto.Name = "btnTipoPosto"
         Me.btnTipoPosto.Size = New System.Drawing.Size(102, 55)
         Me.btnTipoPosto.TabIndex = 0
-        Me.btnTipoPosto.Text = "TIPO DE POSTO"
+        Me.btnTipoPosto.Text = "TIPO DE POSTO (8)"
         Me.btnTipoPosto.UseVisualStyleBackColor = True
         '
-        'btnSubSegmento
+        'btnEscala
         '
-        Me.btnSubSegmento.Enabled = False
-        Me.btnSubSegmento.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnSubSegmento.Location = New System.Drawing.Point(455, 210)
-        Me.btnSubSegmento.Name = "btnSubSegmento"
-        Me.btnSubSegmento.Size = New System.Drawing.Size(102, 55)
-        Me.btnSubSegmento.TabIndex = 0
-        Me.btnSubSegmento.Text = "OT"
-        Me.btnSubSegmento.UseVisualStyleBackColor = True
+        Me.btnEscala.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnEscala.Location = New System.Drawing.Point(455, 210)
+        Me.btnEscala.Name = "btnEscala"
+        Me.btnEscala.Size = New System.Drawing.Size(102, 55)
+        Me.btnEscala.TabIndex = 0
+        Me.btnEscala.Text = "ESCALA (12)"
+        Me.btnEscala.UseVisualStyleBackColor = True
         '
         'btnSegmento
         '
@@ -153,7 +152,7 @@ Partial Class frmMigracao
         Me.btnSegmento.Name = "btnSegmento"
         Me.btnSegmento.Size = New System.Drawing.Size(102, 55)
         Me.btnSegmento.TabIndex = 0
-        Me.btnSegmento.Text = "SEGMENTO/  SUB SEGMENTO"
+        Me.btnSegmento.Text = "SEGMENTO/SUBSEGMENTO (1,2)"
         Me.btnSegmento.UseVisualStyleBackColor = True
         '
         'btnLogradouro
@@ -163,7 +162,7 @@ Partial Class frmMigracao
         Me.btnLogradouro.Name = "btnLogradouro"
         Me.btnLogradouro.Size = New System.Drawing.Size(102, 54)
         Me.btnLogradouro.TabIndex = 0
-        Me.btnLogradouro.Text = "TIPO LOGRADOURO"
+        Me.btnLogradouro.Text = "TIPO LOGRADOURO (6)"
         Me.btnLogradouro.UseVisualStyleBackColor = True
         '
         'frmMigracao
@@ -178,7 +177,7 @@ Partial Class frmMigracao
         Me.Controls.Add(Me.btnFilial)
         Me.Controls.Add(Me.btnTipoPosto)
         Me.Controls.Add(Me.btnDivisao)
-        Me.Controls.Add(Me.btnSubSegmento)
+        Me.Controls.Add(Me.btnEscala)
         Me.Controls.Add(Me.btnCidade)
         Me.Controls.Add(Me.btnSegmento)
         Me.Controls.Add(Me.btnSubCliente)
@@ -203,7 +202,7 @@ Partial Class frmMigracao
     Friend WithEvents btnFilial As System.Windows.Forms.Button
     Friend WithEvents btnDelegacao As System.Windows.Forms.Button
     Friend WithEvents btnTipoPosto As System.Windows.Forms.Button
-    Friend WithEvents btnSubSegmento As System.Windows.Forms.Button
+    Friend WithEvents btnEscala As System.Windows.Forms.Button
     Friend WithEvents btnSegmento As System.Windows.Forms.Button
     Friend WithEvents btnLogradouro As System.Windows.Forms.Button
 
