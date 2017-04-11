@@ -401,6 +401,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="favicon.ico" />
+    <Content Include="Resources\ESCALA\MERGE_ESCALA_PROFAT.SQL" />
+    <Content Include="Resources\ESCALA\SELECT_ESCALA_MARTE.SQL" />
+    <Content Include="Resources\ESCALA\INSERT_ESCALA_DEPARA.SQL" />
     <Content Include="Resources\SEGMENTO\DELETE_MARTE_SEGMENTO.SQL" />
     <Content Include="Resources\SEGMENTO\DELETE_MARTE_SUBSEGMENTO.SQL" />
     <Content Include="Resources\SEGMENTO\INSERT_SEGMENTO_MARTE.SQL" />

@@ -1504,4 +1504,51 @@ Public Class Dados
 
 #End Region
 
+#Region "ESCALA"
+    ''' <summary>
+    ''' Busca dados de ESCALA do MARTE
+    ''' </summary>
+    ''' <returns>tabela com todos os dados de ESCALA</returns>
+    ''' <remarks></remarks>
+    Public Shared Function BuscarEscalaMARTE() As DataTable
+        Using cmd As IDbCommand = DbHelper.AcessoDados.CriarComando(CONEXAO_MARTE)
+            cmd.CommandText = String.Format(My.Resources.SELECT_ESCALA_MARTE, String.Empty)
+            Return DbHelper.AcessoDados.ExecutarDataTable(CONEXAO_MARTE, cmd)
+        End Using
+    End Function
+
+    Public Shared Function MergeEscalaProfat(pCodMARTE As String,
+                                             pDesEsc As String,
+                                             pCodEsc As String,
+                                             ByRef objTransacao As IDbTransaction) As Integer
+        Using cmd As IDbCommand = objTransacao.Connection.CreateCommand
+            cmd.Transaction = objTransacao
+
+            Dim sSQL As String = My.Resources.MERGE_ESCALA_PROFAT
+
+            sSQL = sSQL.Replace("PAR_CODMARTE", pCodMARTE)
+            sSQL = sSQL.Replace("PAR_DESESC", pDesEsc)
+            sSQL = sSQL.Replace("PAR_CODESC", pCodEsc)
+
+            cmd.CommandText = sSQL
+
+            Return DbHelper.AcessoDados.ExecutarNonQuery(CONEXAO_PROFAT, cmd)
+        End Using
+    End Function
+
+    Public Shared Function InsereEscalaDePara(pOID_MARTE As String, pCodProfat As String, objTransacao As IDbTransaction) As Integer
+        Using cmd As IDbCommand = objTransacao.Connection.CreateCommand()
+            cmd.Transaction = objTransacao
+            cmd.CommandText = My.Resources.INSERT_ESCALA_DEPARA
+
+            cmd.Parameters.Add(DbHelper.AcessoDados.CriarParametro(CONEXAO_MARTE, "OID_MARTE", DbType.String, pOID_MARTE))
+            cmd.Parameters.Add(DbHelper.AcessoDados.CriarParametro(CONEXAO_MARTE, "COD_PROFAT", DbType.String, pCodProfat))
+
+            DbHelper.AcessoDados.ExecutarNonQuery(CONEXAO_MARTE, cmd)
+        End Using
+    End Function
+
+#End Region
+
+
 End Class
