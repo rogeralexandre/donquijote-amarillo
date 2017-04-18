@@ -1579,11 +1579,16 @@ Public Class Dados
 
             sSQL = sSQL.Replace("PAR_CODMARTE", pCodMARTE)
             sSQL = sSQL.Replace("PAR_DESESC", pDesEsc)
+            If (String.IsNullOrEmpty(pCodEsc)) Then
+                pCodEsc = "0"
+            End If
             sSQL = sSQL.Replace("PAR_CODESC", pCodEsc)
 
             cmd.CommandText = sSQL
 
-            Return DbHelper.AcessoDados.ExecutarNonQuery(CONEXAO_PROFAT, cmd)
+            'Return DbHelper.AcessoDados.ExecutarNonQuery(CONEXAO_PROFAT, cmd)
+            Return DbHelper.AcessoDados.ExecutarScalar(CONEXAO_PROFAT, cmd)
+
         End Using
     End Function
 
@@ -1595,7 +1600,16 @@ Public Class Dados
             cmd.Parameters.Add(DbHelper.AcessoDados.CriarParametro(CONEXAO_MARTE, "OID_MARTE", DbType.String, pOID_MARTE))
             cmd.Parameters.Add(DbHelper.AcessoDados.CriarParametro(CONEXAO_MARTE, "COD_PROFAT", DbType.String, pCodProfat))
 
-            DbHelper.AcessoDados.ExecutarNonQuery(CONEXAO_MARTE, cmd)
+            Return DbHelper.AcessoDados.ExecutarNonQuery(CONEXAO_MARTE, cmd)
+        End Using
+    End Function
+
+    Public Shared Function ZerarCodMarte_EscalasPROFAT(objTransacao As IDbTransaction) As Integer
+        Using cmd As IDbCommand = objTransacao.Connection.CreateCommand()
+            cmd.Transaction = objTransacao
+            cmd.CommandText = My.Resources.UPDATE_PROFAT_ESCALA_CODMARTE_NULO
+
+            Return DbHelper.AcessoDados.ExecutarNonQuery(CONEXAO_PROFAT, cmd)
         End Using
     End Function
 

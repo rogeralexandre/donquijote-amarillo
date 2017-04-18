@@ -412,6 +412,9 @@
   <data name="UPDATE_NOVI_TIPOLOG" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\TIPOLOGRADOURO\UPDATE_NOVI_TIPOLOG.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
+  <data name="UPDATE_PROFAT_ESCALA_CODMARTE_NULO" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ESCALA\UPDATE_PROFAT_ESCALA_CODMARTE_NULO.SQL;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
   <data name="UPDATE_PROFAT_TIPOLOG" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\TIPOLOGRADOURO\UPDATE_PROFAT_TIPOLOG.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>

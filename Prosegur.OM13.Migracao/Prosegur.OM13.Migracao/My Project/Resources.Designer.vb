@@ -112,12 +112,12 @@ Namespace My.Resources
         '''<summary>
         '''  Looks up a localized string similar to --ATUALIZA SUB CLIENTE NOVI
         '''UPDATE DDLVIG.OSBCL
-        '''   SET OSBCL_NOC_SUBCLI = :OSBCL_NOC_SUBCLI, 
-        '''	   OSBCL_NOL_SUBCLI = :OSBCL_NOL_SUBCLI, 
+        '''   SET --OSBCL_NOC_SUBCLI = :OSBCL_NOC_SUBCLI, 
+        '''	   --OSBCL_NOL_SUBCLI = :OSBCL_NOL_SUBCLI, 
         '''       OSBCL_USU_ULTACTU = &apos;OM13&apos;,
         '''	   OSBCL_FEC_ULTACTU = TO_CHAR(SYSDATE, &apos;YYYYMMDD&apos;),
         '''	   OSBCL_HOR_ULTACTU = TO_CHAR(SYSDATE, &apos;HH24MISS&apos;), 
-        '''	   OSBCL_COD_VIA = :OSBCL_COD_VIA, 
+        '''	   --OSBCL_COD_VIA = :OSBCL_COD_VIA, 
         '''	   COD_SUBCLI_COMERCIAL = :COD_COMERCIAL
         '''WHERE OSBCL_COD_CLIENTE = :COD_CLIE
         '''  AND OSBCL_COD_SUBCLI = :COD_SUBCLIE.
@@ -596,15 +596,23 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Looks up a localized string similar to MERGE INTO dbo.fat_tcadesc ESC1
-        ''' USING (SELECT MAX(CODESC)+1 AS CODESC, &apos;PAR_CODESC&apos; CODESC from fat_tcadesc) ESC2
-        ''' ON (ESC1.CODESC = ESC2.CODESC)
-        ''' WHEN MATCHED THEN 
-        '''	UPDATE SET DATULTALT = GETDATE(), CODUSU = 1100 , CODMARTE = &apos;PAR_CODMARTE&apos;
-        ''' WHEN NOT MATCHED THEN
-        '''	INSERT (CODESC     , DESESC      , CODUSU, DATUTLALT, CODMARTE)
-        '''	VALUES (ESC2.CODESC, &apos;PAR_DESESC&apos;, 1100  , GETDATE(), &apos;PAR_CODMARTE&apos;);
-        '''.
+        '''  Looks up a localized string similar to DECLARE @codesc_n integer = 0
+        '''If exists(SELECT codesc FROM FAT_TCADESC WHERE codesc = PAR_CODESC)
+        ''' begin
+        '''	update FAT_TCADESC
+        '''	   set DATULTALT = GETDATE(), 
+        '''	       CODUSU = 1100 , 
+        '''	       CODMARTE = &apos;PAR_CODMARTE&apos;
+        '''	 where CODESC = 2
+        '''	 select 0 as retorno
+        ''' end
+        '''ELSE
+        ''' begin
+        '''    SELECT @codesc_n = MAX(CODESC)+1 from FAT_TCADESC
+        '''	INSERT INTO FAT_TCADESC 
+        '''	            (CODESC   , DESESC , CODUSU, DATULTALT, CODMARTE)
+        '''	     VALUES
+        '''			    (@codesc_n, &apos;PAR_DESESC&apos;, 1100  , getdate(), &apos;PAR_CODMARTE&apos; [rest of string was truncated]&quot;;.
         '''</summary>
         Friend ReadOnly Property MERGE_ESCALA_PROFAT() As String
             Get
@@ -672,10 +680,10 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Looks up a localized string similar to select e.oid_escala, e.cod_escala, e.des_escala, dp.cod_profat
+        '''  Looks up a localized string similar to select e.oid_escala, e.cod_escala, e.des_escala, nvl(dp.cod_profat,0) cod_profat
         '''from marte.copr_tescala e
-        '''left join marte.vabr_tde_para_geral dp on e.oid_escala = dp.cod_marte
-        '''where dp.cod_param_tab = 12.
+        '''left join marte.vabr_tde_para_geral dp on trim(e.oid_escala) = trim(dp.cod_marte) and dp.cod_param_tab = 12
+        '''where dp.cod_profat is null.
         '''</summary>
         Friend ReadOnly Property SELECT_ESCALA_MARTE() As String
             Get
@@ -1181,6 +1189,7 @@ Namespace My.Resources
         '''      ,[CODSUBRAMATV]
         '''      ,[CODCLICOM]
         '''FROM [db_profat].[dbo].[FAT_TCADCLI]
+        '''where codclicom &lt;&gt; &apos;0&apos;
         '''.
         '''</summary>
         Friend ReadOnly Property SELECT_RAMOS_SUBRAMOS_CLIENTE() As String
@@ -1356,6 +1365,17 @@ Namespace My.Resources
         Friend ReadOnly Property UPDATE_NOVI_TIPOLOG() As String
             Get
                 Return ResourceManager.GetString("UPDATE_NOVI_TIPOLOG", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to UPDATE FAT_TCADESC
+        '''   SET CODMARTE = NULL
+        '''WHERE CODESC = CODESC.
+        '''</summary>
+        Friend ReadOnly Property UPDATE_PROFAT_ESCALA_CODMARTE_NULO() As String
+            Get
+                Return ResourceManager.GetString("UPDATE_PROFAT_ESCALA_CODMARTE_NULO", resourceCulture)
             End Get
         End Property
         
