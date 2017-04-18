@@ -370,6 +370,9 @@
   <data name="SELECT_PROFAT_VERIFICADUPLICIDADE_CPF" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\CLIENTE\SELECT_PROFAT_VERIFICADUPLICIDADE_CPF.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
+  <data name="SELECT_RAMOS_SUBRAMOS_CLIENTE" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\CLIENTE\SELECT_RAMOS-SUBRAMOS_CLIENTE.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
   <data name="UPDATE_CLIENTE_MARTE" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\SEGMENTO\UPDATE_CLIENTE_MARTE.SQL;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
@@ -411,5 +414,8 @@
   </data>
   <data name="UPDATE_PROFAT_TIPOLOG" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\TIPOLOGRADOURO\UPDATE_PROFAT_TIPOLOG.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="UPDATE_SEGMENTO_SUBSEGMENTO_MARTE" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\CLIENTE\UPDATE_SEGMENTO_SUBSEGMENTO_MARTE.SQL;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
 </root>

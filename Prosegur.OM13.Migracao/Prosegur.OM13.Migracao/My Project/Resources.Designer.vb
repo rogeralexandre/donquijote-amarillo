@@ -884,12 +884,16 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Looks up a localized string similar to SELECT C.COD_IDENTIFICACION_FISCAL, C.COD_CLIENTE, C.DES_RAZON_SOCIAL, COUNT(C.COD_IDENTIFICACION_FISCAL) QTD
-        '''FROM MARTE.COPR_TCLIENTE C INNER JOIN MARTE.VABR_TDE_PARA_GERAL V ON C.COD_CLIENTE = V.COD_MARTE     
-        '''WHERE C.BOL_POTENCIAL = 0    
-        '''  AND V.COD_PARAM_TAB = &apos;10&apos;
-        '''GROUP BY C.COD_IDENTIFICACION_FISCAL, C.COD_CLIENTE, C.DES_RAZON_SOCIAL
-        '''HAVING COUNT(C.COD_IDENTIFICACION_FISCAL) &gt; 1  .
+        '''  Looks up a localized string similar to --SELECT C.COD_IDENTIFICACION_FISCAL, C.COD_CLIENTE, C.DES_RAZON_SOCIAL, COUNT(C.COD_IDENTIFICACION_FISCAL) QTD
+        '''--FROM MARTE.COPR_TCLIENTE C INNER JOIN MARTE.VABR_TDE_PARA_GERAL V ON C.COD_CLIENTE = V.COD_MARTE     
+        '''--WHERE C.BOL_POTENCIAL = 0    
+        '''--  AND V.COD_PARAM_TAB = &apos;10&apos;
+        '''--GROUP BY C.COD_IDENTIFICACION_FISCAL, C.COD_CLIENTE, C.DES_RAZON_SOCIAL
+        '''--HAVING COUNT(C.COD_IDENTIFICACION_FISCAL) &gt; 1  
+        '''
+        '''SELECT C.COD_IDENTIFICACION_FISCAL, C.COD_CLIENTE, C.DES_RAZON_SOCIAL
+        '''FROM MARTE.COPR_TCLIENTE C
+        '''IN [rest of string was truncated]&quot;;.
         '''</summary>
         Friend ReadOnly Property SELECT_MARTE_VERIFICADUPLICIDADE() As String
             Get
@@ -1173,6 +1177,19 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized string similar to SELECT [CODRAMATV]
+        '''      ,[CODSUBRAMATV]
+        '''      ,[CODCLICOM]
+        '''FROM [db_profat].[dbo].[FAT_TCADCLI]
+        '''.
+        '''</summary>
+        Friend ReadOnly Property SELECT_RAMOS_SUBRAMOS_CLIENTE() As String
+            Get
+                Return ResourceManager.GetString("SELECT_RAMOS_SUBRAMOS_CLIENTE", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized string similar to UPDATE MARTE.COPR_TCLIENTE
         '''   SET OID_SEGMENTO = &apos;0&apos;, OID_SUBSEGMENTO = &apos;0&apos;
         '''.
@@ -1356,6 +1373,23 @@ Namespace My.Resources
         Friend ReadOnly Property UPDATE_PROFAT_TIPOLOG() As String
             Get
                 Return ResourceManager.GetString("UPDATE_PROFAT_TIPOLOG", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to UPDATE MARTE.COPR_TCLIENTE
+        '''   SET OID_SEGMENTO = (SELECT OID_SEGMENTO FROM MARTE.COPR_TSEGMENTO WHERE COD_SEGMENTO = &apos;COD_RAMO&apos;),
+        '''  	   OID_SUBSEGMENTO = (SELECT SS.OID_SUBSEGMENTO 
+        '''                            FROM MARTE.COPR_TSUBSEGMENTO SS 
+        '''                           INNER JOIN MARTE.COPR_TSEGMENTO S ON S.OID_SEGMENTO = SS.OID_SEGMENTO
+        '''                           WHERE SS.COD_SUBSEGMENTO = &apos;COD_SUBRAMO&apos;
+        '''                             AND S.COD_SEGMENTO = &apos;COD_RAMO&apos;),
+        '''       DES_MUID = &apos;OM13&apos;,
+        '''        [rest of string was truncated]&quot;;.
+        '''</summary>
+        Friend ReadOnly Property UPDATE_SEGMENTO_SUBSEGMENTO_MARTE() As String
+            Get
+                Return ResourceManager.GetString("UPDATE_SEGMENTO_SUBSEGMENTO_MARTE", resourceCulture)
             End Get
         End Property
     End Module
