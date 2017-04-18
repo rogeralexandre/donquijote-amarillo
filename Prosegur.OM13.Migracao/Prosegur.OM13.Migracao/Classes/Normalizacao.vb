@@ -278,7 +278,7 @@ Public Class Normalizacao
                 cont = cont + 1
                 AlteraStatusProcessamento("PROCESSANDO... " & vbNewLine & " Item " & cont & " de " & dtSubClientes.Rows.Count)
             Next
-
+            Log.GravarLog("Rodando os commit no PROFAT e NOVI", pNomeArquivoLog)
             objtransacao_PROFAT.Commit()
             objtransacao_NOVI.Commit()
 
@@ -320,6 +320,8 @@ Public Class Normalizacao
 
             Log.GravarLog("FIM DA NORMALIZAÇÃO DE SUB CLIENTE ----------------------------------------", pNomeArquivoLog)
             AlteraStatusProcessamento(msgInfo & vbNewLine & "FIM DA NORMALIZAÇÃO DE SUB CLIENTE")
+
+            MessageBox.Show("Normalização executada!")
 
         Catch ex As Exception
             objtransacao_PROFAT.Rollback()

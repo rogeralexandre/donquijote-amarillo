@@ -250,6 +250,9 @@ Public Class Dados
     ''' <remarks></remarks>
     Public Shared Function AtualizaCodComercialSubCliPROFAT(ByVal pCodComercial As String, ByVal pCodProfat As String, ByRef objtransacao As IDbTransaction) As Integer
 
+        Dim pNomeArquivoScript As String = "SCRIPT_PROFAT"
+        Dim sSQL As String
+
         Try
             Using cmd As IDbCommand = objtransacao.Connection.CreateCommand()
                 cmd.Transaction = objtransacao
@@ -257,6 +260,11 @@ Public Class Dados
 
                 cmd.Parameters.Add(DbHelper.AcessoDados.CriarParametro(CONEXAO_PROFAT, "COD_COMERCIAL", DbType.String, pCodComercial))
                 cmd.Parameters.Add(DbHelper.AcessoDados.CriarParametro(CONEXAO_PROFAT, "COD_PROFAT", DbType.String, pCodProfat))
+
+                sSQL = My.Resources.ATUALIZA_PROFAT_SUBCLIENTE
+                sSQL = sSQL.Replace("@COD_COMERCIAL", "'" & pCodComercial & "'")
+                sSQL = sSQL.Replace("@COD_PROFAT", "'" & pCodProfat & "'")
+                Log.GravarLog(sSQL, pNomeArquivoScript)
 
                 Return DbHelper.AcessoDados.ExecutarNonQuery(CONEXAO_PROFAT, cmd)
             End Using
@@ -279,9 +287,9 @@ Public Class Dados
                 cmd.Transaction = objtransacao
                 cmd.CommandText = My.Resources.ATUALIZA_NOVI_SUBCLIENTE
 
-                cmd.Parameters.Add(DbHelper.AcessoDados.CriarParametro(CONEXAO_NOVI, "OSBCL_NOC_SUBCLI", DbType.String, pNomeCurto))
-                cmd.Parameters.Add(DbHelper.AcessoDados.CriarParametro(CONEXAO_NOVI, "OSBCL_NOL_SUBCLI", DbType.String, pNomeSubCli))
-                cmd.Parameters.Add(DbHelper.AcessoDados.CriarParametro(CONEXAO_NOVI, "OSBCL_COD_VIA", DbType.String, RetornaCodVia(pCodTipoLog)))
+                'cmd.Parameters.Add(DbHelper.AcessoDados.CriarParametro(CONEXAO_NOVI, "OSBCL_NOC_SUBCLI", DbType.String, pNomeCurto))
+                'cmd.Parameters.Add(DbHelper.AcessoDados.CriarParametro(CONEXAO_NOVI, "OSBCL_NOL_SUBCLI", DbType.String, pNomeSubCli))
+                'cmd.Parameters.Add(DbHelper.AcessoDados.CriarParametro(CONEXAO_NOVI, "OSBCL_COD_VIA", DbType.String, RetornaCodVia(pCodTipoLog)))
                 cmd.Parameters.Add(DbHelper.AcessoDados.CriarParametro(CONEXAO_NOVI, "COD_COMERCIAL", DbType.String, pCodComercial))
                 cmd.Parameters.Add(DbHelper.AcessoDados.CriarParametro(CONEXAO_NOVI, "COD_CLIE", DbType.String, pCodNOVICliente))
                 cmd.Parameters.Add(DbHelper.AcessoDados.CriarParametro(CONEXAO_NOVI, "COD_SUBCLIE", DbType.String, pCodNOVISubCliente))
