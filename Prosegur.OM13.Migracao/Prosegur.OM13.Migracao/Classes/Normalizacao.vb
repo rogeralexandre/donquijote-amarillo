@@ -1025,8 +1025,10 @@ Public Class Normalizacao
     Public Shared Function NormalizaEscala(ByVal pNomeArquivoLog As String) As Boolean
 
         Dim objtransacao_PROFAT As IDbTransaction
+        Dim objtransacao_MARTE As IDbTransaction
         Dim DadosMaestro As New DataTable
         Dim EscalaPROFAT As New DataTable
+        Dim CodEsc As Integer
 
         Try
             Log.GravarLog("INICIO DA NORMALIZAÇÃO DE ESCALA ----------------------------------------", pNomeArquivoLog)
@@ -1039,18 +1041,32 @@ Public Class Normalizacao
             Dim conn_PROFAT As IDbConnection = AcessoDados.Conectar(Dados.CONEXAO_PROFAT)
             objtransacao_PROFAT = conn_PROFAT.BeginTransaction
 
+            Log.GravarLog("ABRINDO CONEXÃO COM O MARTE", pNomeArquivoLog)
+            Dim conn_MARTE As IDbConnection = AcessoDados.Conectar(Dados.CONEXAO_MARTE)
+            objtransacao_MARTE = conn_MARTE.BeginTransaction()
+
+            'ZERAR O CAMPO CODMARTE DENTRO DO PROFAT
+            Dados.ZerarCodMarte_EscalasPROFAT(objtransacao_PROFAT)
+
             'SERÁ FEITO SOMENTE PARA NOVAS ESCALAS NO MARTE QUE NÃO EXISTAM DIRETAMENTE NO PROFAT.
             'O DE-PARA SERÁ ATUALIZADO PARA QUE O IVA FIQUE OK ENQUANTO EXISTIR.
             For Each dr As DataRow In DadosMaestro.Rows
                 Log.GravarLog("REALIZAR O MERGE NO PROFAT DA ESCALA MARTE " & dr("COD_ESCALA").ToString(), pNomeArquivoLog)
-                Dados.MergeEscalaProfat(dr("COD_ESCALA"), dr("DES_ESCALA"), dr("COD_PROFAT"), objtransacao_PROFAT)
-            Next
-            'TODO ATUALIZAR O DE-PARA
+                CodEsc = Dados.MergeEscalaProfat(dr("COD_ESCALA"), dr("DES_ESCALA"), dr("COD_PROFAT"), objtransacao_PROFAT)
 
+                If (CodEsc > 0) Then
+                    'TODO ATUALIZAR O DE-PARA
+                    Log.GravarLog("ATUALIZANDO O DE-PARA DA ESCALA " & dr("COD_ESCALA").ToString() & " (" & dr("OID_ESCALA") & ") " & " COD_PROFAT=" & CodEsc.ToString(), pNomeArquivoLog)
+                    Dados.InsereEscalaDePara(dr("OID_ESCALA"), CodEsc.ToString(), objtransacao_MARTE)
+                End If
+            Next
 
             Log.GravarLog("COMMIT NO PROFAT", pNomeArquivoLog)
-            'objtransacao_PROFAT.Commit()
-            objtransacao_PROFAT.Rollback()
+            objtransacao_PROFAT.Commit()
+            objtransacao_MARTE.Commit()
+            'PARA TESTES
+            'objtransacao_PROFAT.Rollback()
+            'objtransacao_MARTE.Rollback()
 
             Log.GravarLog("FIM DA NORMALIZAÇÃO DE ESCALA ----------------------------------------", pNomeArquivoLog)
             AlteraStatusProcessamento("FIM DA NORMALIZAÇÃO DE ESCALA")
@@ -1061,6 +1077,7 @@ Public Class Normalizacao
             If (objtransacao_PROFAT IsNot Nothing) And (objtransacao_PROFAT.Connection.State = ConnectionState.Open) Then
                 objtransacao_PROFAT.Rollback()
             End If
+            objtransacao_MARTE.Rollback()
 
             Throw ex
         End Try
