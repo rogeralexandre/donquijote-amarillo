@@ -132,6 +132,49 @@ Public Class Dados
         End Try
     End Function
 
+    Public Shared Function AtualizaSegmentoSubsegmentoClientecomBasePROFAT(ByVal pCodPROFAT As String,
+                                                               ByVal pCodRamo As String,
+                                                               ByVal pCodSubRamo As String,
+                                                               ByVal pNomeArquivoLog As String,
+                                                               ByRef objtransacao As IDbTransaction) As Integer
+
+        Try
+            Using cmd As IDbCommand = objtransacao.Connection.CreateCommand()
+                cmd.Transaction = objtransacao
+
+                Dim sSql As String = My.Resources.UPDATE_SEGMENTO_SUBSEGMENTO_MARTE
+
+                If (String.IsNullOrEmpty(pCodRamo)) Then
+                    pCodRamo = "0"
+                End If
+                If (String.IsNullOrEmpty(pCodSubRamo)) Then
+                    pCodSubRamo = "0"
+                End If
+
+                sSql = sSql.Replace("COD_RAMO", pCodRamo)
+                sSql = sSql.Replace("COD_SUBRAMO", pCodSubRamo)
+                sSql = sSql.Replace("COD_PROFAT", pCodPROFAT)
+
+                cmd.CommandText = sSql
+                Log.GravarLog("executando comando: " & sSql, pNomeArquivoLog)
+
+                Return DbHelper.AcessoDados.ExecutarNonQuery(CONEXAO_MARTE, cmd)
+            End Using
+        Catch ex As Exception
+            'Throw ex
+            Log.GravarLog("Ocorreu erro na execução do comando: " & ex.Message, pNomeArquivoLog)
+            Log.GravarLog(ex.ToString(), pNomeArquivoLog)
+        End Try
+
+    End Function
+
+    Public Shared Function RetornaRamoSubramoPROFAT() As DataTable
+        Using cmd As IDbCommand = DbHelper.AcessoDados.CriarComando(CONEXAO_PROFAT)
+            cmd.CommandText = My.Resources.SELECT_RAMOS_SUBRAMOS_CLIENTE
+            Return DbHelper.AcessoDados.ExecutarDataTable(CONEXAO_PROFAT, cmd)
+        End Using
+    End Function
+
 #End Region
 
 #Region "SUBCLIENTE"

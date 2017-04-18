@@ -9,6 +9,12 @@ Public Class Normalizacao
 
         Dim objtransacao_NOVI As IDbTransaction
         Dim objtransacao_PROFAT As IDbTransaction
+        Dim objtransacao_MARTE As IDbTransaction
+        'Por desconhecimento de como obter o stado da transação, apelei.
+        Dim TransacaoMARTE_ON As Boolean = False
+        Dim TransacaoPROFAT_ON As Boolean = False
+        Dim TransacaoNOVI_ON As Boolean = False
+
         Dim UsaWS As Boolean = CType(System.Configuration.ConfigurationManager.AppSettings("HabilitarWSPROFAT"), Boolean)
 
         Try
@@ -21,7 +27,9 @@ Public Class Normalizacao
             conn_PROFAT.Open()
 
             objtransacao_NOVI = conn_NOVI.BeginTransaction
+            TransacaoNOVI_ON = True
             objtransacao_PROFAT = conn_PROFAT.BeginTransaction
+            TransacaoPROFAT_ON = True
 
             Dim dtClientes As New DataTable
             Dim ws As New WSPROFAT.ClienteMarteProfat
@@ -84,14 +92,18 @@ Public Class Normalizacao
                 Log.GravarLog("ATUALIZOU NA TABELA 'DDLVIG.OCLTE' O CLIENTE " & dr.Item("COD_NOVI").ToString & " COD_COMERCIAL = " & dr.Item("COD_CLIENTE").ToString, pNomeArquivoLog)
                 Dados.AtualizaCodComercialClienteNOVI(dr.Item("COD_NOVI").ToString, dr.Item("COD_IDENTIFICACION_FISCAL").ToString,
                                                       dr.Item("DES_NOMBRE_FANTASIA").ToString, dr.Item("DES_RAZON_SOCIAL").ToString,
-                                                      dr.Item("COD_NOVI").ToString, dr.Item("DES_TIPO_CALLE").ToString, objtransacao_NOVI)
+                                                      dr.Item("COD_CLIENTE").ToString, dr.Item("DES_TIPO_CALLE").ToString, objtransacao_NOVI)
 
                 cont = cont + 1
                 AlteraStatusProcessamento("PROCESSANDO... " & vbNewLine & " Item " & cont & " de " & dtClientes.Rows.Count)
             Next
 
+            Log.GravarLog("Realizando Commit no PROFAT", pNomeArquivoLog)
             objtransacao_PROFAT.Commit()
+            TransacaoPROFAT_ON = False
+            Log.GravarLog("Realizando Commit no NOVI", pNomeArquivoLog)
             objtransacao_NOVI.Commit()
+            TransacaoNOVI_ON = False
 
             Dim msgInfo As String = String.Empty
             Dim dtAux As New DataTable
@@ -121,6 +133,30 @@ Public Class Normalizacao
                 Log.GravarLog("NÃO FORAM ENCONTRADOS CLIENTES COM NIF NULO NO MARTE:" & vbNewLine, pNomeArquivoLog)
             End If
 
+            'atualizar o código do segmento e subsegmento no marte
+            Dim conn_MARTE As IDbConnection = AcessoDados.Conectar(Dados.CONEXAO_MARTE)
+            Log.GravarLog("CARREGANDO OS RAMOS E SUBRAMOS DO PROFAT NO SEGMENTO/SUBSEGMENTO NO MARTE.", pNomeArquivoLog)
+
+            Dim dtClientesPROFAT As New DataTable
+            dtClientesPROFAT = Dados.RetornaRamoSubramoPROFAT()
+
+            objtransacao_MARTE = conn_MARTE.BeginTransaction()
+            TransacaoMARTE_ON = True
+            For Each dr As DataRow In dtClientesPROFAT.Rows
+                Log.GravarLog("ATUALIZANDO O CLIENTE " & dr.Item("CODCLICOM"), pNomeArquivoLog)
+                Dados.AtualizaSegmentoSubsegmentoClientecomBasePROFAT(dr("CODCLICOM").ToString,
+                                                                      dr("CODRAMATV").ToString,
+                                                                      dr("CODSUBRAMATV").ToString,
+                                                                      pNomeArquivoLog,
+                                                                      objtransacao_MARTE)
+            Next
+
+            Log.GravarLog("REALIZANDO COMMIT NO MARTE.", pNomeArquivoLog)
+            objtransacao_MARTE.Commit()
+            TransacaoMARTE_ON = False
+
+            Log.GravarLog("FIM DAS CARGAS DE RAMO/SUBRAMO NO MARTE.", pNomeArquivoLog)
+
             Log.GravarLog("FIM DA NORMALIZAÇÃO DE CLIENTE ----------------------------------------", pNomeArquivoLog)
             AlteraStatusProcessamento(msgInfo & vbNewLine & "FIM DA NORMALIZAÇÃO DE CLIENTE")
 
@@ -128,8 +164,15 @@ Public Class Normalizacao
             Log.GravarLog(ex.ToString, pNomeArquivoLog)
 
             Log.GravarLog("EXECUTANDO O ROLLBACK NAS BASES", pNomeArquivoLog)
-            objtransacao_PROFAT.Rollback()
-            objtransacao_NOVI.Rollback()
+            If TransacaoMARTE_ON Then
+                objtransacao_MARTE.Rollback()
+            End If
+            If TransacaoPROFAT_ON Then
+                objtransacao_PROFAT.Rollback()
+            End If
+            If TransacaoNOVI_ON Then
+                objtransacao_NOVI.Rollback()
+            End If
 
             'Log.GravarLog(ex.ToString, pNomeArquivoLog)
             Throw ex
@@ -212,7 +255,7 @@ Public Class Normalizacao
 
                         If wsRet.CodigoRetorno <> 1 Then
                             Log.GravarLog("-----------------------------------------------------------", pNomeArquivoLog)
-                            Log.GravarLog("ERRO AO TENTAR ATUALIZAR O SUB CLIENTE: " & dr.Item("COD_SUB_MARTE").ToString, pNomeArquivoLog)
+                            Log.GravarLog("ERRO AO TENTAR ATUALIZAR O SUB CLIENTE:  " & dr.Item("COD_SUB_MARTE").ToString, pNomeArquivoLog)
                             For Each msgRet As WSPROFAT.Mensagens In wsRet.Lista_Retorno
                                 Log.GravarLog("Cod Retorno WSPROFAT = " & msgRet.Codigo & vbNewLine & _
                                               "Mensagem retorno = " & msgRet.Mensagem & vbNewLine & _
