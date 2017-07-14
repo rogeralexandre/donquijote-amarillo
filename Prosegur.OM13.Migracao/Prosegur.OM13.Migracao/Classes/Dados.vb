@@ -1595,10 +1595,16 @@ Public Class Dados
     Public Shared Function InsereEscalaDePara(pOID_MARTE As String, pCodProfat As String, objTransacao As IDbTransaction) As Integer
         Using cmd As IDbCommand = objTransacao.Connection.CreateCommand()
             cmd.Transaction = objTransacao
-            cmd.CommandText = My.Resources.INSERT_ESCALA_DEPARA
 
-            cmd.Parameters.Add(DbHelper.AcessoDados.CriarParametro(CONEXAO_MARTE, "OID_MARTE", DbType.String, pOID_MARTE))
-            cmd.Parameters.Add(DbHelper.AcessoDados.CriarParametro(CONEXAO_MARTE, "COD_PROFAT", DbType.String, pCodProfat))
+            Dim sSQL As String = My.Resources.INSERT_ESCALA_DEPARA
+            'cmd.CommandText = My.Resources.INSERT_ESCALA_DEPARA
+
+            'cmd.Parameters.Add(DbHelper.AcessoDados.CriarParametro(CONEXAO_MARTE, "OID_MARTE", DbType.String, pOID_MARTE))
+            'cmd.Parameters.Add(DbHelper.AcessoDados.CriarParametro(CONEXAO_MARTE, "COD_PROFAT", DbType.String, pCodProfat))
+            sSQL = sSQL.Replace("P_MARTE", pOID_MARTE)
+            sSQL = sSQL.Replace("P_PROFAT", pCodProfat)
+
+            cmd.CommandText = sSQL
 
             Return DbHelper.AcessoDados.ExecutarNonQuery(CONEXAO_MARTE, cmd)
         End Using
