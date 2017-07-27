@@ -1,11 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.ServiceModel;
-using System.Text;
-using System.Threading.Tasks;
 using System.Threading;
 
 namespace adapter.rateio
@@ -24,6 +19,7 @@ namespace adapter.rateio
             List<WsIntegracaoRateioOT.DadosListaRateio> ListadoRateo = new List<WsIntegracaoRateioOT.DadosListaRateio>();
             //List<tempuri.org.Mensagens> ListaMensagens = new List<tempuri.org.Mensagens>();
 
+            string nomeCaminho = System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath;
             String nomeArquivo = "LOG_" + DateTime.Now.ToString().Replace("/", "").Replace(":", "") + ".txt";
 
             // WEB SERVICE - declarações
@@ -33,18 +29,18 @@ namespace adapter.rateio
             Thread.CurrentThread.CurrentUICulture = new CultureInfo("en-us");
             try
             {
-                GravarLog("Iniciando serviço", nomeArquivo);
-                GravarLog("Lendo request", nomeArquivo);
+                GravarLog("Iniciando serviço", nomeArquivo, nomeCaminho);
+                GravarLog("Lendo request", nomeArquivo, nomeCaminho);
 
                 strEmpresa = request.Body.Rateio.Empresa;
                 strClienteComercial = request.Body.Rateio.ClienteComercial;
                 strObjetivoComercial = request.Body.Rateio.ObjetivoComercial;
 
-                GravarLog("Empresa = " + strEmpresa, nomeArquivo);
-                GravarLog("ClienteComercial = " + strClienteComercial, nomeArquivo);
-                GravarLog("ObjetivoComercial = " + strObjetivoComercial, nomeArquivo);
+                GravarLog("Empresa = " + strEmpresa, nomeArquivo, nomeCaminho);
+                GravarLog("ClienteComercial = " + strClienteComercial, nomeArquivo, nomeCaminho);
+                GravarLog("ObjetivoComercial = " + strObjetivoComercial, nomeArquivo, nomeCaminho);
 
-                GravarLog("Lendo o listado rateio" , nomeArquivo);
+                GravarLog("Lendo o listado rateio" , nomeArquivo, nomeCaminho);
                 for (int i = 0; i < request.Body.Rateio.ListaDoRateio.Length; i++)
                 {
                     ListadoRateo.Add(new WsIntegracaoRateioOT.DadosListaRateio(request.Body.Rateio.ListaDoRateio));
@@ -54,12 +50,12 @@ namespace adapter.rateio
                     ListadoRateo[i].ObjetivoFaturar = request.Body.Rateio.ListaDoRateio[i].ObjetivoFaturar;
                     ListadoRateo[i].Percentual = request.Body.Rateio.ListaDoRateio[i].Percentual;
 
-                    GravarLog("Listado rateio Item[" + i.ToString() + "]", nomeArquivo);
-                    GravarLog("  Cliente Cobranca=" + ListadoRateo[i].ClienteCobranca.ToString() , nomeArquivo);
-                    GravarLog("  Objetivo Cobranca=" + ListadoRateo[i].ObjetivoCobranca.ToString(), nomeArquivo);
-                    GravarLog("  Cliente Faturar=" + ListadoRateo[i].ClienteFaturar.ToString(), nomeArquivo);
-                    GravarLog("  Objetivo Faturar=" + ListadoRateo[i].ObjetivoFaturar.ToString(), nomeArquivo);
-                    GravarLog("  Percentual=" + ListadoRateo[i].Percentual.ToString(), nomeArquivo);
+                    GravarLog("Listado rateio Item[" + i.ToString() + "]", nomeArquivo, nomeCaminho);
+                    GravarLog("  Cliente Cobranca=" + ListadoRateo[i].ClienteCobranca.ToString() , nomeArquivo, nomeCaminho);
+                    GravarLog("  Objetivo Cobranca=" + ListadoRateo[i].ObjetivoCobranca.ToString(), nomeArquivo, nomeCaminho);
+                    GravarLog("  Cliente Faturar=" + ListadoRateo[i].ClienteFaturar.ToString(), nomeArquivo, nomeCaminho);
+                    GravarLog("  Objetivo Faturar=" + ListadoRateo[i].ObjetivoFaturar.ToString(), nomeArquivo, nomeCaminho);
+                    GravarLog("  Percentual=" + ListadoRateo[i].Percentual.ToString(), nomeArquivo, nomeCaminho);
                 }
 
                 // Chamada ao WS do PROFAT.
@@ -68,7 +64,7 @@ namespace adapter.rateio
                 {
                     // TODO: Fazer a busca no Web.config.
                     //WSProfat.Url = "http://10.80.48.91/Prosegur.Profat.WS_Versao13/IntegracaoRateioOT.asmx";
-                    GravarLog("Preparando chamada ao WSPROFAT localizado em :" + WSProfat.Url, nomeArquivo);
+                    GravarLog("Preparando chamada ao WSPROFAT localizado em :" + WSProfat.Url, nomeArquivo, nomeCaminho);
 
                     // Preparação para o request
                     WsRequest.Empresa = strEmpresa;
@@ -76,18 +72,18 @@ namespace adapter.rateio
                     WsRequest.ObjetivoComercial = strObjetivoComercial;
                     WsRequest.ListaDoRateio = ListadoRateo.ToArray();
                     
-                    GravarLog("Executando WSProfat", nomeArquivo);
+                    GravarLog("Executando WSProfat", nomeArquivo, nomeCaminho);
                     WsResponse = WSProfat.IntegracaoRateio(WsRequest);
-                    GravarLog("WSProfat foi executado com sucesso!", nomeArquivo);
+                    GravarLog("WSProfat foi executado com sucesso!", nomeArquivo, nomeCaminho);
                 }
                     
                 // obtendo o retorno
-                GravarLog("Gerando o retorno", nomeArquivo);
+                GravarLog("Gerando o retorno", nomeArquivo, nomeCaminho);
                 var r = new tempuri.org.Retorno();
                 r.Lista_Retorno = new tempuri.org.Mensagens[WsResponse.Lista_Retorno.Length];
                 
                 r.CodigoRetorno = WsResponse.CodigoRetorno;
-                GravarLog("CodigoRetorno recebido do PROFAT = " + r.CodigoRetorno.ToString(), nomeArquivo);
+                GravarLog("CodigoRetorno recebido do PROFAT = " + r.CodigoRetorno.ToString(), nomeArquivo, nomeCaminho);
                 alterarCodigoRetorno = false;
 
                 for (int i = 0; i < WsResponse.Lista_Retorno.Length; i++)
@@ -99,7 +95,7 @@ namespace adapter.rateio
 
                     if (r.Lista_Retorno[i].Codigo != null)
                     {
-                        GravarLog("Código da mensagem do retorno linha-" + i.ToString() + " = " + r.Lista_Retorno[i].Codigo.ToString(), nomeArquivo);
+                        GravarLog("Código da mensagem do retorno linha-" + i.ToString() + " = " + r.Lista_Retorno[i].Codigo.ToString(), nomeArquivo, nomeCaminho);
                         if (r.Lista_Retorno[i].Codigo == "ID008" || r.Lista_Retorno[i].Codigo == "ID009" || r.Lista_Retorno[i].Codigo == "ID011" || r.Lista_Retorno[i].Codigo == "ID012" || r.Lista_Retorno[i].Codigo == "ID013" || r.Lista_Retorno[i].Codigo == "ID014") 
                         {
                             alterarCodigoRetorno = true;
@@ -108,45 +104,47 @@ namespace adapter.rateio
 
                     if (r.Lista_Retorno[i].Detalhe != null)
                     {
-                        GravarLog("Detalhe da mensagem do retorno linha-" + i.ToString() + " = " + r.Lista_Retorno[i].Detalhe.ToString(), nomeArquivo);
+                        GravarLog("Detalhe da mensagem do retorno linha-" + i.ToString() + " = " + r.Lista_Retorno[i].Detalhe.ToString(), nomeArquivo, nomeCaminho);
                     }
 
                     if (r.Lista_Retorno[i].Mensagem != null)
                     {
-                        GravarLog("Mensagem da mensagem do retorno linha-" + i.ToString() + " = " + r.Lista_Retorno[i].Mensagem.ToString(), nomeArquivo);
+                        GravarLog("Mensagem da mensagem do retorno linha-" + i.ToString() + " = " + r.Lista_Retorno[i].Mensagem.ToString(), nomeArquivo, nomeCaminho);
                     }
                     
                 }
 
                 if (alterarCodigoRetorno)
                 {
-                    GravarLog("Alterando o código retornado pelo PROFAT", nomeArquivo);
+                    GravarLog("Alterando o código retornado pelo PROFAT", nomeArquivo, nomeCaminho);
                     // alterando o código para OK/SUCESSO.
                     r.CodigoRetorno = 1;
-                    GravarLog("CodigoRetorno alterado para " + r.CodigoRetorno.ToString(), nomeArquivo);
+                    GravarLog("CodigoRetorno alterado para " + r.CodigoRetorno.ToString(), nomeArquivo, nomeCaminho);
                 }
                 
                 // Retornos do WS
                 var retornoCorpo = new IntegracaoRateioResponseBody(r);
                 var retorno = new IntegracaoRateioResponse(retornoCorpo);
                                 
-                GravarLog("Finalizando o serviço.", nomeArquivo);
+                GravarLog("Finalizando o serviço.", nomeArquivo, nomeCaminho);
                 return retorno;
             }
             catch (Exception ex)
             {
-                GravarLog("Ocorreu um erro:", nomeArquivo);
-                GravarLog("Mensagem de erro:" + ex.Message.ToString(), nomeArquivo);
+                //GravarLog("Ocorreu um erro:", nomeArquivo, nomeCaminho);
+                GravarLog("Mensagem de erro:" + ex.Message.ToString(), nomeArquivo, nomeCaminho);
+                GravarLog("StackTrace: " + ex.StackTrace.ToString(), nomeArquivo, nomeCaminho);
                 throw;
             }
 
 
         }
 
-        private void GravarLog(String pMensagem, String pNomeArquivo)
+        private void GravarLog(String pMensagem, String pNomeArquivo, String nomeCaminho)
         {
-            //String nomeCaminho = System.IO.Directory.GetCurrentDirectory().ToString() + "\\Log";
-            String nomeCaminho =  "C:\\Log";
+
+            //String nomeCaminho =  "C:\\Log";
+            nomeCaminho = nomeCaminho + "Log\\";
             String destinoArquivo;
 
             if (!System.IO.Directory.Exists(nomeCaminho))

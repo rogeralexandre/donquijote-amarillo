@@ -198,8 +198,13 @@ Public Class Normalizacao
             AlteraStatusProcessamento("INICIO DA NORMALIZAÇÃO DE SUB CLIENTE")
 
             Dim conn_NOVI As IDbConnection = AcessoDados.Conectar(Dados.CONEXAO_NOVI)
-            Dim conn_PROFAT As New SqlConnection(AcessoDados.RecuperarStringConexao(Dados.CONEXAO_PROFAT))
+            'Tive que alterar o timeout do PROFAT, está demorando mais de 30 segundos.
+            Dim conn_PROFAT_String As String = AcessoDados.RecuperarStringConexao(Dados.CONEXAO_PROFAT)
+            Dim builder As New SqlConnectionStringBuilder(conn_PROFAT_String)
+            builder.ConnectTimeout = 90
+            Dim conn_PROFAT As New SqlConnection(builder.ConnectionString)
             conn_PROFAT.Open()
+
 
             objtransacao_NOVI = conn_NOVI.BeginTransaction
             objtransacao_PROFAT = conn_PROFAT.BeginTransaction
@@ -267,11 +272,11 @@ Public Class Normalizacao
                         End If
                     End If
 
-                    Log.GravarLog("ATUALIZOU NA TABELA 'FAT_TCADPONATE' CODPONATE = " & dr.Item("COD_PROFAT").ToString & " CODPONATECOM = " & dr.Item("COD_SUB_MARTE").ToString, pNomeArquivoLog)
+                    Log.GravarLog("ATUALIZAR NA TABELA 'FAT_TCADPONATE' CODPONATE = " & dr.Item("COD_PROFAT").ToString & " CODPONATECOM = " & dr.Item("COD_SUB_MARTE").ToString, pNomeArquivoLog)
                     Dados.AtualizaCodComercialSubCliPROFAT(dr.Item("COD_SUB_MARTE").ToString, dr.Item("COD_PROFAT").ToString, objtransacao_PROFAT)
                 End If
 
-                Log.GravarLog("ATUALIZOU NA TABELA 'DDLVIG.OSBCL' CLIENTE E SUB NOVI: " & dr.Item("COD_CLI_NOVI").ToString & "/" & dr.Item("COD_SUB_NOVI").ToString & " COD_SUBCLI_COMERCIAL = " & dr.Item("COD_SUB_MARTE").ToString, pNomeArquivoLog)
+                Log.GravarLog("ATUALIZAR NA TABELA 'DDLVIG.OSBCL' CLIENTE E SUB NOVI: " & dr.Item("COD_CLI_NOVI").ToString & "/" & dr.Item("COD_SUB_NOVI").ToString & " COD_SUBCLI_COMERCIAL = " & dr.Item("COD_SUB_MARTE").ToString, pNomeArquivoLog)
                 Dados.AtualizaCodComercialSubCliNOVI(dr.Item("DES_SUBCLIENTE").ToString, dr.Item("DES_CORTA_SUBCLIENTE").ToString, dr.Item("DES_TIPO_CALLE").ToString, _
                                                      dr.Item("COD_CLI_NOVI").ToString, dr.Item("COD_SUB_NOVI").ToString, dr.Item("COD_SUB_MARTE").ToString, objtransacao_NOVI)
 
@@ -635,15 +640,22 @@ Public Class Normalizacao
                 Log.GravarLog("BUSCOU DADOS DO PROFAT NA TABELA DE DEPARA COM O CODIGO = " & dr.Item("COMERCIAL"), pNomeArquivoLog)
                 For Each drProfat As DataRow In dtCodProfat.Rows
                     If Not String.IsNullOrEmpty(drProfat.Item("COD_PROFAT").ToString) Then
+                        Log.GravarLog("BUSCAR FILIAL NO PROFAT COM O CODIGO = " & drProfat.Item("COD_PROFAT").ToString(), pNomeArquivoLog)
                         dtaux = Dados.RetornaFilialPROFAT(drProfat.Item("COD_PROFAT").ToString)
 
-                        Log.GravarLog("INSERIU DADOS NA TABELA ESPELHO DE FATURAMENTO COPR_TCAD_FILIAL_FAT CODFIL = " & dtaux.Rows(0).Item("CODFIL") & " NOMFIL = " & dtaux.Rows(0).Item("NOMFIL") & " CNP = " & dtaux.Rows(0).Item("CNP"), pNomeArquivoLog)
-                        Dados.InsereTabelaEspelhoFaturamento(dtaux.Rows(0).Item("CODFIL").ToString, dtaux.Rows(0).Item("NOMFIL").ToString, dtaux.Rows(0).Item("CNP").ToString, objtransacao_MARTE)
+                        If (dtaux.Rows.Count > 0) Then
+                            Log.GravarLog("INSERIU DADOS NA TABELA ESPELHO DE FATURAMENTO COPR_TCAD_FILIAL_FAT CODFIL = " & dtaux.Rows(0).Item("CODFIL") & " NOMFIL = " & dtaux.Rows(0).Item("NOMFIL") & " CNP = " & dtaux.Rows(0).Item("CNP"), pNomeArquivoLog)
+                            Dados.InsereTabelaEspelhoFaturamento(dtaux.Rows(0).Item("CODFIL").ToString, dtaux.Rows(0).Item("NOMFIL").ToString, dtaux.Rows(0).Item("CNP").ToString, objtransacao_MARTE)
 
-                        Log.GravarLog("INSERIU DADOS NA TABELA DEPARA DE FATURAMENTO COPR_TFILIAL_COM_X_FAT COMERCIAL = " & dr.Item("COMERCIAL") & " CODEMP = " & dtaux.Rows(0).Item("CODEMP") & " CODFIL = " & dtaux.Rows(0).Item("CODFIL"), pNomeArquivoLog)
-                        Dados.InsereDeParaFaturamento(dr.Item("COMERCIAL"), drProfat.Item("COD_PARAM_TAB").ToString, dtaux.Rows(0).Item("CODFIL"), objtransacao_MARTE)
+                            Log.GravarLog("INSERIU DADOS NA TABELA DEPARA DE FATURAMENTO COPR_TFILIAL_COM_X_FAT COMERCIAL = " & dr.Item("COMERCIAL") & " CODEMP = " & dtaux.Rows(0).Item("CODEMP") & " CODFIL = " & dtaux.Rows(0).Item("CODFIL"), pNomeArquivoLog)
+                            Dados.InsereDeParaFaturamento(dr.Item("COMERCIAL"), drProfat.Item("COD_PARAM_TAB").ToString, dtaux.Rows(0).Item("CODFIL"), objtransacao_MARTE)
+                        Else
+                            Log.GravarLog("NÃO FOI ENCONTRADO A FILIAL COM COD_PROFAT " & drProfat.Item("COD_PROFAT").ToString(), pNomeArquivoLog)
+                            Log.GravarLog("NÃO FOI CRIADO DE-PARA NAS TABELAS COPR_TCAD_FILIAL_FAT E COPR_TFILIAL_COM_X_FAT ", pNomeArquivoLog)
+                        End If
+
                     Else
-                        Log.GravarLog("NÃO FOI ENCONTRADO VALOR DO CAMPO COD_PROFAT DO DE-PARA PARA A FILIAL COMERCIAL " & dr.Item("COMERCIAL") & " PARA O COD_PARAM_TAB=" & dr.Item("COD_PARAM_TAB"), pNomeArquivoLog)
+                        Log.GravarLog("NÃO FOI ENCONTRADO VALOR DO CAMPO COD_PROFAT DO DE-PARA PARA A FILIAL COMERCIAL " & dr.Item("COMERCIAL"), pNomeArquivoLog)
                     End If
                 Next
 
@@ -670,7 +682,9 @@ Public Class Normalizacao
             AlteraStatusProcessamento("FIM DA NORMALIZAÇÃO DE FILIAL...")
 
         Catch ex As Exception
+            Log.GravarLog(ex.ToString, pNomeArquivoLog)
 
+            Log.GravarLog("Executando o ROLLBACK no NOVI e MARTE", pNomeArquivoLog)
             objtransacao_NOVI.Rollback()
             objtransacao_MARTE.Rollback()
 
@@ -734,7 +748,7 @@ Public Class Normalizacao
 
             Log.GravarLog(ex.ToString, pNomeArquivoLog)
 
-            Log.GravarLog("ROLLBACK NO NOVI E PROFAT", pNomeArquivoLog)
+            Log.GravarLog("ROLLBACK NO NOVI!", pNomeArquivoLog)
             'objtransacao_PROFAT.Rollback()
             objtransacao_NOVI.Rollback()
 
@@ -859,8 +873,8 @@ Public Class Normalizacao
             AlteraStatusProcessamento("INICIO DA NORMALIZAÇÃO DE SEGMENTO E SUB SEGMENTO")
 
             Dim cont As Integer = 0
-            Dim dtSegmentoMarte As DataTable
-            Dim dtSubSegmentoMarte As DataTable
+            'Dim dtSegmentoMarte As DataTable
+            'Dim dtSubSegmentoMarte As DataTable
             Dim sCodSeg As String = String.Empty
             Dim sCodSubSeg As String = String.Empty
             Dim sOidSeg As String = String.Empty
@@ -1008,7 +1022,9 @@ Public Class Normalizacao
             AlteraStatusProcessamento("FIM DA NORMALIZAÇÃO DE DIVISÃO...")
 
         Catch ex As Exception
+            Log.GravarLog(ex.ToString, pNomeArquivoLog)
 
+            Log.GravarLog("Executando Rollback!", pNomeArquivoLog)
             objtransacao_PROFAT.Rollback()
             objtransacao_NOVI.Rollback()
 
