@@ -22,6 +22,8 @@ Public Class Normalizacao
             Log.GravarLog("INICIO DA NORMALIZAÇÃO DE CLIENTE ----------------------------------------", pNomeArquivoLog)
             AlteraStatusProcessamento("INICIO DA NORMALIZAÇÃO DE CLIENTE")
 
+            UsaWS = False
+
             Dim conn_NOVI As IDbConnection = AcessoDados.Conectar(Dados.CONEXAO_NOVI)
             Dim conn_PROFAT As New SqlConnection(AcessoDados.RecuperarStringConexao(Dados.CONEXAO_PROFAT))
             conn_PROFAT.Open()
@@ -133,29 +135,32 @@ Public Class Normalizacao
                 Log.GravarLog("NÃO FORAM ENCONTRADOS CLIENTES COM NIF NULO NO MARTE:" & vbNewLine, pNomeArquivoLog)
             End If
 
-            'atualizar o código do segmento e subsegmento no marte
-            Dim conn_MARTE As IDbConnection = AcessoDados.Conectar(Dados.CONEXAO_MARTE)
-            Log.GravarLog("CARREGANDO OS RAMOS E SUBRAMOS DO PROFAT NO SEGMENTO/SUBSEGMENTO NO MARTE.", pNomeArquivoLog)
+            If (False) Then
+                'atualizar o código do segmento e subsegmento no marte
+                Dim conn_MARTE As IDbConnection = AcessoDados.Conectar(Dados.CONEXAO_MARTE)
+                Log.GravarLog("CARREGANDO OS RAMOS E SUBRAMOS DO PROFAT NO SEGMENTO/SUBSEGMENTO NO MARTE.", pNomeArquivoLog)
 
-            Dim dtClientesPROFAT As New DataTable
-            dtClientesPROFAT = Dados.RetornaRamoSubramoPROFAT()
+                Dim dtClientesPROFAT As New DataTable
+                dtClientesPROFAT = Dados.RetornaRamoSubramoPROFAT()
 
-            objtransacao_MARTE = conn_MARTE.BeginTransaction()
-            TransacaoMARTE_ON = True
-            For Each dr As DataRow In dtClientesPROFAT.Rows
-                Log.GravarLog("ATUALIZANDO O CLIENTE " & dr.Item("CODCLICOM"), pNomeArquivoLog)
-                Dados.AtualizaSegmentoSubsegmentoClientecomBasePROFAT(dr("CODCLICOM").ToString,
+                objtransacao_MARTE = conn_MARTE.BeginTransaction()
+                TransacaoMARTE_ON = True
+                For Each dr As DataRow In dtClientesPROFAT.Rows
+                    Log.GravarLog("ATUALIZANDO O CLIENTE " & dr.Item("CODCLICOM"), pNomeArquivoLog)
+                    Dados.AtualizaSegmentoSubsegmentoClientecomBasePROFAT(dr("CODCLICOM").ToString,
                                                                       dr("CODRAMATV").ToString,
                                                                       dr("CODSUBRAMATV").ToString,
                                                                       pNomeArquivoLog,
                                                                       objtransacao_MARTE)
-            Next
+                Next
 
-            Log.GravarLog("REALIZANDO COMMIT NO MARTE.", pNomeArquivoLog)
-            objtransacao_MARTE.Commit()
-            TransacaoMARTE_ON = False
+                Log.GravarLog("REALIZANDO COMMIT NO MARTE.", pNomeArquivoLog)
+                objtransacao_MARTE.Commit()
+                TransacaoMARTE_ON = False
+                Log.GravarLog("FIM DAS CARGAS DE RAMO/SUBRAMO NO MARTE.", pNomeArquivoLog)
+            End If
 
-            Log.GravarLog("FIM DAS CARGAS DE RAMO/SUBRAMO NO MARTE.", pNomeArquivoLog)
+
 
             Log.GravarLog("FIM DA NORMALIZAÇÃO DE CLIENTE ----------------------------------------", pNomeArquivoLog)
             AlteraStatusProcessamento(msgInfo & vbNewLine & "FIM DA NORMALIZAÇÃO DE CLIENTE")
@@ -193,6 +198,9 @@ Public Class Normalizacao
         Dim UsaWS As Boolean = CType(System.Configuration.ConfigurationManager.AppSettings("HabilitarWSPROFAT"), Boolean)
 
         Try
+
+            'Travar o uso do WS para sempre não
+            UsaWS = False
 
             Log.GravarLog("INICIO DA NORMALIZAÇÃO DE SUB CLIENTE ----------------------------------------", pNomeArquivoLog)
             AlteraStatusProcessamento("INICIO DA NORMALIZAÇÃO DE SUB CLIENTE")
@@ -553,25 +561,26 @@ Public Class Normalizacao
                 AlteraStatusProcessamento("PROCESSANDO... " & vbNewLine & " Item " & cont & " de " & dt.Rows.Count)
             Next
 
-            dt = Dados.RetornaCidadesSemDeparaMARTE()
-            AlteraStatusProcessamento("INSERINDO DADOS NA TABELA DE DEPARA PARA NOVAS CIDADES...")
-            For Each dr As DataRow In dt.Rows
+            'dt = Dados.RetornaCidadesSemDeparaMARTE()
+            'AlteraStatusProcessamento("INSERINDO DADOS NA TABELA DE DEPARA PARA NOVAS CIDADES...")
+            'For Each dr As DataRow In dt.Rows
 
-                dtProfat = Dados.RetornaCidadesPROFAT(" NOMMUN = '" & dr.Item("DES_CIUDAD") & "'")
-                If dtProfat.Rows.Count > 0 AndAlso Not String.IsNullOrEmpty(dtProfat.Rows(0).Item("CODIBGE").ToString) Then
-                    Log.GravarLog("INSERE CIDADE NO NOVI - " & dr.Item("COD_CIUDAD") & "-" & dr.Item("DES_CIUDAD") & "-" & dr.Item("OID_ESTADO").ToString.Trim, pNomeArquivoLog)
-                    Dados.InsereCidadeNOVI(dr.Item("COD_CIUDAD").ToString, dr.Item("DES_CIUDAD").ToString & "-" & dr.Item("OID_ESTADO").ToString.Trim,
-                                           dtProfat.Rows(0).Item("CODIBGE").ToString, objtransacao_NOVI)
+            '    dtProfat = Dados.RetornaCidadesPROFAT(" NOMMUN = '" & dr.Item("DES_CIUDAD") & "'")
+            '    If dtProfat.Rows.Count > 0 AndAlso Not String.IsNullOrEmpty(dtProfat.Rows(0).Item("CODIBGE").ToString) Then
+            '        Log.GravarLog("INSERE CIDADE NO NOVI - " & dr.Item("COD_CIUDAD") & "-" & dr.Item("DES_CIUDAD") & "-" & dr.Item("OID_ESTADO").ToString.Trim, pNomeArquivoLog)
+            '        Dados.InsereCidadeNOVI(dr.Item("COD_CIUDAD").ToString, dr.Item("DES_CIUDAD").ToString & "-" & dr.Item("OID_ESTADO").ToString.Trim,
+            '                               dtProfat.Rows(0).Item("CODIBGE").ToString, objtransacao_NOVI)
 
-                    Log.GravarLog("INSERE DEPARA PARA ITENS QUE NÃO TINHAM DEPARA - " & dr.Item("COD_CIUDAD") & "-" & dr.Item("DES_CIUDAD") & "-" & dr.Item("OID_ESTADO").ToString.Trim, pNomeArquivoLog)
-                    Dados.InsereCidadeDEPARA(dr.Item("COD_CIUDAD"), dtProfat.Rows(0).Item("CODMUN"), dr.Item("COD_CIUDAD"), objtransacao_MARTE)
-                Else
-                    Log.GravarLog("A CIDADE " & dr.Item("COD_CIUDAD") & "-" & dr.Item("DES_CIUDAD") & "-" & dr.Item("OID_ESTADO").ToString.Trim & "NÃO FOI ENCONTRADA PELA DESCRIÇÃO OU NÃO TEM CODIBGE PREENCHIDO NO PROFAT.", pNomeArquivoLog)
-                End If
-            Next
-            Log.GravarLog("LIMPOU LIXO DAS TABELAS DO NOVI E DO DEPARA", pNomeArquivoLog)
-            Dados.DeletaCidadesSemDeparaNOVI(objtransacao_NOVI)
-            Dados.DeletaCidadesSemDepara(objtransacao_MARTE)
+            '        Log.GravarLog("INSERE DEPARA PARA ITENS QUE NÃO TINHAM DEPARA - " & dr.Item("COD_CIUDAD") & "-" & dr.Item("DES_CIUDAD") & "-" & dr.Item("OID_ESTADO").ToString.Trim, pNomeArquivoLog)
+            '        Dados.InsereCidadeDEPARA(dr.Item("COD_CIUDAD"), dtProfat.Rows(0).Item("CODMUN"), dr.Item("COD_CIUDAD"), objtransacao_MARTE)
+            '    Else
+            '        Log.GravarLog("A CIDADE " & dr.Item("COD_CIUDAD") & "-" & dr.Item("DES_CIUDAD") & "-" & dr.Item("OID_ESTADO").ToString.Trim & "NÃO FOI ENCONTRADA PELA DESCRIÇÃO OU NÃO TEM CODIBGE PREENCHIDO NO PROFAT.", pNomeArquivoLog)
+            '    End If
+            'Next
+
+            'Log.GravarLog("LIMPOU LIXO DAS TABELAS DO NOVI E DO DEPARA", pNomeArquivoLog)
+            'Dados.DeletaCidadesSemDeparaNOVI(objtransacao_NOVI)
+            'Dados.DeletaCidadesSemDepara(objtransacao_MARTE)
 
             Log.GravarLog("HABILITANDO TRIGGER NA TABELA MARTE.COPR_TCIUDAD", pNomeArquivoLog)
             Dados.HabilitarTriggerCidadeMARTE(objtransacao_MARTE)
