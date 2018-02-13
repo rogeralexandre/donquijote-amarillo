@@ -95,6 +95,7 @@
 
         Try
             Dim sNomeArquivoLog As String = "ValidacaoDivisao_" & Date.Now.ToString.Replace("/", "").Replace(":", "")
+
             Normalizacao.NormalizaDivisao(sNomeArquivoLog)
         Catch ex As Exception
             MsgBox(ex.Message & vbNewLine & ex.StackTrace, MsgBoxStyle.Critical, "NORMALIZAÇÃO DIVISÃO")
