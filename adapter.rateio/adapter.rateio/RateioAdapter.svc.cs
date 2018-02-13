@@ -13,14 +13,14 @@ namespace adapter.rateio
         public IntegracaoRateioResponse IntegracaoRateio(IntegracaoRateioRequest request) 
         {
             bool alterarCodigoRetorno;
-            String strEmpresa;
-            String strClienteComercial;
-            String strObjetivoComercial;
+            string strEmpresa;
+            string strClienteComercial;
+            string strObjetivoComercial;
             List<WsIntegracaoRateioOT.DadosListaRateio> ListadoRateo = new List<WsIntegracaoRateioOT.DadosListaRateio>();
             //List<tempuri.org.Mensagens> ListaMensagens = new List<tempuri.org.Mensagens>();
 
             string nomeCaminho = System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath;
-            String nomeArquivo = "LOG_" + DateTime.Now.ToString().Replace("/", "").Replace(":", "") + ".txt";
+            string nomeArquivo = "LOG_" + DateTime.Now.ToString().Replace("/", "").Replace(":", "") + ".txt";
 
             // WEB SERVICE - declarações
             WsIntegracaoRateioOT.DadosContratoXmlRateio WsRequest = new WsIntegracaoRateioOT.DadosContratoXmlRateio();
@@ -48,7 +48,7 @@ namespace adapter.rateio
                     ListadoRateo[i].ObjetivoCobranca = request.Body.Rateio.ListaDoRateio[i].ObjetivoCobranca;
                     ListadoRateo[i].ClienteFaturar = request.Body.Rateio.ListaDoRateio[i].ClienteFaturar;
                     ListadoRateo[i].ObjetivoFaturar = request.Body.Rateio.ListaDoRateio[i].ObjetivoFaturar;
-                    ListadoRateo[i].Percentual = request.Body.Rateio.ListaDoRateio[i].Percentual;
+                    ListadoRateo[i].Percentual = request.Body.Rateio.ListaDoRateio[i].Percentual.Replace(",",".");
 
                     GravarLog("Listado rateio Item[" + i.ToString() + "]", nomeArquivo, nomeCaminho);
                     GravarLog("  Cliente Cobranca=" + ListadoRateo[i].ClienteCobranca.ToString() , nomeArquivo, nomeCaminho);
@@ -62,6 +62,7 @@ namespace adapter.rateio
                 //WsIntegracaoRateioOT.RateioOT WSProfat = new WsIntegracaoRateioOT.RateioOT();
                 using (var WSProfat = new WsIntegracaoRateioOT.RateioOT())
                 {
+                    
                     // TODO: Fazer a busca no Web.config.
                     //WSProfat.Url = "http://10.80.48.91/Prosegur.Profat.WS_Versao13/IntegracaoRateioOT.asmx";
                     GravarLog("Preparando chamada ao WSPROFAT localizado em :" + WSProfat.Url, nomeArquivo, nomeCaminho);
