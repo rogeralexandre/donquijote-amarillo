@@ -1,5 +1,6 @@
 ﻿Imports Prosegur.DbHelper
 Imports System.Data.SqlClient
+Imports System.Globalization
 
 Public Class Normalizacao
 
@@ -1100,8 +1101,188 @@ Public Class Normalizacao
 
         Return True
     End Function
-#End Region
 
+    Public Shared Sub CargaPROFATPostos01(ByVal pNomeArquivoLog As String)
+
+        '15/02/2018
+        '1) Recebi a carga em Excel e gerei um script. [somente create table d:\Prosegur\profat\01-create_table.sql]
+        '2) Fiz os inserts na tabela marte.TMP_AcertoPROFAT [d:\Prosegur\profat\02-carga_excel.sql]
+        '3) adicionei os campos que seram carregados com os dados do MARTE. [ALTER TABLE do arquivo d:\Prosegur\profat\01-create_table.sql]
+        '4) executar esse código 
+        '5) exportar para excel direto do PL/SQL
+
+        'TESTE
+        Dim contador As Integer
+        Dim QtdePostos As Integer
+
+        Dim objtransacao_MARTE As IDbTransaction
+        Dim DadosTMP_AcertoProfat As New DataTable
+        Dim DadosPostosMarte As New DataTable
+
+        Dim mCodUnicoPosto As String
+        Dim mFechaInicio As String
+        Dim mHoraFechaInicio As String
+        Dim mFechaFin As String
+        Dim mHoraFechaFin As String
+        Dim mDiasTrabajo As String
+        Dim mTipoDia As String
+        Dim mHorarios As String
+        Dim mNumeroHoras As String
+        Dim mIntervaloAlmuerzo As String
+        Dim mTrabajaAlmuerzo As String
+
+        Dim vData As Date
+        Dim vHora As Date
+        Dim vHorasPorDiaXVigilante As Decimal
+        Dim vHorasAlmoco As Decimal
+        Dim ParteInteira As Decimal
+        Dim ParteDecimal As Decimal
+
+        Try
+            Log.GravarLog("INICIO DA CARGA DE DADOS PARA PROFAT---------------------------------", pNomeArquivoLog)
+            AlteraStatusProcessamento("INICIO DA CARGA DE DADOS PARA PROFAT")
+
+            Log.GravarLog("BUSCAR DADOS DO MARTE PARA A MEMORIA", pNomeArquivoLog)
+            DadosTMP_AcertoProfat = Dados.BuscarTMP_AcertoPROFAT()
+
+            Log.GravarLog("ABRINDO CONEXÃO COM O MARTE", pNomeArquivoLog)
+            Dim conn_MARTE As IDbConnection = AcessoDados.Conectar(Dados.CONEXAO_MARTE)
+
+            For Each drPROFAT As DataRow In DadosTMP_AcertoProfat.Rows
+                Log.GravarLog("INICIANDO TRANSAÇÃO", pNomeArquivoLog)
+                objtransacao_MARTE = conn_MARTE.BeginTransaction()
+
+                Log.GravarLog("Buscando dados OIDPUEMAR : " & drPROFAT("OIDPUEMAR"), pNomeArquivoLog)
+
+                DadosPostosMarte = Dados.BuscarDadosPostosMARTE(drPROFAT("OIDPUEMAR"))
+
+                QtdePostos = DadosPostosMarte.Rows.Count
+                For Each dr As DataRow In DadosPostosMarte.Rows
+                    'INICIAR TRATAMENTO DOS CAMPOS
+                    mCodUnicoPosto = dr("cod_empresa_erp").ToString().Trim()
+                    mCodUnicoPosto = mCodUnicoPosto & "|" & dr("cod_cliente").ToString().Trim()
+                    mCodUnicoPosto = mCodUnicoPosto & "|" & dr("cod_subcliente").ToString().Trim()
+                    mCodUnicoPosto = mCodUnicoPosto & "|" & dr("cod_puesto").ToString().Trim()
+
+                    Log.GravarLog("Código único posto a processar: " & mCodUnicoPosto, pNomeArquivoLog)
+
+                    'If (mCodUnicoPosto = "B13|016930|238|4") Then
+                    '    contador = contador
+                    'End If
+
+                    vData = DateTime.Parse(dr("fec_inicio_servicio"))
+                    mFechaInicio = vData.Year.ToString() & "-" & vData.Month.ToString("00") & "-" & vData.Day.ToString("00")
+
+                    If (Not IsDBNull(dr("hor_inicio_servicio"))) Then
+                        vHora = DateTime.Parse(dr("hor_inicio_servicio"))
+                        mHoraFechaInicio = vHora.Hour.ToString("00") & ":" & vHora.Minute.ToString("00") & ":" & vHora.Second.ToString("00")
+                    Else
+                        mHoraFechaInicio = String.Empty
+                    End If
+
+                    If (IsDBNull(dr("fec_fin_servicio"))) Then
+                        'busca a data da baixa, se houver
+                        If (IsDBNull(dr("fec_baixa"))) Then
+                            'não tem baixa
+                            mFechaFin = String.Empty
+                            mHoraFechaFin = String.Empty
+                        Else
+                            vData = DateTime.Parse(dr("fec_baixa"))
+                            mFechaFin = vData.Year.ToString("00") & "-" & vData.Month.ToString("00") & "-" & vData.Day.ToString("00")
+                            If (IsDBNull(dr("hor_baixa"))) Then
+                                mHoraFechaFin = String.Empty
+                            Else
+                                vHora = DateTime.Parse(dr("hor_baixa"))
+                                mHoraFechaFin = vHora.Hour.ToString("00") & ":" & vHora.Minute.ToString("00") & ":" & vHora.Second.ToString("00")
+                            End If
+                        End If
+                    Else
+                        'busca a data da baixa para os ESPO.
+                        vData = DateTime.Parse(dr("fec_fin_servicio"))
+                        mFechaFin = vData.Year.ToString("00") & "-" & vData.Month.ToString("00") & "-" & vData.Day.ToString("00")
+                        If (IsDBNull(dr("hor_fin_servicio"))) Then
+                            mHoraFechaFin = String.Empty
+                        Else
+                            vHora = DateTime.Parse(dr("hor_fin_servicio"))
+                            mHoraFechaFin = vHora.Hour.ToString("00") & ":" & vHora.Minute.ToString("00") & ":" & vHora.Second.ToString("00")
+                        End If
+
+                    End If
+
+                    mDiasTrabajo = dr("segunda").ToString &
+                                   dr("terça").ToString &
+                                   dr("quarta").ToString &
+                                   dr("quinta").ToString &
+                                   dr("sexta").ToString &
+                                   dr("sabado").ToString &
+                                   dr("domingo").ToString
+
+                    mTipoDia = dr("oid_tipo_jornada").ToString().Trim()
+
+                    vHora = DateTime.Parse(dr("hor_inicio_1"))
+                    mHorarios = vHora.Hour.ToString("00") & ":" & vHora.Minute.ToString("00")
+                    vHora = DateTime.Parse(dr("hor_fin_1"))
+                    mHorarios = mHorarios & "-" & vHora.Hour.ToString("00") & ":" & vHora.Minute.ToString("00")
+
+                    vHorasPorDiaXVigilante = dr("HorasDiaXVigilante")
+                    ParteInteira = Math.Truncate(vHorasPorDiaXVigilante)
+                    ParteDecimal = (vHorasPorDiaXVigilante - ParteInteira) * 60
+                    mNumeroHoras = ParteInteira.ToString("00") & ParteDecimal.ToString("00")
+
+                    vHorasAlmoco = dr("AlmocoHoras")
+                    ParteInteira = Math.Truncate(vHorasAlmoco)
+                    ParteDecimal = (vHorasAlmoco - ParteInteira) * 60
+                    mIntervaloAlmuerzo = ParteInteira.ToString("00") & ":" & ParteDecimal.ToString("00")
+
+                    mTrabajaAlmuerzo = dr("des_cobertura_almuerzo").ToString().Trim()
+
+                    'ATUALIZAR A TABELA TEMPORÁRIA.
+                    Dados.AtualizarTMP_AcertoPROFAT(objtransacao_MARTE,
+                                                    mCodUnicoPosto,
+                                                    mFechaInicio,
+                                                    mHoraFechaInicio,
+                                                    mFechaFin,
+                                                    mHoraFechaFin,
+                                                    mDiasTrabajo,
+                                                    mTipoDia,
+                                                    mHorarios,
+                                                    mNumeroHoras,
+                                                    mIntervaloAlmuerzo,
+                                                    mTrabajaAlmuerzo,
+                                                    drPROFAT("OIDPUEMAR"),
+                                                    QtdePostos)
+                Next
+
+                Log.GravarLog("COMITANDO TRANSAÇÃO", pNomeArquivoLog)
+                objtransacao_MARTE.Commit()
+
+                DadosPostosMarte.Clear()
+
+                'TESTE
+                contador = contador + 1
+
+                Log.GravarLog(String.Format("Registro número -> {0}", contador), pNomeArquivoLog)
+                'If (contador > 10) Then
+                '    Exit For
+                'End If
+
+            Next
+
+            DadosTMP_AcertoProfat.Clear()
+            conn_MARTE.Close()
+            conn_MARTE.Dispose()
+
+        Catch ex As Exception
+            Log.GravarLog(ex.ToString, pNomeArquivoLog)
+
+            Log.GravarLog("Realizando o ROLLBACK no MARTE", pNomeArquivoLog)
+            objtransacao_MARTE.Rollback()
+
+            Throw ex
+        End Try
+
+    End Sub
+#End Region
 
     Public Shared Sub AlteraStatusProcessamento(ByVal ptexto As String)
         frmMigracao.txtStatus.Text = ptexto

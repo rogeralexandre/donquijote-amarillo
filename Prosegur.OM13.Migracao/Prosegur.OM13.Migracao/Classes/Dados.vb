@@ -1621,5 +1621,84 @@ Public Class Dados
 
 #End Region
 
+#Region "CargaPROFATPostos01"
+    Public Shared Function BuscarTMP_AcertoPROFAT() As DataTable
+        Using cmd As IDbCommand = DbHelper.AcessoDados.CriarComando(CONEXAO_MARTE)
+
+            cmd.CommandText = String.Format(My.Resources.Buscar_TMP_AcertoPROFAT, String.Empty)
+
+            Return DbHelper.AcessoDados.ExecutarDataTable(CONEXAO_MARTE, cmd)
+        End Using
+    End Function
+
+    Public Shared Function BuscarDadosPostosMARTE(ByVal pOIDPUEMAR As String) As DataTable
+        Using cmd As IDbCommand = DbHelper.AcessoDados.CriarComando(CONEXAO_MARTE)
+
+            Dim strFiltro As String
+            Dim strQuery = My.Resources.BUSCAR_POSTOS_MARTE
+
+            'validar que método de filtragem fazer.
+            If (pOIDPUEMAR.Contains("|")) Then
+                Dim aOIDPUEMAR As String() = pOIDPUEMAR.Split("|")
+
+                strFiltro = String.Format(" (e.cod_empresa_erp = '{0}' and ", aOIDPUEMAR(0).ToString().Trim())
+                'strFiltro = " ("
+                strFiltro = strFiltro & String.Format("c.cod_cliente = '{0}' and ", aOIDPUEMAR(1).ToString().Trim())
+                strFiltro = strFiltro & String.Format("s.cod_subcliente = '{0}' and ", aOIDPUEMAR(2).ToString().Trim())
+                strFiltro = strFiltro & String.Format("pot.cod_puesto = {0})", aOIDPUEMAR(3).ToString().Trim())
+
+            Else
+                strFiltro = String.Format(" (pot.oid_puestosxot = '{0}')", pOIDPUEMAR.ToString().Trim())
+            End If
+
+            cmd.CommandText = String.Format(My.Resources.BUSCAR_POSTOS_MARTE, strFiltro)
+
+            Return DbHelper.AcessoDados.ExecutarDataTable(CONEXAO_MARTE, cmd)
+        End Using
+    End Function
+
+    Public Shared Sub AtualizarTMP_AcertoPROFAT(ByRef objtransacao As IDbTransaction,
+                                                ByVal pCODUNICOPOSTO As String,
+                                                ByVal pFECHAINICIO As String,
+                                                ByVal pHORAFECHAINICIO As String,
+                                                ByVal pFECHAFIN As String,
+                                                ByVal pHORAFECHAFIN As String,
+                                                ByVal pDIASTRABAJO As String,
+                                                ByVal pTIPODIA As String,
+                                                ByVal pHORARIOS As String,
+                                                ByVal pNUMEROHORAS As String,
+                                                ByVal pINTERVALOALMUERZO As String,
+                                                ByVal pTRABAJAALMUERZO As String,
+                                                ByVal pOIDPUEMAR As String,
+                                                ByVal pQtdePostos As Integer)
+        Dim qtdLinhas As Integer
+
+        Try
+            Using cmd As IDbCommand = objtransacao.Connection.CreateCommand()
+                cmd.Transaction = objtransacao
+                cmd.CommandText = My.Resources.UPDATE_TMP_ACERTOPROFAT
+
+                cmd.Parameters.Add(DbHelper.AcessoDados.CriarParametro(CONEXAO_NOVI, "pCODUNICOPOSTO", DbType.String, pCODUNICOPOSTO))
+                cmd.Parameters.Add(DbHelper.AcessoDados.CriarParametro(CONEXAO_NOVI, "pFECHAINICIO", DbType.String, pFECHAINICIO))
+                cmd.Parameters.Add(DbHelper.AcessoDados.CriarParametro(CONEXAO_NOVI, "pHORAFECHAINICIO", DbType.String, pHORAFECHAINICIO))
+                cmd.Parameters.Add(DbHelper.AcessoDados.CriarParametro(CONEXAO_NOVI, "pFECHAFIN", DbType.String, pFECHAFIN))
+                cmd.Parameters.Add(DbHelper.AcessoDados.CriarParametro(CONEXAO_NOVI, "pHORAFECHAFIN", DbType.String, pHORAFECHAFIN))
+                cmd.Parameters.Add(DbHelper.AcessoDados.CriarParametro(CONEXAO_NOVI, "pDIASTRABAJO", DbType.String, pDIASTRABAJO))
+                cmd.Parameters.Add(DbHelper.AcessoDados.CriarParametro(CONEXAO_NOVI, "pTIPODIA", DbType.String, pTIPODIA))
+                cmd.Parameters.Add(DbHelper.AcessoDados.CriarParametro(CONEXAO_NOVI, "pHORARIOS", DbType.String, pHORARIOS))
+                cmd.Parameters.Add(DbHelper.AcessoDados.CriarParametro(CONEXAO_NOVI, "pNUMEROHORAS", DbType.String, pNUMEROHORAS))
+                cmd.Parameters.Add(DbHelper.AcessoDados.CriarParametro(CONEXAO_NOVI, "pINTERVALOALMUERZO", DbType.String, pINTERVALOALMUERZO))
+                cmd.Parameters.Add(DbHelper.AcessoDados.CriarParametro(CONEXAO_NOVI, "pTRABAJAALMUERZO", DbType.String, pTRABAJAALMUERZO))
+                cmd.Parameters.Add(DbHelper.AcessoDados.CriarParametro(CONEXAO_NOVI, "pQtdePostos", DbType.Int16, pQtdePostos))
+                cmd.Parameters.Add(DbHelper.AcessoDados.CriarParametro(CONEXAO_NOVI, "pOIDPUEMAR", DbType.String, pOIDPUEMAR))
+
+                qtdLinhas = DbHelper.AcessoDados.ExecutarNonQuery(CONEXAO_NOVI, cmd)
+            End Using
+        Catch ex As Exception
+            Throw ex
+        End Try
+    End Sub
+
+#End Region
 
 End Class

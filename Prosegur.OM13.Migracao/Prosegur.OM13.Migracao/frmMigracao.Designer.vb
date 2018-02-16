@@ -36,6 +36,7 @@ Partial Class frmMigracao
         Me.btnEscala = New System.Windows.Forms.Button()
         Me.btnSegmento = New System.Windows.Forms.Button()
         Me.btnLogradouro = New System.Windows.Forms.Button()
+        Me.Button1 = New System.Windows.Forms.Button()
         Me.SuspendLayout()
         '
         'btnCliente
@@ -165,11 +166,22 @@ Partial Class frmMigracao
         Me.btnLogradouro.Text = "TIPO LOGRADOURO (6)"
         Me.btnLogradouro.UseVisualStyleBackColor = True
         '
+        'Button1
+        '
+        Me.Button1.BackColor = System.Drawing.SystemColors.Highlight
+        Me.Button1.Location = New System.Drawing.Point(23, 277)
+        Me.Button1.Name = "Button1"
+        Me.Button1.Size = New System.Drawing.Size(102, 43)
+        Me.Button1.TabIndex = 3
+        Me.Button1.Text = "Carga dados postos PROFAT"
+        Me.Button1.UseVisualStyleBackColor = False
+        '
         'frmMigracao
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(585, 283)
+        Me.ClientSize = New System.Drawing.Size(585, 351)
+        Me.Controls.Add(Me.Button1)
         Me.Controls.Add(Me.lblStatus)
         Me.Controls.Add(Me.lblTitulo)
         Me.Controls.Add(Me.txtStatus)
@@ -205,5 +217,5 @@ Partial Class frmMigracao
     Friend WithEvents btnEscala As System.Windows.Forms.Button
     Friend WithEvents btnSegmento As System.Windows.Forms.Button
     Friend WithEvents btnLogradouro As System.Windows.Forms.Button
-
+    Friend WithEvents Button1 As Button
 End Class

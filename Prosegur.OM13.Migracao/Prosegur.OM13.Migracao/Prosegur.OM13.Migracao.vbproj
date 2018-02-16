@@ -407,6 +407,9 @@
     <Content Include="Resources\ESCALA\SELECT_ESCALA_MARTE.SQL" />
     <Content Include="Resources\ESCALA\INSERT_ESCALA_DEPARA.SQL" />
     <Content Include="Resources\ESCALA\UPDATE_PROFAT_ESCALA_CODMARTE_NULO.SQL" />
+    <Content Include="Resources\PROFAT\BUSCAR_POSTOS_MARTE.sql" />
+    <Content Include="Resources\PROFAT\Buscar_TMP_AcertoPROFAT.sql" />
+    <Content Include="Resources\PROFAT\UPDATE_TMP_ACERTOPROFAT.sql" />
     <Content Include="Resources\SEGMENTO\DELETE_MARTE_SEGMENTO.SQL" />
     <Content Include="Resources\SEGMENTO\DELETE_MARTE_SUBSEGMENTO.SQL" />
     <Content Include="Resources\SEGMENTO\INSERT_SEGMENTO_MARTE.SQL" />

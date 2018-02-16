@@ -111,4 +111,16 @@
             MsgBox(ex.Message & vbNewLine & ex.StackTrace, MsgBoxStyle.Critical, "NORMALIZAÇÃO ESCALA")
         End Try
     End Sub
+
+    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+        Try
+            Dim sNomeArquivoLog As String = "CARGA_PROFAT_POSTOS_01" & Date.Now.ToString.Replace("/", "").Replace(":", "")
+
+            Normalizacao.CargaPROFATPostos01(sNomeArquivoLog)
+            MsgBox("Carga postos PROFAT finalizado!", MsgBoxStyle.Information, "Aviso")
+
+        Catch ex As Exception
+            MsgBox(ex.Message & vbNewLine & ex.StackTrace, MsgBoxStyle.Critical, "CARGA DADOS FALTANTES DE POSTOS - PROFAT")
+        End Try
+    End Sub
 End Class
