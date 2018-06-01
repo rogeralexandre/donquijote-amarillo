@@ -27,7 +27,9 @@ Public Class Log
     ''' <param name="pMensagem"></param>
     ''' <param name="pNomeArq"></param>
     ''' <remarks></remarks>
-    Public Shared Sub GravarLog(ByVal pMensagem As String, ByVal pNomeArq As String)
+    Public Shared Sub GravarLog(ByVal pMensagem As String,
+                                ByVal pNomeArq As String,
+                                Optional ByVal pColocaData As Boolean = True)
 
         If Not HabilitarLog Then Return
 
@@ -40,7 +42,12 @@ Public Class Log
 
             Dim Arquivo As String = String.Format("{0}\" + pNomeArq + ".txt", pastaLog)
             Using srt As New System.IO.StreamWriter(Arquivo, True)
-                srt.WriteLine(Date.Now.ToString + " - " + pMensagem)
+                If (pColocaData) Then
+                    srt.WriteLine(Date.Now.ToString + " - " + pMensagem)
+                Else
+                    srt.WriteLine(pMensagem.Replace(vbCr, "").Replace(vbLf, "").ToString())
+                End If
+
                 srt.Close()
             End Using
 

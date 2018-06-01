@@ -37,12 +37,15 @@ Partial Class frmMigracao
         Me.btnSegmento = New System.Windows.Forms.Button()
         Me.btnLogradouro = New System.Windows.Forms.Button()
         Me.Button1 = New System.Windows.Forms.Button()
+        Me.Button2 = New System.Windows.Forms.Button()
+        Me.Button3 = New System.Windows.Forms.Button()
+        Me.btnGerarGrupoTarifario = New System.Windows.Forms.Button()
         Me.SuspendLayout()
         '
         'btnCliente
         '
         Me.btnCliente.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnCliente.Location = New System.Drawing.Point(347, 215)
+        Me.btnCliente.Location = New System.Drawing.Point(351, 253)
         Me.btnCliente.Name = "btnCliente"
         Me.btnCliente.Size = New System.Drawing.Size(102, 55)
         Me.btnCliente.TabIndex = 0
@@ -79,7 +82,7 @@ Partial Class frmMigracao
         'btnSubCliente
         '
         Me.btnSubCliente.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnSubCliente.Location = New System.Drawing.Point(455, 215)
+        Me.btnSubCliente.Location = New System.Drawing.Point(459, 253)
         Me.btnSubCliente.Name = "btnSubCliente"
         Me.btnSubCliente.Size = New System.Drawing.Size(102, 55)
         Me.btnSubCliente.TabIndex = 0
@@ -89,7 +92,7 @@ Partial Class frmMigracao
         'btnCidade
         '
         Me.btnCidade.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnCidade.Location = New System.Drawing.Point(131, 158)
+        Me.btnCidade.Location = New System.Drawing.Point(135, 196)
         Me.btnCidade.Name = "btnCidade"
         Me.btnCidade.Size = New System.Drawing.Size(102, 51)
         Me.btnCidade.TabIndex = 0
@@ -99,7 +102,7 @@ Partial Class frmMigracao
         'btnDivisao
         '
         Me.btnDivisao.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnDivisao.Location = New System.Drawing.Point(347, 158)
+        Me.btnDivisao.Location = New System.Drawing.Point(351, 196)
         Me.btnDivisao.Name = "btnDivisao"
         Me.btnDivisao.Size = New System.Drawing.Size(102, 51)
         Me.btnDivisao.TabIndex = 0
@@ -109,7 +112,7 @@ Partial Class frmMigracao
         'btnFilial
         '
         Me.btnFilial.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnFilial.Location = New System.Drawing.Point(455, 158)
+        Me.btnFilial.Location = New System.Drawing.Point(459, 196)
         Me.btnFilial.Name = "btnFilial"
         Me.btnFilial.Size = New System.Drawing.Size(102, 51)
         Me.btnFilial.TabIndex = 0
@@ -119,7 +122,7 @@ Partial Class frmMigracao
         'btnDelegacao
         '
         Me.btnDelegacao.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnDelegacao.Location = New System.Drawing.Point(23, 215)
+        Me.btnDelegacao.Location = New System.Drawing.Point(27, 253)
         Me.btnDelegacao.Name = "btnDelegacao"
         Me.btnDelegacao.Size = New System.Drawing.Size(102, 55)
         Me.btnDelegacao.TabIndex = 0
@@ -129,7 +132,7 @@ Partial Class frmMigracao
         'btnTipoPosto
         '
         Me.btnTipoPosto.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnTipoPosto.Location = New System.Drawing.Point(239, 157)
+        Me.btnTipoPosto.Location = New System.Drawing.Point(243, 195)
         Me.btnTipoPosto.Name = "btnTipoPosto"
         Me.btnTipoPosto.Size = New System.Drawing.Size(102, 52)
         Me.btnTipoPosto.TabIndex = 0
@@ -139,17 +142,17 @@ Partial Class frmMigracao
         'btnEscala
         '
         Me.btnEscala.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnEscala.Location = New System.Drawing.Point(131, 215)
+        Me.btnEscala.Location = New System.Drawing.Point(135, 253)
         Me.btnEscala.Name = "btnEscala"
         Me.btnEscala.Size = New System.Drawing.Size(102, 55)
         Me.btnEscala.TabIndex = 0
-        Me.btnEscala.Text = "ESCALA (12)"
+        Me.btnEscala.Text = "ESCALA (12) - profat não usa mais"
         Me.btnEscala.UseVisualStyleBackColor = True
         '
         'btnSegmento
         '
         Me.btnSegmento.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnSegmento.Location = New System.Drawing.Point(239, 215)
+        Me.btnSegmento.Location = New System.Drawing.Point(243, 253)
         Me.btnSegmento.Name = "btnSegmento"
         Me.btnSegmento.Size = New System.Drawing.Size(102, 55)
         Me.btnSegmento.TabIndex = 0
@@ -159,7 +162,7 @@ Partial Class frmMigracao
         'btnLogradouro
         '
         Me.btnLogradouro.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnLogradouro.Location = New System.Drawing.Point(23, 158)
+        Me.btnLogradouro.Location = New System.Drawing.Point(27, 196)
         Me.btnLogradouro.Name = "btnLogradouro"
         Me.btnLogradouro.Size = New System.Drawing.Size(102, 51)
         Me.btnLogradouro.TabIndex = 0
@@ -169,18 +172,51 @@ Partial Class frmMigracao
         'Button1
         '
         Me.Button1.BackColor = System.Drawing.SystemColors.Highlight
-        Me.Button1.Location = New System.Drawing.Point(23, 277)
+        Me.Button1.Location = New System.Drawing.Point(27, 315)
         Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(102, 43)
+        Me.Button1.Size = New System.Drawing.Size(102, 47)
         Me.Button1.TabIndex = 3
         Me.Button1.Text = "Carga dados postos PROFAT"
         Me.Button1.UseVisualStyleBackColor = False
+        '
+        'Button2
+        '
+        Me.Button2.BackColor = System.Drawing.Color.Yellow
+        Me.Button2.Location = New System.Drawing.Point(136, 315)
+        Me.Button2.Name = "Button2"
+        Me.Button2.Size = New System.Drawing.Size(101, 47)
+        Me.Button2.TabIndex = 4
+        Me.Button2.Text = "Gerar agendamentos DUO - DSV"
+        Me.Button2.UseVisualStyleBackColor = False
+        '
+        'Button3
+        '
+        Me.Button3.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(128, Byte), Integer))
+        Me.Button3.Location = New System.Drawing.Point(135, 369)
+        Me.Button3.Name = "Button3"
+        Me.Button3.Size = New System.Drawing.Size(102, 23)
+        Me.Button3.TabIndex = 5
+        Me.Button3.Text = "Gerar XMLs"
+        Me.Button3.UseVisualStyleBackColor = False
+        '
+        'btnGerarGrupoTarifario
+        '
+        Me.btnGerarGrupoTarifario.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(0, Byte), Integer))
+        Me.btnGerarGrupoTarifario.Location = New System.Drawing.Point(244, 315)
+        Me.btnGerarGrupoTarifario.Name = "btnGerarGrupoTarifario"
+        Me.btnGerarGrupoTarifario.Size = New System.Drawing.Size(101, 47)
+        Me.btnGerarGrupoTarifario.TabIndex = 7
+        Me.btnGerarGrupoTarifario.Text = "Gerar Grupos Tarifários"
+        Me.btnGerarGrupoTarifario.UseVisualStyleBackColor = False
         '
         'frmMigracao
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(585, 351)
+        Me.ClientSize = New System.Drawing.Size(585, 412)
+        Me.Controls.Add(Me.btnGerarGrupoTarifario)
+        Me.Controls.Add(Me.Button3)
+        Me.Controls.Add(Me.Button2)
         Me.Controls.Add(Me.Button1)
         Me.Controls.Add(Me.lblStatus)
         Me.Controls.Add(Me.lblTitulo)
@@ -218,4 +254,7 @@ Partial Class frmMigracao
     Friend WithEvents btnSegmento As System.Windows.Forms.Button
     Friend WithEvents btnLogradouro As System.Windows.Forms.Button
     Friend WithEvents Button1 As Button
+    Friend WithEvents Button2 As Button
+    Friend WithEvents Button3 As Button
+    Friend WithEvents btnGerarGrupoTarifario As Button
 End Class

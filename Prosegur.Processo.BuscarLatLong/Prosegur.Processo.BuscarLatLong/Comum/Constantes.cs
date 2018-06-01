@@ -50,6 +50,14 @@ namespace Prosegur.Processo.BuscarLatLong.Comum
                 }
             }
         }
+
+        public static string NomeJSONControleExecucoes
+        {
+            get
+            {
+                return @"BuscarLatLong.JSON";
+            }
+        }
         #endregion
     }
 }

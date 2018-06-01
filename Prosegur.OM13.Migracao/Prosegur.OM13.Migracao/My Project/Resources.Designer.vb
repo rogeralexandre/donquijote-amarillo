@@ -165,6 +165,34 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized string similar to SELECT P_OIDPUEMAR 
+        '''  FROM MARTE.TMP_CARGAENVIOOTS T 
+        ''' WHERE P_OIDPUEMAR LIKE &apos;{0}%&apos;
+        '''  order by P_OIDPUEMAR;
+        '''.
+        '''</summary>
+        Friend ReadOnly Property BUSCAR_DADOS_TEMPORARIA() As String
+            Get
+                Return ResourceManager.GetString("BUSCAR_DADOS_TEMPORARIA", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to SELECT DISTINCT
+        '''       regexp_substr(T.P_OIDPUEMAR, &apos;[^|]+|[^|]+&apos;,1,1) AS P_CODEMPRESA,
+        '''       regexp_substr(T.P_OIDPUEMAR, &apos;[^|]+|[^|]+&apos;,2,2) AS P_CODCLIENTE,
+        '''       regexp_substr(T.P_OIDPUEMAR, &apos;[^|]+|[^|]+&apos;,3,3) AS P_CODSUBCLI
+        '''  FROM MARTE.TMP_CARGAENVIOOTS T
+        ''' ORDER BY P_CODEMPRESA, P_CODCLIENTE, P_CODSUBCLI
+        '''.
+        '''</summary>
+        Friend ReadOnly Property BUSCAR_DADOS_TEMPORARIA_N0() As String
+            Get
+                Return ResourceManager.GetString("BUSCAR_DADOS_TEMPORARIA_N0", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized string similar to select e.cod_empresa_erp,
         '''       c.cod_cliente,
         '''       s.cod_subcliente,
@@ -192,11 +220,33 @@ Namespace My.Resources
         '''<summary>
         '''  Looks up a localized string similar to select OIDPUEMAR
         '''  from marte.Tmp_Acertoprofat
+        ''' where M_DATAEXPORTACAO is null
         '''.
         '''</summary>
         Friend ReadOnly Property Buscar_TMP_AcertoPROFAT() As String
             Get
                 Return ResourceManager.GetString("Buscar_TMP_AcertoPROFAT", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to SELECT DISTINCT
+        '''       e.cod_empresa_erp,
+        '''       c.cod_cliente,
+        '''       s.cod_subcliente, 
+        '''       ot.num_nro_ot,
+        '''       cot.oid_tipo_servicio,
+        '''       co.cod_comprobante,
+        '''       OT.Fec_Inicio
+        '''FROM marte.copr_tcliente c 
+        '''inner join marte.copr_tsubcliente s on c.oid_cliente = s.oid_cliente
+        '''inner join marte.copr_tot ot on ot.oid_cliente = c.oid_cliente and ot.oid_subcliente = s.oid_subcliente
+        '''inner join marte.copr_tpuestosxot pot on ot.oid_ot = pot.oid_ot
+        '''inner join marte.copr_tempresa e on e.oid_emp [rest of string was truncated]&quot;;.
+        '''</summary>
+        Friend ReadOnly Property BUSCAROTSPOREMPRESACLISUBPOSTO() As String
+            Get
+                Return ResourceManager.GetString("BUSCAROTSPOREMPRESACLISUBPOSTO", resourceCulture)
             End Get
         End Property
         
@@ -1466,9 +1516,9 @@ Namespace My.Resources
         '''       M_HORARIOS = :pHORARIOS,
         '''       M_NUMEROHORAS = :pNUMEROHORAS,
         '''       M_INTERVALOALMUERZO = :pINTERVALOALMUERZO,
-        '''       M_TRABAJAALMUERZO = :pTRABAJAALMUERZO
-        ''' where oidpuemar = :pOIDPUEMAR
-        '''.
+        '''       M_TRABAJAALMUERZO = :pTRABAJAALMUERZO,
+        '''	   M_DATAEXPORTACAO = sysdate,
+        '''	   [rest of string was truncated]&quot;;.
         '''</summary>
         Friend ReadOnly Property UPDATE_TMP_ACERTOPROFAT() As String
             Get

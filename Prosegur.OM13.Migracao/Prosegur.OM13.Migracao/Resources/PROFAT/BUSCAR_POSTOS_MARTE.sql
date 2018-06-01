@@ -19,6 +19,7 @@
        pot.bol_dia_6 sabado,
        pot.bol_dia_7 domingo,
        pot.oid_tipo_jornada,
+	   pot.num_cantidad_pto,
        tmp1.fec_baixa,
        tmp1.hor_baixa
   from marte.copr_tot ot 
@@ -40,9 +41,11 @@
              inner join marte.copr_tempresa e1    on e1.oid_empresa = ot1.oid_empresa
              inner join marte.copr_tpuestosxot pot1 on pot1.oid_ot = ot1.oid_ot
              where pot1.des_condicion = 'B'
+			   and ot1.oid_situacion_ot  = 'APR'
            ) tmp1 on  tmp1.cod_empresa_erp = e.cod_empresa_erp
                   and tmp1.cod_cliente     = c.cod_cliente
                   and tmp1.cod_subcliente  = s.cod_subcliente
                   and tmp1.cod_puesto      = pot.cod_puesto
  where pot.des_condicion = 'A'
+   and ot.oid_situacion_ot  = 'APR'
    and {0}

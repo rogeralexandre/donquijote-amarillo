@@ -1,3 +1,3 @@
 ﻿select OIDPUEMAR
-  from marte.Tmp_Acertoprofat
+  from marte.BRINT_COMPLETAR_DADOS
  where M_DATAEXPORTACAO is null
