@@ -142,6 +142,21 @@
   <data name="ATUALIZA_PROFAT_SUBCLIENTE" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\SUBCLIENTE\ATUALIZA_PROFAT_SUBCLIENTE.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
+  <data name="BUSCAROTSPOREMPRESACLISUBPOSTO" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\PROFAT_XML\BUSCAROTSPOREMPRESACLISUBPOSTO.SQL;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="BUSCAR_DADOS_TEMPORARIA" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\PROFAT_XML\BUSCAR_DADOS_TEMPORARIA.SQL;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="BUSCAR_DADOS_TEMPORARIA_N0" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\PROFAT_XML\BUSCAR_DADOS_TEMPORARIA_N0.SQL;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="BUSCAR_POSTOS_MARTE" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\PROFAT\BUSCAR_POSTOS_MARTE.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="Buscar_TMP_AcertoPROFAT" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\PROFAT\Buscar_TMP_AcertoPROFAT.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
   <data name="DELETE_DEPARA_CIDADESEMDEPARA" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\CIDADE\DELETE_DEPARA_CIDADESEMDEPARA.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
@@ -420,5 +435,8 @@
   </data>
   <data name="UPDATE_SEGMENTO_SUBSEGMENTO_MARTE" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\CLIENTE\UPDATE_SEGMENTO_SUBSEGMENTO_MARTE.SQL;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="UPDATE_TMP_ACERTOPROFAT" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\PROFAT\UPDATE_TMP_ACERTOPROFAT.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
 </root>

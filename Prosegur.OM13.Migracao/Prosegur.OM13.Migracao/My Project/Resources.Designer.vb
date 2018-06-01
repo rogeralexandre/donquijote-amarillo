@@ -22,7 +22,7 @@ Namespace My.Resources
     '''<summary>
     '''  A strongly-typed resource class, for looking up localized strings, etc.
     '''</summary>
-    <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0"),  _
+    <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0"),  _
      Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
      Global.System.Runtime.CompilerServices.CompilerGeneratedAttribute(),  _
      Global.Microsoft.VisualBasic.HideModuleNameAttribute()>  _
@@ -161,6 +161,92 @@ Namespace My.Resources
         Friend ReadOnly Property ATUALIZA_PROFAT_SUBCLIENTE() As String
             Get
                 Return ResourceManager.GetString("ATUALIZA_PROFAT_SUBCLIENTE", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to SELECT P_OIDPUEMAR 
+        '''  FROM MARTE.TMP_CARGAENVIOOTS T 
+        ''' WHERE P_OIDPUEMAR LIKE &apos;{0}%&apos;
+        '''  order by P_OIDPUEMAR;
+        '''.
+        '''</summary>
+        Friend ReadOnly Property BUSCAR_DADOS_TEMPORARIA() As String
+            Get
+                Return ResourceManager.GetString("BUSCAR_DADOS_TEMPORARIA", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to SELECT DISTINCT
+        '''       regexp_substr(T.P_OIDPUEMAR, &apos;[^|]+|[^|]+&apos;,1,1) AS P_CODEMPRESA,
+        '''       regexp_substr(T.P_OIDPUEMAR, &apos;[^|]+|[^|]+&apos;,2,2) AS P_CODCLIENTE,
+        '''       regexp_substr(T.P_OIDPUEMAR, &apos;[^|]+|[^|]+&apos;,3,3) AS P_CODSUBCLI
+        '''  FROM MARTE.TMP_CARGAENVIOOTS T
+        ''' ORDER BY P_CODEMPRESA, P_CODCLIENTE, P_CODSUBCLI
+        '''.
+        '''</summary>
+        Friend ReadOnly Property BUSCAR_DADOS_TEMPORARIA_N0() As String
+            Get
+                Return ResourceManager.GetString("BUSCAR_DADOS_TEMPORARIA_N0", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to select e.cod_empresa_erp,
+        '''       c.cod_cliente,
+        '''       s.cod_subcliente,
+        '''       pot.cod_puesto,
+        '''       pot.fec_inicio_servicio,
+        '''       pot.hor_inicio_servicio,
+        '''       pot.fec_fin_servicio,
+        '''       pot.hor_fin_servicio,
+        '''       pot.hor_inicio_1,
+        '''       pot.hor_fin_1,
+        '''       pot.num_horas_dia_vig HorasDiaXVigilante,
+        '''       pot.num_horas_almuerzo AlmocoHoras,
+        '''       ca.des_cobertura_almuerzo,
+        '''       pot.bol_dia_1 segunda,
+        '''       pot.bol_dia_2 terça,
+        '''       pot.bol_dia_3 quarta,
+        '''       pot.bol_dia [rest of string was truncated]&quot;;.
+        '''</summary>
+        Friend ReadOnly Property BUSCAR_POSTOS_MARTE() As String
+            Get
+                Return ResourceManager.GetString("BUSCAR_POSTOS_MARTE", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to select OIDPUEMAR
+        '''  from marte.Tmp_Acertoprofat
+        ''' where M_DATAEXPORTACAO is null
+        '''.
+        '''</summary>
+        Friend ReadOnly Property Buscar_TMP_AcertoPROFAT() As String
+            Get
+                Return ResourceManager.GetString("Buscar_TMP_AcertoPROFAT", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to SELECT DISTINCT
+        '''       e.cod_empresa_erp,
+        '''       c.cod_cliente,
+        '''       s.cod_subcliente, 
+        '''       ot.num_nro_ot,
+        '''       cot.oid_tipo_servicio,
+        '''       co.cod_comprobante,
+        '''       OT.Fec_Inicio
+        '''FROM marte.copr_tcliente c 
+        '''inner join marte.copr_tsubcliente s on c.oid_cliente = s.oid_cliente
+        '''inner join marte.copr_tot ot on ot.oid_cliente = c.oid_cliente and ot.oid_subcliente = s.oid_subcliente
+        '''inner join marte.copr_tpuestosxot pot on ot.oid_ot = pot.oid_ot
+        '''inner join marte.copr_tempresa e on e.oid_emp [rest of string was truncated]&quot;;.
+        '''</summary>
+        Friend ReadOnly Property BUSCAROTSPOREMPRESACLISUBPOSTO() As String
+            Get
+                Return ResourceManager.GetString("BUSCAROTSPOREMPRESACLISUBPOSTO", resourceCulture)
             End Get
         End Property
         
@@ -402,10 +488,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Looks up a localized string similar to INSERT INTO MARTE.VABR_TDE_PARA_GERAL
-        '''(OID_TABELA, COD_PARAM_TAB, COD_MARTE  , COD_PROFAT, COD_NOVI, FEC_ALTA)
-        '''VALUES
-        '''(SYS_GUID(), 12           , :OID_MARTE, :COD_PROFAT, NULL, SYSDATE).
+        '''  Looks up a localized string similar to 
+        '''MERGE INTO MARTE.VABR_TDE_PARA_GERAL ESC1
+        ''' USING (SELECT &apos;P_MARTE&apos; P_COD_MARTE, &apos;P_PROFAT&apos; P_COD_PROFAT FROM DUAL) ESC2 
+        ''' ON (ESC1.COD_MARTE = ESC2.P_COD_MARTE)
+        ''' WHEN MATCHED THEN 
+        '''      UPDATE SET COD_PROFAT = ESC2.P_COD_PROFAT 
+        ''' WHEN NOT MATCHED THEN 
+        '''      INSERT (OID_TABELA, COD_PARAM_TAB, COD_MARTE  , COD_PROFAT  , COD_NOVI, FEC_ALTA)
+        '''      VALUES (SYS_GUID(), 12           , P_COD_MARTE, P_COD_PROFAT, NULL    , SYSDATE).
         '''</summary>
         Friend ReadOnly Property INSERT_ESCALA_DEPARA() As String
             Get
@@ -603,7 +694,7 @@ Namespace My.Resources
         '''	   set DATULTALT = GETDATE(), 
         '''	       CODUSU = 1100 , 
         '''	       CODMARTE = &apos;PAR_CODMARTE&apos;
-        '''	 where CODESC = 2
+        '''	 where CODESC = PAR_CODESC
         '''	 select 0 as retorno
         ''' end
         '''ELSE
@@ -612,7 +703,7 @@ Namespace My.Resources
         '''	INSERT INTO FAT_TCADESC 
         '''	            (CODESC   , DESESC , CODUSU, DATULTALT, CODMARTE)
         '''	     VALUES
-        '''			    (@codesc_n, &apos;PAR_DESESC&apos;, 1100  , getdate(), &apos;PAR_CODMARTE&apos; [rest of string was truncated]&quot;;.
+        '''			    (@codesc_n, &apos;PAR_DESESC&apos;, 1100  , getdate(), &apos;PAR_ [rest of string was truncated]&quot;;.
         '''</summary>
         Friend ReadOnly Property MERGE_ESCALA_PROFAT() As String
             Get
@@ -683,7 +774,7 @@ Namespace My.Resources
         '''  Looks up a localized string similar to select e.oid_escala, e.cod_escala, e.des_escala, nvl(dp.cod_profat,0) cod_profat
         '''from marte.copr_tescala e
         '''left join marte.vabr_tde_para_geral dp on trim(e.oid_escala) = trim(dp.cod_marte) and dp.cod_param_tab = 12
-        '''where dp.cod_profat is null.
+        '''.
         '''</summary>
         Friend ReadOnly Property SELECT_ESCALA_MARTE() As String
             Get
@@ -1410,6 +1501,28 @@ Namespace My.Resources
         Friend ReadOnly Property UPDATE_SEGMENTO_SUBSEGMENTO_MARTE() As String
             Get
                 Return ResourceManager.GetString("UPDATE_SEGMENTO_SUBSEGMENTO_MARTE", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to update marte.Tmp_Acertoprofat
+        '''   set M_CODUNICOPOSTO = :pCODUNICOPOSTO,
+        '''       M_FECHAINICIO   = :pFECHAINICIO,
+        '''       M_HORAFECHAINICIO = :pHORAFECHAINICIO,
+        '''       M_FECHAFIN = :pFECHAFIN,
+        '''       M_HORAFECHAFIN = :pHORAFECHAFIN,
+        '''       M_DIASTRABAJO = :pDIASTRABAJO,
+        '''       M_TIPODIA = :pTIPODIA,
+        '''       M_HORARIOS = :pHORARIOS,
+        '''       M_NUMEROHORAS = :pNUMEROHORAS,
+        '''       M_INTERVALOALMUERZO = :pINTERVALOALMUERZO,
+        '''       M_TRABAJAALMUERZO = :pTRABAJAALMUERZO,
+        '''	   M_DATAEXPORTACAO = sysdate,
+        '''	   [rest of string was truncated]&quot;;.
+        '''</summary>
+        Friend ReadOnly Property UPDATE_TMP_ACERTOPROFAT() As String
+            Get
+                Return ResourceManager.GetString("UPDATE_TMP_ACERTOPROFAT", resourceCulture)
             End Get
         End Property
     End Module

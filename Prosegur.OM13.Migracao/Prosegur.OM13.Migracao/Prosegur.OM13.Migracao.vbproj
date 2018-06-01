@@ -191,7 +191,9 @@
       <DependentUpon>Reference.map</DependentUpon>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Resources\MAPEAR\" />
+  </ItemGroup>
   <ItemGroup>
     <None Include="Resources\CLIENTE\DELETE_MARTE_DELETACLIENTEDUPLICADO.sql" />
   </ItemGroup>
@@ -407,6 +409,12 @@
     <Content Include="Resources\ESCALA\SELECT_ESCALA_MARTE.SQL" />
     <Content Include="Resources\ESCALA\INSERT_ESCALA_DEPARA.SQL" />
     <Content Include="Resources\ESCALA\UPDATE_PROFAT_ESCALA_CODMARTE_NULO.SQL" />
+    <Content Include="Resources\PROFAT\BUSCAR_POSTOS_MARTE.sql" />
+    <Content Include="Resources\PROFAT\Buscar_TMP_AcertoPROFAT.sql" />
+    <Content Include="Resources\PROFAT\UPDATE_TMP_ACERTOPROFAT.sql" />
+    <None Include="Resources\PROFAT_XML\BUSCAROTSPOREMPRESACLISUBPOSTO.SQL" />
+    <None Include="Resources\PROFAT_XML\BUSCAR_DADOS_TEMPORARIA.SQL" />
+    <None Include="Resources\PROFAT_XML\BUSCAR_DADOS_TEMPORARIA_N0.SQL" />
     <Content Include="Resources\SEGMENTO\DELETE_MARTE_SEGMENTO.SQL" />
     <Content Include="Resources\SEGMENTO\DELETE_MARTE_SUBSEGMENTO.SQL" />
     <Content Include="Resources\SEGMENTO\INSERT_SEGMENTO_MARTE.SQL" />

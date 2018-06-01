@@ -112,4 +112,53 @@
             MsgBox(ex.Message & vbNewLine & ex.StackTrace, MsgBoxStyle.Critical, "NORMALIZAÇÃO ESCALA")
         End Try
     End Sub
+
+    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+        Try
+            Dim sNomeArquivoLog As String = "CARGA_PROFAT_POSTOS_01" & Date.Now.ToString.Replace("/", "").Replace(":", "")
+
+            Normalizacao.CargaPROFATPostos01(sNomeArquivoLog)
+            MsgBox("Carga postos PROFAT finalizado!", MsgBoxStyle.Information, "Aviso")
+
+        Catch ex As Exception
+            MsgBox(ex.Message & vbNewLine & ex.StackTrace, MsgBoxStyle.Critical, "CARGA DADOS FALTANTES DE POSTOS - PROFAT")
+        End Try
+    End Sub
+
+    Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
+        Try
+            Dim sNomeArquivoLog As String = "CARGA_PROFAT_GERAR_SINCRONIA_DUO_OT" & Date.Now.ToString.Replace("/", "").Replace(":", "")
+
+            Normalizacao.CargaPROFATGerarDUO_OT(sNomeArquivoLog)
+            MsgBox("Geração dos agendamentos finalizado!", MsgBoxStyle.Information, "Aviso")
+
+        Catch ex As Exception
+            MsgBox(ex.Message & vbNewLine & ex.StackTrace, MsgBoxStyle.Critical, "PROFAT - GERAR SINCRONIA DUO OT")
+        End Try
+    End Sub
+
+    Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
+        Try
+            'Dim sNomeArquivoLog As String = "PAYLOAD" & Date.Now.ToString.Replace("/", "").Replace(":", "")
+
+            Normalizacao.GerarPayload()
+            MsgBox("Geração dos payloads finalizado!", MsgBoxStyle.Information, "Aviso")
+
+        Catch ex As Exception
+            MsgBox(ex.Message & vbNewLine & ex.StackTrace, MsgBoxStyle.Critical, "GERAR PAYLOADS")
+        End Try
+    End Sub
+
+    Private Sub btnGerarGrupoTarifario_Click(sender As Object, e As EventArgs) Handles btnGerarGrupoTarifario.Click
+        Try
+            Dim sNomeArquivoLog As String = "TARIFARIO_" & Date.Now.ToString.Replace("/", "").Replace(":", "")
+
+            Normalizacao.ExporteGrupoTarifario(sNomeArquivoLog)
+            MsgBox("Exporte do tarifario terminado!", MsgBoxStyle.Information, "Aviso")
+
+        Catch ex As Exception
+            MsgBox(ex.Message & vbNewLine & ex.StackTrace, MsgBoxStyle.Critical, "EXPORTE TARIFARIO")
+        End Try
+
+    End Sub
 End Class

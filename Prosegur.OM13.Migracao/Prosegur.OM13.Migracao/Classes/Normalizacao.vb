@@ -1,5 +1,7 @@
 ﻿Imports Prosegur.DbHelper
 Imports System.Data.SqlClient
+Imports System.Text
+Imports System.Globalization
 
 Public Class Normalizacao
 
@@ -1111,6 +1113,466 @@ Public Class Normalizacao
     End Function
 #End Region
 
+#Region "CARGAS_PROFAT"
+
+    Public Shared Sub CargaPROFATPostos01(ByVal pNomeArquivoLog As String)
+
+        '15/02/2018
+        '1) Recebi a carga em Excel e gerei um script. [somente create table d:\Prosegur\profat\01-create_table.sql]
+        '2) Fiz os inserts na tabela marte.TMP_AcertoPROFAT [d:\Prosegur\profat\02-carga_excel.sql]
+        '3) adicionei os campos que seram carregados com os dados do MARTE. [ALTER TABLE do arquivo d:\Prosegur\profat\01-create_table.sql]
+        '4) executar esse código 
+        '5) exportar para excel direto do PL/SQL
+
+        'TESTE
+        Dim contador As Integer
+        Dim QtdePostos As Integer
+
+        Dim objtransacao_MARTE As IDbTransaction
+        Dim DadosTMP_AcertoProfat As New DataTable
+        Dim DadosPostosMarte As New DataTable
+
+        Dim mCodUnicoPosto As String
+        Dim mFechaInicio As String
+        Dim mHoraFechaInicio As String
+        Dim mFechaFin As String
+        Dim mHoraFechaFin As String
+        Dim mDiasTrabajo As String
+        Dim mTipoDia As String
+        Dim mHorarios As String
+        Dim mNumeroHoras As String
+        Dim mIntervaloAlmuerzo As String
+        Dim mTrabajaAlmuerzo As String
+        Dim mQtdePostos As String
+
+        Dim vData As Date
+        Dim vHora As Date
+        Dim vHorasPorDiaXVigilante As Decimal
+        Dim vHorasAlmoco As Decimal
+        Dim ParteInteira As Decimal
+        Dim ParteDecimal As Decimal
+
+        Try
+            Log.GravarLog("INICIO DA CARGA DE DADOS PARA PROFAT---------------------------------", pNomeArquivoLog)
+            AlteraStatusProcessamento("INICIO DA CARGA DE DADOS PARA PROFAT")
+
+            Log.GravarLog("BUSCAR DADOS DO MARTE PARA A MEMORIA", pNomeArquivoLog)
+            DadosTMP_AcertoProfat = Dados.BuscarTMP_AcertoPROFAT()
+
+            Log.GravarLog("ABRINDO CONEXÃO COM O MARTE", pNomeArquivoLog)
+            Dim conn_MARTE As IDbConnection = AcessoDados.Conectar(Dados.CONEXAO_MARTE)
+
+            For Each drPROFAT As DataRow In DadosTMP_AcertoProfat.Rows
+                Log.GravarLog("INICIANDO TRANSAÇÃO", pNomeArquivoLog)
+                objtransacao_MARTE = conn_MARTE.BeginTransaction()
+
+                Log.GravarLog("Buscando dados OIDPUEMAR : " & drPROFAT("OIDPUEMAR"), pNomeArquivoLog)
+
+                DadosPostosMarte = Dados.BuscarDadosPostosMARTE(drPROFAT("OIDPUEMAR"))
+
+                QtdePostos = DadosPostosMarte.Rows.Count
+                For Each dr As DataRow In DadosPostosMarte.Rows
+                    'INICIAR TRATAMENTO DOS CAMPOS
+                    mCodUnicoPosto = dr("cod_empresa_erp").ToString().Trim()
+                    mCodUnicoPosto = mCodUnicoPosto & "|" & dr("cod_cliente").ToString().Trim()
+                    mCodUnicoPosto = mCodUnicoPosto & "|" & dr("cod_subcliente").ToString().Trim()
+                    mCodUnicoPosto = mCodUnicoPosto & "|" & dr("cod_puesto").ToString().Trim()
+
+                    Log.GravarLog("Código único posto a processar: " & mCodUnicoPosto, pNomeArquivoLog)
+
+                    'If (mCodUnicoPosto = "B13|016930|238|4") Then
+                    '    contador = contador
+                    'End If
+
+                    vData = DateTime.Parse(dr("fec_inicio_servicio"))
+                    mFechaInicio = vData.Year.ToString() & "-" & vData.Month.ToString("00") & "-" & vData.Day.ToString("00")
+
+                    If (Not IsDBNull(dr("hor_inicio_servicio"))) Then
+                        vHora = DateTime.Parse(dr("hor_inicio_servicio"))
+                        mHoraFechaInicio = vHora.Hour.ToString("00") & ":" & vHora.Minute.ToString("00") & ":" & vHora.Second.ToString("00")
+                    Else
+                        mHoraFechaInicio = String.Empty
+                    End If
+
+                    If (IsDBNull(dr("fec_fin_servicio"))) Then
+                        'busca a data da baixa, se houver
+                        If (IsDBNull(dr("fec_baixa"))) Then
+                            'não tem baixa
+                            mFechaFin = String.Empty
+                            mHoraFechaFin = String.Empty
+                        Else
+                            vData = DateTime.Parse(dr("fec_baixa"))
+                            mFechaFin = vData.Year.ToString("00") & "-" & vData.Month.ToString("00") & "-" & vData.Day.ToString("00")
+                            If (IsDBNull(dr("hor_baixa"))) Then
+                                mHoraFechaFin = String.Empty
+                            Else
+                                vHora = DateTime.Parse(dr("hor_baixa"))
+                                mHoraFechaFin = vHora.Hour.ToString("00") & ":" & vHora.Minute.ToString("00") & ":" & vHora.Second.ToString("00")
+                            End If
+                        End If
+                    Else
+                        'busca a data da baixa para os ESPO.
+                        vData = DateTime.Parse(dr("fec_fin_servicio"))
+                        mFechaFin = vData.Year.ToString("00") & "-" & vData.Month.ToString("00") & "-" & vData.Day.ToString("00")
+                        If (IsDBNull(dr("hor_fin_servicio"))) Then
+                            mHoraFechaFin = String.Empty
+                        Else
+                            vHora = DateTime.Parse(dr("hor_fin_servicio"))
+                            mHoraFechaFin = vHora.Hour.ToString("00") & ":" & vHora.Minute.ToString("00") & ":" & vHora.Second.ToString("00")
+                        End If
+
+                    End If
+
+                    mDiasTrabajo = dr("segunda").ToString &
+                                   dr("terça").ToString &
+                                   dr("quarta").ToString &
+                                   dr("quinta").ToString &
+                                   dr("sexta").ToString &
+                                   dr("sabado").ToString &
+                                   dr("domingo").ToString
+
+                    mTipoDia = dr("oid_tipo_jornada").ToString().Trim()
+
+                    vHora = DateTime.Parse(dr("hor_inicio_1"))
+                    mHorarios = vHora.Hour.ToString("00") & ":" & vHora.Minute.ToString("00")
+                    vHora = DateTime.Parse(dr("hor_fin_1"))
+                    mHorarios = mHorarios & "-" & vHora.Hour.ToString("00") & ":" & vHora.Minute.ToString("00")
+
+                    vHorasPorDiaXVigilante = dr("HorasDiaXVigilante")
+                    ParteInteira = Math.Truncate(vHorasPorDiaXVigilante)
+                    ParteDecimal = (vHorasPorDiaXVigilante - ParteInteira) * 60
+                    mNumeroHoras = ParteInteira.ToString("00") & ParteDecimal.ToString("00")
+
+                    vHorasAlmoco = dr("AlmocoHoras")
+                    ParteInteira = Math.Truncate(vHorasAlmoco)
+                    ParteDecimal = (vHorasAlmoco - ParteInteira) * 60
+                    mIntervaloAlmuerzo = ParteInteira.ToString("00") & ":" & ParteDecimal.ToString("00")
+
+                    mTrabajaAlmuerzo = dr("des_cobertura_almuerzo").ToString().Trim()
+
+                    mQtdePostos = dr("num_cantidad_pto").ToString.Trim
+
+                    'ATUALIZAR A TABELA TEMPORÁRIA.
+                    Dados.AtualizarTMP_AcertoPROFAT(objtransacao_MARTE,
+                                                    mCodUnicoPosto,
+                                                    mFechaInicio,
+                                                    mHoraFechaInicio,
+                                                    mFechaFin,
+                                                    mHoraFechaFin,
+                                                    mDiasTrabajo,
+                                                    mTipoDia,
+                                                    mHorarios,
+                                                    mNumeroHoras,
+                                                    mIntervaloAlmuerzo,
+                                                    mTrabajaAlmuerzo,
+                                                    drPROFAT("OIDPUEMAR"),
+                                                    QtdePostos,
+                                                    mQtdePostos)
+                Next
+
+                Log.GravarLog("COMITANDO TRANSAÇÃO", pNomeArquivoLog)
+                objtransacao_MARTE.Commit()
+
+                DadosPostosMarte.Clear()
+
+                'TESTE
+                contador = contador + 1
+
+                Log.GravarLog(String.Format("Registro número -> {0}", contador), pNomeArquivoLog)
+                'If (contador > 10) Then
+                '    Exit For
+                'End If
+
+            Next
+
+            DadosTMP_AcertoProfat.Clear()
+            conn_MARTE.Close()
+            conn_MARTE.Dispose()
+
+        Catch ex As Exception
+            Log.GravarLog(ex.ToString, pNomeArquivoLog)
+
+            Log.GravarLog("Realizando o ROLLBACK no MARTE", pNomeArquivoLog)
+            objtransacao_MARTE.Rollback()
+
+            Throw ex
+        End Try
+
+    End Sub
+
+    Public Shared Sub CargaPROFATGerarDUO_OT(ByVal pNomeArquivoLog As String)
+        'rotina que lê uma tabela em que carreguei os oidpuemar enviado pela equipe PROFAT.
+        '00-ENVIO_AUTOMATICO_CRIARTABELA.sql
+        '00-ENVIO_AUTOMATICO_CARGAEXCEL.sql
+
+        Dim objtransacao_MARTE As IDbTransaction
+        Dim TransacaoAberta As Boolean = False
+
+        Dim TMP_CARGAENVIOOTS_SUB As New DataTable
+        Dim TMP_CARGAENVIOOTS_POSTOS As New DataTable
+        Dim OTsParaAgendar As New DataTable
+
+        Dim ListaPostosIN As String
+        Dim OID_ITEM_PROCESSO As String
+        Dim DataAgendamento As Date = Date.Now
+
+        Try
+            Log.GravarLog("INICIO DO PROCESSO DE GERAÇÃO DE AGENDAMENTOS DUO PARA PROFAT---------------------------------", pNomeArquivoLog)
+            AlteraStatusProcessamento("INICIANDO")
+
+            Log.GravarLog("ABRINDO CONEXÃO COM O MARTE", pNomeArquivoLog)
+            Dim conn_MARTE As IDbConnection = AcessoDados.Conectar(Dados.CONEXAO_MARTE_DSV)
+
+            'BUSCAR OS DADOS DA TEMPORÁRIA EM DSV.
+            TMP_CARGAENVIOOTS_SUB = Dados.BuscarTMP_CARGAENVIOOTS()
+
+            For Each drSub As DataRow In TMP_CARGAENVIOOTS_SUB.Rows
+                'AQUI VOU TER EMPRESA,CLIENTE E SUB
+                Log.GravarLog($"Empresa = {drSub("P_CODEMPRESA")}; Cliente = {drSub("P_CODCLIENTE")}; Subcliente = {drSub("P_CODSUBCLI")}", pNomeArquivoLog)
+                'Dim aOIDPUEMAR As String() = drSub("P_OIDPUEMAR").ToString.Split("|")
+
+                'buscar os postos desta combinação de empresa, cliente e subcliente
+                TMP_CARGAENVIOOTS_POSTOS = Dados.BuscarPostosListaPROFAT(drSub("P_CODEMPRESA"), drSub("P_CODCLIENTE"), drSub("P_CODSUBCLI"))
+
+                'Montar o IN(lista de postos)
+                ListaPostosIN = String.Empty
+                For Each drPostos As DataRow In TMP_CARGAENVIOOTS_POSTOS.Rows
+                    Dim aOIDPUEMAR_POSTO As String() = drPostos("P_OIDPUEMAR").ToString.Split("|")
+                    ListaPostosIN = ListaPostosIN & aOIDPUEMAR_POSTO(3) & ","
+                Next
+                'Retirar a última virgula
+                ListaPostosIN = ListaPostosIN.Substring(0, ListaPostosIN.Length - 1)
+
+                TMP_CARGAENVIOOTS_POSTOS.Clear()
+
+                'BUSCAR AS OTS, ORDENADAS POR DATA.
+                Log.GravarLog("BUSCANDO OTS", pNomeArquivoLog)
+                OTsParaAgendar = Dados.BuscarOTPorEmpresaClienteSubPosto(drSub("P_CODEMPRESA"), drSub("P_CODCLIENTE"), drSub("P_CODSUBCLI"), ListaPostosIN)
+
+                If (OTsParaAgendar.Rows.Count > 0) Then
+                    Log.GravarLog("INICIANDO TRANSAÇÃO", pNomeArquivoLog)
+                    objtransacao_MARTE = conn_MARTE.BeginTransaction()
+                    TransacaoAberta = True
+
+                    For Each drOT As DataRow In OTsParaAgendar.Rows
+                        'MONTAR OS AGENDAMENTOS.
+                        Log.GravarLog($"AGENDAR ITEM PROCESSO: |{drOT("cod_empresa").ToString.Trim}|{drOT("cod_cliente").ToString.Trim}|{drOT("cod_subcliente").ToString.Trim}|{drOT("num_nro_ot").ToString.Trim}|{drOT("oid_tipo_servicio").ToString.Trim}|{drOT("cod_comprobante").ToString.Trim}|", pNomeArquivoLog)
+                        Log.GravarLog($"AGENDADO PARA ÀS {DataAgendamento.ToString()}", pNomeArquivoLog)
+                        OID_ITEM_PROCESSO = Dados.AgendarSincronizacaoDUOOT(drOT("cod_empresa"),
+                                                                            drOT("cod_cliente"),
+                                                                            drOT("cod_subcliente"),
+                                                                            drOT("num_nro_ot"),
+                                                                            drOT("oid_tipo_servicio"),
+                                                                            drOT("cod_comprobante"),
+                                                                            DataAgendamento,
+                                                                            objtransacao_MARTE)
+                        Log.GravarLog($"AGENDADO ITEM PROCESSO: {OID_ITEM_PROCESSO}", pNomeArquivoLog)
+
+                        'AVANÇAR A DATA DE AGENDAMENTO PARA AS PRÓXIMAS OTS
+                        ' ISSO É PARA EVITAR DE DUAS OTS SEREM EXECUTADAS NO MESMO SEGUNDO, FAZENDO COM QUE AS OTS SEJAM EXECUTADAS FORA DE ORDEM
+                        DataAgendamento = DataAgendamento.AddSeconds(30)
+                    Next
+
+                    Log.GravarLog($"COMMIT NA TRANSAÇÃO - |{drSub("P_CODEMPRESA")}|{drSub("P_CODCLIENTE")}|{drSub("P_CODSUBCLI")}|", pNomeArquivoLog)
+                    objtransacao_MARTE.Commit()
+                    TransacaoAberta = False
+                Else
+                    Log.GravarLog($"Não foi encontrado serviço para a chave Empresa/Cliente/Subcliente - |{drSub("P_CODEMPRESA")}|{drSub("P_CODCLIENTE")}|{drSub("P_CODSUBCLI")}|" & Environment.NewLine & $" postos {ListaPostosIN}", pNomeArquivoLog)
+                End If
+
+                'PARA TESTES
+                'Exit For
+            Next
+            TMP_CARGAENVIOOTS_SUB.Clear()
+
+            Log.GravarLog($"EXECUÇÃO FINALIZADA COM SUCESSO ÀS {Date.Now.ToString()}", pNomeArquivoLog)
+
+        Catch ex As Exception
+
+            Log.GravarLog("Ocorreu uma exceção!", pNomeArquivoLog)
+            Log.GravarLog(ex.ToString, pNomeArquivoLog)
+
+            If (TransacaoAberta) Then
+                Log.GravarLog("Executar ROLLBACK!", pNomeArquivoLog)
+                objtransacao_MARTE.Rollback()
+            End If
+
+
+            Throw ex
+        End Try
+    End Sub
+
+#End Region
+
+#Region "GERAR_PAYLOAD"
+    Public Shared Sub GerarPayload()
+
+        Dim ListaPayloads As New DataTable
+        Dim sbPayload As New StringBuilder
+        Dim nomeArquivoPayload As String
+        Dim sequencia As Integer
+
+        'INFORMAR A DATA DE FILTRAGEM
+        Dim DataCriacao As Date = Date.ParseExact("28/03/2018", "dd/MM/yyyy", System.Globalization.DateTimeFormatInfo.InvariantInfo)
+        'INFORMAR O OID_INTEGRACAO DE FILTRAGEM
+        ' OT = "4"
+        Dim oidIntegracao As String = "4"
+
+        Try
+            sequencia = 1
+
+            ListaPayloads = Dados.BuscarPAYLOADS(DataCriacao, oidIntegracao)
+
+            For Each drPayload In ListaPayloads.Rows
+
+                sbPayload.Append(drPayload("obs_payload"))
+                nomeArquivoPayload = $"{sequencia.ToString("0000")}-{drPayload("obs_cod_legado").ToString.Replace("|", "_").Substring(1, drPayload("obs_cod_legado").ToString.Length - 1).Trim}"
+                Log.GravarLog(sbPayload.ToString(), nomeArquivoPayload, False)
+
+                sequencia = sequencia + 1
+                'Esvaziar o stringbuilder
+                sbPayload.Length = 0
+            Next
+
+        Catch ex As Exception
+            Throw ex
+        End Try
+    End Sub
+#End Region
+
+#Region "EXPORTE_GRUPO_TARIFARIO"
+    Public Shared Sub ExporteGrupoTarifario(ByVal pNomeArquivoLog As String)
+        'Rotina que gera todos os GRUPOS TARIFARIOS de TODAS AS OTS APROVADAS.
+        'TABELA DESTINO
+        'create table BRINT_CARGA_GT_RESULTADO (IDPOSTO VARCHAR2(100) Not NULL,
+        '                                       DATA_INICIO Date Not NULL,
+        '                                       COD_ITEM_TARIFA VARCHAR2(15) Not NULL,
+        '                                       DES_ITEM_TARIFA VARCHAR2(50) Not NULL,
+        '                                       PRECO FLOAT Not NULL);
+        '****
+        Dim objtransacao_MARTE As IDbTransaction
+        Dim transacaoAberta As Boolean = False
+        Dim Tarifarios As New DataTable
+        Dim conn_MARTE As IDbConnection = AcessoDados.Conectar(Dados.CONEXAO_MARTE)
+        Dim IDPosto As String
+        Dim DataInicio As Date
+        Dim CodItemTarifario As String
+        Dim DesItemTarifario As String
+        Dim Preco As Decimal
+
+        Dim LinhasEsquema As DataTable
+        Dim EncontradaPeloTarifario As Boolean
+
+        Dim ExportarLinhaTarifario As Boolean = False
+
+        Try
+            Log.GravarLog("EXECUÇÃO INICIADA.", pNomeArquivoLog)
+
+            Log.GravarLog("ZERANDO TABELA DE EXPORTE BRINT_CARGA_GT_RESULTADO", pNomeArquivoLog)
+            objtransacao_MARTE = conn_MARTE.BeginTransaction()
+            Dados.ApagaTodosRegistrosResultado(objtransacao_MARTE)
+            objtransacao_MARTE.Commit()
+
+            'Buscar os dados de todos os grupos tarifários
+            Log.GravarLog("INICIANDO BUSCA DOS GRUPOS TARIFARIOS.", pNomeArquivoLog)
+            Tarifarios = Dados.BuscarGruposTarifariosOT()
+            Log.GravarLog("FINALIZADA BUSCA DOS GRUPOS TARIFARIOS.", pNomeArquivoLog)
+
+            Log.GravarLog($"RETORNADOS {Tarifarios.Rows.Count} TARIFÁRIOS A EXPORTAR.", pNomeArquivoLog)
+            For Each Tarifario As DataRow In Tarifarios.Rows
+                'Verificar se o tarifario é de uma OT com ou sem linhas de esquema.
+                If (IsDBNull(Tarifario.Item("OID_PUESTOSXOT"))) Then
+                    'OT sem linha de esquema
+                    LinhasEsquema = Dados.RetornaLinhaEsquemaPorTarifario(Tarifario.Item("OID_GRUPO_TARIFARIO"))
+                    EncontradaPeloTarifario = True
+                Else
+                    'OT com linha de esquema
+                    LinhasEsquema = Dados.RetornaLinhaEsquema(Tarifario.Item("OID_PUESTOSXOT"))
+                    EncontradaPeloTarifario = False
+                End If
+
+                If (LinhasEsquema.Rows.Count > 0) Then
+                    If (LinhasEsquema.Rows.Count > 1) Then
+                        Dim mensagemErro = $"Encontrado mais de um OID_PUESTOSXOT {Tarifario.Item("OID_PUESTOSXOT")}"
+                        'Throw New Exception(mensagemErro)
+                    End If
+                    For Each linhaEsquema As DataRow In LinhasEsquema.Rows
+                        'Não exportaremos os grupos tarifários da linha de baixa.
+                        If (linhaEsquema.Item("des_condicion") <> "B") Then
+                            IDPosto = MontaIDPosto(linhaEsquema.Item("COD_EMPRESA_ERP"),
+                                                   linhaEsquema.Item("COD_CLIENTE"),
+                                                   linhaEsquema.Item("COD_SUBCLIENTE"),
+                                                   linhaEsquema.Item("COD_PUESTO"))
+                            'DEBUG
+                            'If (IDPosto = "B01|001056|13|1") Then
+                            '    Dim mensagemErro = "teste"
+                            'End If
+                            If (EncontradaPeloTarifario) Then
+                                DataInicio = Tarifario.Item("DATA_INICIO_OT")
+                            Else
+                                DataInicio = linhaEsquema.Item("FEC_INICIO_SERVICIO")
+                            End If
+
+                            CodItemTarifario = Tarifario.Item("COD_ITEM_TARIFA")
+                            DesItemTarifario = Tarifario.Item("DES_ITEM_TARIFA")
+                            'TODO: ZERAR PREÇOS DE ITENS DE TARIFA 30 E 31 DE POSTOS COMPLEMENTARES.
+                            If (linhaEsquema.Item("posto_principal") = "1" OrElse CodItemTarifario = "34") Then
+                                'Retorna os preços para todos os itens de tarifa de postos principais
+                                'e para o item de tarifa 34 para as linhas complementares
+                                Preco = Tarifario.Item("NUM_PRECIO")
+                            Else
+                                Preco = 0
+                            End If
+
+                            objtransacao_MARTE = conn_MARTE.BeginTransaction()
+                            transacaoAberta = True
+                            Dados.GravaTarifaParaExporte(objtransacao_MARTE,
+                                                         IDPosto,
+                                                         DataInicio,
+                                                         CodItemTarifario,
+                                                         DesItemTarifario,
+                                                         Preco,
+                                                         EncontradaPeloTarifario)
+                            objtransacao_MARTE.Commit()
+                            transacaoAberta = False
+                        End If
+                    Next
+                Else
+                    'Throw New Exception($"Não encontrado o OID_PUESTOSXOT {Tarifario.Item("OID_PUESTOSXOT")}")
+                    Log.GravarLog("NÃO FOI ENCONTRADA LINHA NA COPR_TPUESTOSXOT", pNomeArquivoLog)
+                    Log.GravarLog($"EncontradaPeloTarifario = {EncontradaPeloTarifario.ToString()}", pNomeArquivoLog)
+                    If (EncontradaPeloTarifario) Then
+                        Log.GravarLog($"NÃO FOI ENCONTRADA LINHA PELO FILTRO TARIFARIO '{Tarifario.Item("OID_GRUPO_TARIFARIO")}'", pNomeArquivoLog)
+                    Else
+                        Log.GravarLog($"NÃO FOI ENCONTRADA LINHA PELO FILTRO OID_PUESTOSXOT '{Tarifario.Item("OID_PUESTOSXOT")}'", pNomeArquivoLog)
+                    End If
+                End If
+
+            Next
+        Catch ex As Exception
+            If transacaoAberta Then
+                objtransacao_MARTE.Rollback()
+            End If
+            Throw ex
+        End Try
+
+    End Sub
+
+    Private Shared Function MontaIDPosto(pCodEmpresa As String,
+                                         pCodCliente As String,
+                                         pCodSubcliente As String,
+                                         pIDPosto As String) As String
+
+        Return pCodEmpresa.Trim() + "|" + pCodCliente.Trim() + "|" + pCodSubcliente.Trim() + "|" + pIDPosto.Trim()
+
+    End Function
+
+    Private Shared Sub ExportarGrupoTarifario(pNomeArquivo As String)
+
+
+
+    End Sub
+#End Region
 
     Public Shared Sub AlteraStatusProcessamento(ByVal ptexto As String)
         frmMigracao.txtStatus.Text = ptexto

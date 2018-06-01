@@ -17,9 +17,21 @@ Public Class Dados
         End Get
     End Property
 
+    Public Shared ReadOnly Property CONEXAO_MARTE_DSV() As String
+        Get
+            Return System.Configuration.ConfigurationManager.AppSettings("ConexaoMarteDSV")
+        End Get
+    End Property
+
     Public Shared ReadOnly Property CONEXAO_PROFAT() As String
         Get
             Return System.Configuration.ConfigurationManager.AppSettings("ConexaoPROFAT")
+        End Get
+    End Property
+
+    Public Shared ReadOnly Property CONEXAO_BRINTEGRACAO() As String
+        Get
+            Return System.Configuration.ConfigurationManager.AppSettings("ConexaoBRIntegracao")
         End Get
     End Property
 
@@ -1621,5 +1633,486 @@ Public Class Dados
 
 #End Region
 
+#Region "CargaPROFATPostos01"
+    Public Shared Function BuscarTMP_AcertoPROFAT() As DataTable
+        Using cmd As IDbCommand = DbHelper.AcessoDados.CriarComando(CONEXAO_MARTE)
 
+            cmd.CommandText = String.Format(My.Resources.Buscar_TMP_AcertoPROFAT, String.Empty)
+
+            Return DbHelper.AcessoDados.ExecutarDataTable(CONEXAO_MARTE, cmd)
+        End Using
+    End Function
+
+    Public Shared Function BuscarDadosPostosMARTE(ByVal pOIDPUEMAR As String) As DataTable
+        Using cmd As IDbCommand = DbHelper.AcessoDados.CriarComando(CONEXAO_MARTE)
+
+            Dim strFiltro As String
+            Dim strQuery = My.Resources.BUSCAR_POSTOS_MARTE
+
+            'validar que método de filtragem fazer.
+            If (pOIDPUEMAR.Contains("|")) Then
+                Dim aOIDPUEMAR As String() = pOIDPUEMAR.Split("|")
+
+                strFiltro = String.Format(" (e.cod_empresa_erp = '{0}' and ", aOIDPUEMAR(0).ToString().Trim())
+                'strFiltro = " ("
+                strFiltro = strFiltro & String.Format("c.cod_cliente = '{0}' and ", aOIDPUEMAR(1).ToString().Trim())
+                strFiltro = strFiltro & String.Format("s.cod_subcliente = '{0}' and ", aOIDPUEMAR(2).ToString().Trim())
+                strFiltro = strFiltro & String.Format("pot.cod_puesto = {0})", aOIDPUEMAR(3).ToString().Trim())
+
+            Else
+                strFiltro = String.Format(" (pot.oid_puestosxot = '{0}')", pOIDPUEMAR.ToString().Trim())
+            End If
+
+            cmd.CommandText = String.Format(My.Resources.BUSCAR_POSTOS_MARTE, strFiltro)
+
+            Return DbHelper.AcessoDados.ExecutarDataTable(CONEXAO_MARTE, cmd)
+        End Using
+    End Function
+
+    Public Shared Sub AtualizarTMP_AcertoPROFAT(ByRef objtransacao As IDbTransaction,
+                                                ByVal pCODUNICOPOSTO As String,
+                                                ByVal pFECHAINICIO As String,
+                                                ByVal pHORAFECHAINICIO As String,
+                                                ByVal pFECHAFIN As String,
+                                                ByVal pHORAFECHAFIN As String,
+                                                ByVal pDIASTRABAJO As String,
+                                                ByVal pTIPODIA As String,
+                                                ByVal pHORARIOS As String,
+                                                ByVal pNUMEROHORAS As String,
+                                                ByVal pINTERVALOALMUERZO As String,
+                                                ByVal pTRABAJAALMUERZO As String,
+                                                ByVal pOIDPUEMAR As String,
+                                                ByVal pQtdePostos As Integer,
+                                                ByVal pQtdePostosMARTE As String)
+        Dim qtdLinhas As Integer
+
+        Try
+            Using cmd As IDbCommand = objtransacao.Connection.CreateCommand()
+                cmd.Transaction = objtransacao
+                cmd.CommandText = My.Resources.UPDATE_TMP_ACERTOPROFAT
+
+                cmd.Parameters.Add(DbHelper.AcessoDados.CriarParametro(CONEXAO_MARTE, "pCODUNICOPOSTO", DbType.String, pCODUNICOPOSTO))
+                cmd.Parameters.Add(DbHelper.AcessoDados.CriarParametro(CONEXAO_MARTE, "pFECHAINICIO", DbType.String, pFECHAINICIO))
+                cmd.Parameters.Add(DbHelper.AcessoDados.CriarParametro(CONEXAO_MARTE, "pHORAFECHAINICIO", DbType.String, pHORAFECHAINICIO))
+                cmd.Parameters.Add(DbHelper.AcessoDados.CriarParametro(CONEXAO_MARTE, "pFECHAFIN", DbType.String, pFECHAFIN))
+                cmd.Parameters.Add(DbHelper.AcessoDados.CriarParametro(CONEXAO_MARTE, "pHORAFECHAFIN", DbType.String, pHORAFECHAFIN))
+                cmd.Parameters.Add(DbHelper.AcessoDados.CriarParametro(CONEXAO_MARTE, "pDIASTRABAJO", DbType.String, pDIASTRABAJO))
+                cmd.Parameters.Add(DbHelper.AcessoDados.CriarParametro(CONEXAO_MARTE, "pTIPODIA", DbType.String, pTIPODIA))
+                cmd.Parameters.Add(DbHelper.AcessoDados.CriarParametro(CONEXAO_MARTE, "pHORARIOS", DbType.String, pHORARIOS))
+                cmd.Parameters.Add(DbHelper.AcessoDados.CriarParametro(CONEXAO_MARTE, "pNUMEROHORAS", DbType.String, pNUMEROHORAS))
+                cmd.Parameters.Add(DbHelper.AcessoDados.CriarParametro(CONEXAO_MARTE, "pINTERVALOALMUERZO", DbType.String, pINTERVALOALMUERZO))
+                cmd.Parameters.Add(DbHelper.AcessoDados.CriarParametro(CONEXAO_MARTE, "pTRABAJAALMUERZO", DbType.String, pTRABAJAALMUERZO))
+                cmd.Parameters.Add(DbHelper.AcessoDados.CriarParametro(CONEXAO_MARTE, "pQtdePostos", DbType.Int16, pQtdePostos))
+                cmd.Parameters.Add(DbHelper.AcessoDados.CriarParametro(CONEXAO_MARTE, "pOIDPUEMAR", DbType.String, pOIDPUEMAR))
+                cmd.Parameters.Add(DbHelper.AcessoDados.CriarParametro(CONEXAO_MARTE, "pQtdePostosMARTE", DbType.String, pQtdePostosMARTE))
+
+                qtdLinhas = DbHelper.AcessoDados.ExecutarNonQuery(CONEXAO_MARTE, cmd)
+            End Using
+        Catch ex As Exception
+            Throw ex
+        End Try
+    End Sub
+
+#End Region
+
+#Region "PROFAT_CARGA-DUO"
+    Public Shared Function BuscarTMP_CARGAENVIOOTS() As DataTable
+
+        'A TABELA TMP_CARGAENVIOOTS FOI CRIADA EM DSV PORQUE O DUO USADO É DE DSV
+        Using cmd As IDbCommand = DbHelper.AcessoDados.CriarComando(CONEXAO_MARTE_DSV)
+
+            cmd.CommandText = String.Format(My.Resources.BUSCAR_DADOS_TEMPORARIA_N0, String.Empty)
+
+            Return DbHelper.AcessoDados.ExecutarDataTable(CONEXAO_MARTE_DSV, cmd)
+        End Using
+
+    End Function
+
+    Public Shared Function BuscarPostosListaPROFAT(ByVal pCodEmpresaERP As String,
+                                                   ByVal pCodCliente As String,
+                                                   ByVal pCodSubCliente As String) As DataTable
+
+        Dim strWhereLike As String
+        strWhereLike = pCodEmpresaERP.Trim() & "|" & pCodCliente.Trim() & "|" & pCodSubCliente.Trim() & "|"
+
+        Using cmd As IDbCommand = DbHelper.AcessoDados.CriarComando(CONEXAO_MARTE_DSV)
+
+            cmd.CommandText = String.Format(My.Resources.BUSCAR_DADOS_TEMPORARIA, strWhereLike)
+
+            'A TABELA TMP_CARGAENVIOOTS FOI CRIADA EM DSV PORQUE O DUO USADO É DE DSV
+            Return DbHelper.AcessoDados.ExecutarDataTable(CONEXAO_MARTE_DSV, cmd)
+        End Using
+
+    End Function
+
+    Public Shared Function BuscarOTPorEmpresaClienteSubPosto(ByVal pCodEmpresaERP As String,
+                                                             ByVal pCodCliente As String,
+                                                             ByVal pCodSubCliente As String,
+                                                             ByVal pListaPostosIN As String) As DataTable
+
+        Dim strQuery As String
+
+        Using cmd As IDbCommand = DbHelper.AcessoDados.CriarComando(CONEXAO_MARTE)
+
+            strQuery = My.Resources.BUSCAROTSPOREMPRESACLISUBPOSTO
+            strQuery = strQuery & $" where c.cod_cliente = '{pCodCliente}'" & Environment.NewLine
+            strQuery = strQuery & $"   and s.cod_subcliente = '{pCodSubCliente}'" & Environment.NewLine
+            strQuery = strQuery & $"   and e.cod_empresa_erp = '{pCodEmpresaERP}'" & Environment.NewLine
+            strQuery = strQuery & $"   and pot.cod_puesto in ({pListaPostosIN})" & Environment.NewLine
+            strQuery = strQuery & $"   and ot.oid_situacion_ot = 'APR'" & Environment.NewLine
+            strQuery = strQuery & " Order by ot.fec_inicio"
+
+            cmd.CommandText = strQuery
+
+            'AQUI JÁ SE CONSULTA PRODUÇÃO, PORQUE VAMOS BUSCAR AS OTS DE PROD.
+            Return DbHelper.AcessoDados.ExecutarDataTable(CONEXAO_MARTE, cmd)
+        End Using
+
+    End Function
+
+    Public Shared Function AgendarSincronizacaoDUOOT(ByVal pCodEmpresa As String,
+                                                     ByVal pCodCliente As String,
+                                                     ByVal pCodSubcliente As String,
+                                                     ByVal pCodOT As String,
+                                                     ByVal pCodClassificacao As String,
+                                                     ByVal pCodComprovante As String,
+                                                     ByVal pDataProgramacao As Date,
+                                                     ByRef pObjTransacao As IDbTransaction) As String
+        Dim qtdeOTAgendada As Integer
+        Dim chaveItem As String
+        Dim retOID_ITEM_PROCESSO As String = String.Empty
+        Dim strQuery As String = String.Empty
+
+        'Montar a chave do item (DES_VALOR).
+        chaveItem = $"'|{pCodEmpresa.Trim}|{pCodCliente.Trim}|{pCodSubcliente.Trim}|{pCodOT.Trim}|{pCodClassificacao.Trim}|{pCodComprovante.Trim}|'"
+
+        strQuery = "DUO_05."
+        strQuery = strQuery & "DUPR_SCREAR_ITEM_2("
+        strQuery = strQuery & "'MRT_INT_OT',"
+        strQuery = strQuery & $"{chaveItem},"
+        strQuery = strQuery & "0,"
+        strQuery = strQuery & "'OM13.Migra',"
+        strQuery = strQuery & $"to_date('{pDataProgramacao.ToString()}','DD-MM-YYYY HH24:MI:SS'),"
+        strQuery = strQuery & "'OT_',"
+        strQuery = strQuery & "V_OID_ITEM_PROCESO"
+        strQuery = strQuery & ");"
+        Log.GravarLog(strQuery, "DUO_STREAM.TXT")
+
+        Try
+            'Using cmd As IDbCommand = pObjTransacao.Connection.CreateCommand()
+            '    cmd.Transaction = pObjTransacao
+            '    'cmd.CommandText = strQuery
+            '    cmd.CommandText = "DUO_05.DUPR_SCREAR_ITEM_2"
+            '    cmd.CommandType = CommandType.StoredProcedure
+
+            '    'Dim param As OracleClient.OracleParameter
+
+            '    'param = New OracleClient.OracleParameter("COD_PROCESSO", oracleType:=OracleClient.OracleType.VarChar)
+            '    'param.Direction = ParameterDirection.Input
+            '    'param.Size = 15
+            '    'param.Value = "MRT_INT_OT"
+            '    'cmd.Parameters.Add(param)
+
+            '    'param = New OracleClient.OracleParameter("DES_VALOR", oracleType:=OracleClient.OracleType.VarChar)
+            '    'param.Direction = ParameterDirection.Input
+            '    'param.Size = 4000
+            '    'param.Value = chaveItem
+            '    'cmd.Parameters.Add(param)
+
+            '    'param = New OracleClient.OracleParameter("BOL_POSEE_DEPENDENCIA", oracleType:=OracleClient.OracleType.Number)
+            '    'param.Direction = ParameterDirection.Input
+            '    'param.Value = 0
+            '    'cmd.Parameters.Add(param)
+
+            '    'param = New OracleClient.OracleParameter("DES_ORIGEN", oracleType:=OracleClient.OracleType.VarChar)
+            '    'param.Direction = ParameterDirection.Input
+            '    'param.Size = 50
+            '    'param.Value = "OM13.Migra"
+            '    'cmd.Parameters.Add(param)
+
+            '    'param = New OracleClient.OracleParameter("FYH_PROGRAMACION", oracleType:=OracleClient.OracleType.DateTime)
+            '    'param.Direction = ParameterDirection.Input
+            '    'param.Value = Convert.ToDateTime("2018-02-19") 'pDataProgramacao
+            '    'cmd.Parameters.Add(param)
+
+            '    'param = New OracleClient.OracleParameter("COD_PREFIJO", oracleType:=OracleClient.OracleType.VarChar)
+            '    'param.Direction = ParameterDirection.Input
+            '    'param.Value = "OT_"
+            '    'cmd.Parameters.Add(param)
+
+            '    'param = New OracleClient.OracleParameter("OID_ITEM_PROCESO", oracleType:=OracleClient.OracleType.VarChar)
+            '    'param.Size = 36
+            '    'param.Direction = ParameterDirection.Output
+            '    ''param.Value = retOID_ITEM_PROCESSO
+            '    'cmd.Parameters.Add(param)
+
+            '    'cmd.ExecuteNonQuery()
+
+            '    'retOID_ITEM_PROCESSO = param.Value
+
+            '    'cmd.Parameters.Add(DbHelper.AcessoDados.CriarParametro(CONEXAO_MARTE_DSV, "COD_PROCESO", DbType.String, "MRT_INT_OT"))
+            '    'cmd.Parameters.Add(DbHelper.AcessoDados.CriarParametro(CONEXAO_MARTE_DSV, "DES_VALOR", DbType.String, chaveItem))
+            '    'cmd.Parameters.Add(DbHelper.AcessoDados.CriarParametro(CONEXAO_MARTE_DSV, "BOL_POSEE_DEPENDENCIA", DbType.Int16, 0))
+            '    'cmd.Parameters.Add(DbHelper.AcessoDados.CriarParametro(CONEXAO_MARTE_DSV, "DES_ORIGEN", DbType.String, "MIGRA"))
+            '    'cmd.Parameters.Add(DbHelper.AcessoDados.CriarParametro(CONEXAO_MARTE_DSV, "FYH_PROGRAMACION", DbType.Date, pDataProgramacao))
+            '    'cmd.Parameters.Add(DbHelper.AcessoDados.CriarParametro(CONEXAO_MARTE_DSV, "COD_PREFIJO", DbType.String, "OT_"))
+            '    'cmd.Parameters.Add(DbHelper.AcessoDados.CriarParametro(CONEXAO_MARTE_DSV, "OID_ITEM_PROCESO", DbType.String, retOID_ITEM_PROCESSO))
+
+
+            '    'EXECUTA O AGENDAMENTO NO MARTE DE DSV.
+            '    'DbHelper.AcessoDados.ExecutarNonQuery(CONEXAO_MARTE_DSV, cmd)
+
+            'End Using
+
+            Return retOID_ITEM_PROCESSO
+
+        Catch ex As Exception
+            Throw ex
+        End Try
+
+    End Function
+#End Region
+
+#Region "GERAR_PAYLOAD"
+    Public Shared Function BuscarPAYLOADS(ByVal p_DataEntrada As Date,
+                                          ByVal p_oidIntegracao As String) As DataTable
+
+        Dim strQuery As String
+
+        strQuery = $"select h.fyh_entrada,       
+                            h.obs_cod_legado,
+                            p.obs_payload,
+                            p.fyh_entrada
+                       from brintegracao.copr_tintegracao_historico h
+                 inner join brintegracao.copr_tintegracao_status s on h.oid_status = s.oid_status
+                 inner join brintegracao.copr_tintegracao_log_atividade a on a.oid_historico = h.oid_historico
+                 inner join brintegracao.copr_tintegracao_payload p on p.oid_atividade = a.oid_atividade
+                      where oid_integracao = '{p_oidIntegracao}'
+                        and h.fyh_entrada >= '{p_DataEntrada.ToShortDateString()}' 
+                   order by h.fyh_entrada"
+
+        'A TABELA TMP_CARGAENVIOOTS FOI CRIADA EM DSV PORQUE O DUO USADO É DE DSV
+        Using cmd As IDbCommand = DbHelper.AcessoDados.CriarComando(CONEXAO_BRINTEGRACAO)
+
+            cmd.CommandText = strQuery
+
+            Return DbHelper.AcessoDados.ExecutarDataTable(CONEXAO_BRINTEGRACAO, cmd)
+        End Using
+
+    End Function
+#End Region
+
+#Region "ExportarGruposTarifarios"
+    Public Shared Function BuscarGruposTarifariosOT() As DataTable
+
+        Dim strQuery As String
+
+        strQuery = $"select ot.fec_inicio data_inicio_ot
+                            ,it.cod_item_tarifa
+                            ,it.des_item_tarifa
+                            ,tot.num_precio
+                            ,gt.cod_grupo_tarifario
+                            ,gt.oid_grupo_tarifario
+                            ,pot.oid_puestosxot
+                            ,pot.fec_inicio_servicio data_inicio_posto
+                       from marte.copr_tot ot
+                 inner join marte.copr_ttarifarioxot tot   on tot.oid_ot = ot.oid_ot
+                 inner join marte.copr_titemsxgrupo ig     on ig.oid_itemxgrupo = tot.oid_itemxgrupo
+                 inner join marte.copr_tgrupo_tarifario gt on gt.oid_grupo_tarifario = ig.oid_grupo_tarifario
+                 inner join marte.copr_titem_tarifa it     on it.oid_item_tarifa = ig.oid_item_tarifa
+                 inner join marte.copr_tcliente c          on ot.oid_cliente = c.oid_cliente
+                 inner join marte.copr_tsubcliente s       on ot.oid_subcliente = s.oid_subcliente
+                  left join marte.copr_tpuestosxot pot     on ot.oid_ot = pot.oid_ot
+                                                          and pot.oid_grupo_tarifario = gt.oid_grupo_tarifario
+                      where ot.oid_situacion_ot = 'APR'"
+        'USADO PARA TESTES, o conjunto inteiro é muito grande.
+        '        strQuery = strQuery + " and c.cod_cliente = '001056' and s.cod_subcliente = '13'"
+        'ORDENAÇÃO NECESSÁRIA PARA GARANTIR QUE O PREÇO COM DATA REGISTRO MAIS RECENTE (DO CASO DE MAIS DE UM PREÇO PARA O MESMO DIA) É O QUE SERÁ EXPORTADO.
+        strQuery = strQuery + " order by ot.fec_inicio, ot.fec_registracion"
+
+        Using cmd As IDbCommand = DbHelper.AcessoDados.CriarComando(CONEXAO_MARTE)
+            cmd.CommandText = strQuery
+            Return DbHelper.AcessoDados.ExecutarDataTable(CONEXAO_MARTE, cmd)
+        End Using
+
+    End Function
+
+    Public Shared Function RetornaLinhaEsquema(pOIDPUESTOSXOT As String) As DataTable
+        Dim strQuery As String
+
+        strQuery = $"select e.cod_empresa_erp
+                           ,c.cod_cliente
+                           ,s.cod_subcliente
+                           ,p.cod_puesto
+                           ,p.fec_inicio_servicio
+                           ,p.des_condicion
+                           ,p.oid_puestosxot
+                           ,es.bol_principal posto_principal
+                       from marte.copr_tpuestosxot p
+                 inner join marte.copr_tot ot        on ot.oid_ot = p.oid_ot
+                 inner join marte.copr_tsubcliente s on s.oid_subcliente = ot.oid_subcliente
+                 inner join marte.copr_tcliente c    on c.oid_cliente = ot.oid_cliente
+                 inner join marte.copr_tempresa e    on e.oid_empresa = ot.oid_empresa
+                 inner join marte.copr_tescala es    on es.oid_escala = p.oid_escala
+                      where oid_puestosxot = '{pOIDPUESTOSXOT}'"
+
+        Using cmd As IDbCommand = DbHelper.AcessoDados.CriarComando(CONEXAO_MARTE)
+            cmd.CommandText = strQuery
+            Return DbHelper.AcessoDados.ExecutarDataTable(CONEXAO_MARTE, cmd)
+        End Using
+
+    End Function
+
+    Public Shared Function RetornaLinhaEsquemaPorTarifario(pOIDGRUPOTARIFARIO As String) As DataTable
+        Dim strQuery As String
+
+        'ROGER
+        'Coloquei no filtro p.des_condicion in ('A','M') porque encontrei casos de postos que para um dado GT não tem A, tem somente M ou B.
+        'No select coloquei DISTINCT para não trazer todos os M do mesmo GT e assim duplicar a saída, tendo o mesmo preço N vezes
+        strQuery = $"select distinct 
+                            e.cod_empresa_erp
+                           ,c.cod_cliente
+                           ,s.cod_subcliente
+                           ,p.cod_puesto
+                           ,'A' des_condicion
+                           ,es.bol_principal posto_principal
+                       from marte.copr_tpuestosxot p
+                 inner join marte.copr_tot ot        on ot.oid_ot = p.oid_ot
+                 inner join marte.copr_tsubcliente s on s.oid_subcliente = ot.oid_subcliente
+                 inner join marte.copr_tcliente c    on c.oid_cliente = ot.oid_cliente
+                 inner join marte.copr_tempresa e    on e.oid_empresa = ot.oid_empresa
+                 inner join marte.copr_tescala  es   on es.oid_escala = p.oid_escala
+                      where p.oid_grupo_tarifario = '{pOIDGRUPOTARIFARIO}'
+                        and p.des_condicion in ('A','M')"
+
+        Using cmd As IDbCommand = DbHelper.AcessoDados.CriarComando(CONEXAO_MARTE)
+            cmd.CommandText = strQuery
+            Return DbHelper.AcessoDados.ExecutarDataTable(CONEXAO_MARTE, cmd)
+        End Using
+
+    End Function
+
+    Public Shared Sub GravaTarifaParaExporte(ByRef objtransacao As IDbTransaction,
+                                             pIDPosto As String,
+                                             pDataInicio As Date,
+                                             pCodItemTarifario As String,
+                                             pDesItemTarifario As String,
+                                             pPreco As Decimal,
+                                             pEncontradaPeloTarifario As Boolean)
+        Dim qtdLinhas As Integer
+        Dim strSQL As String
+        Dim JaExistePostoNaData As Boolean
+
+        Try
+            'TRATAMENTO PARA CASOS DO PASSADO QUE TEM MAIS DE UM PREÇO PARA O MESMO POSTO NA MESMA DATA DE INÍCIO
+            'IREMOS MANTER O PREÇO DA OT COM DATA DE REGISTRO MAIS NOVA, PORQUE PELO QUE NOTEI É ASSIM QUE A OT VIVA FAZ.
+            strSQL = $"select *
+                         from BRINT_CARGA_GT_RESULTADO
+                        where IDPOSTO = :IDPOSTO
+                          and DATA_INICIO = :DATA_INICIO
+                          and COD_ITEM_TARIFA = :COD_ITEM_TARIFA"
+
+            Using cmd As IDbCommand = DbHelper.AcessoDados.CriarComando(CONEXAO_MARTE)
+                Dim consultaCarga As DataTable
+                cmd.CommandText = strSQL
+
+                cmd.Parameters.Add(DbHelper.AcessoDados.CriarParametro(CONEXAO_MARTE, "IDPOSTO", DbType.String, pIDPosto))
+                cmd.Parameters.Add(DbHelper.AcessoDados.CriarParametro(CONEXAO_MARTE, "DATA_INICIO", DbType.Date, pDataInicio))
+                cmd.Parameters.Add(DbHelper.AcessoDados.CriarParametro(CONEXAO_MARTE, "COD_ITEM_TARIFA", DbType.String, pCodItemTarifario))
+
+                consultaCarga = DbHelper.AcessoDados.ExecutarDataTable(CONEXAO_MARTE, cmd)
+                If (consultaCarga.Rows.Count > 0) Then
+                    JaExistePostoNaData = True
+                Else
+                    JaExistePostoNaData = False
+                End If
+            End Using
+
+            If JaExistePostoNaData Then
+                strSQL = $"Update BRINT_CARGA_GT_RESULTADO
+                              set PRECO = :PRECO
+                            where IDPOSTO = :IDPOSTO
+                              and DATA_INICIO = :DATA_INICIO
+                              and COD_ITEM_TARIFA = :COD_ITEM_TARIFA"
+
+                Using cmd As IDbCommand = objtransacao.Connection.CreateCommand()
+                    cmd.Transaction = objtransacao
+                    cmd.CommandText = strSQL
+
+                    cmd.Parameters.Add(DbHelper.AcessoDados.CriarParametro(CONEXAO_MARTE, "IDPOSTO", DbType.String, pIDPosto))
+                    cmd.Parameters.Add(DbHelper.AcessoDados.CriarParametro(CONEXAO_MARTE, "DATA_INICIO", DbType.Date, pDataInicio))
+                    cmd.Parameters.Add(DbHelper.AcessoDados.CriarParametro(CONEXAO_MARTE, "COD_ITEM_TARIFA", DbType.String, pCodItemTarifario))
+                    cmd.Parameters.Add(DbHelper.AcessoDados.CriarParametro(CONEXAO_MARTE, "PRECO", DbType.Decimal, pPreco))
+
+                    qtdLinhas = DbHelper.AcessoDados.ExecutarNonQuery(CONEXAO_MARTE, cmd)
+                End Using
+            Else
+                strSQL = $"Insert into BRINT_CARGA_GT_RESULTADO 
+                                      (IDPOSTO , DATA_INICIO , COD_ITEM_TARIFA , DES_ITEM_TARIFA , PRECO , PELOTARIFARIO)
+                                Values
+                                      (:IDPOSTO, :DATA_INICIO, :COD_ITEM_TARIFA, :DES_ITEM_TARIFA, :PRECO, :PELOTARIFARIO)"
+
+                Using cmd As IDbCommand = objtransacao.Connection.CreateCommand()
+                    cmd.Transaction = objtransacao
+                    cmd.CommandText = strSQL
+
+                    cmd.Parameters.Add(DbHelper.AcessoDados.CriarParametro(CONEXAO_MARTE, "IDPOSTO", DbType.String, pIDPosto))
+                    cmd.Parameters.Add(DbHelper.AcessoDados.CriarParametro(CONEXAO_MARTE, "DATA_INICIO", DbType.Date, pDataInicio))
+                    cmd.Parameters.Add(DbHelper.AcessoDados.CriarParametro(CONEXAO_MARTE, "COD_ITEM_TARIFA", DbType.String, pCodItemTarifario))
+                    cmd.Parameters.Add(DbHelper.AcessoDados.CriarParametro(CONEXAO_MARTE, "DES_ITEM_TARIFA", DbType.String, pDesItemTarifario))
+                    cmd.Parameters.Add(DbHelper.AcessoDados.CriarParametro(CONEXAO_MARTE, "PRECO", DbType.Decimal, pPreco))
+                    cmd.Parameters.Add(DbHelper.AcessoDados.CriarParametro(CONEXAO_MARTE, "PELOTARIFARIO", DbType.Int32, Convert.ToInt32(pEncontradaPeloTarifario)))
+
+                    qtdLinhas = DbHelper.AcessoDados.ExecutarNonQuery(CONEXAO_MARTE, cmd)
+                End Using
+            End If
+
+        Catch ex As Exception
+            Throw ex
+        End Try
+
+    End Sub
+
+    Public Shared Sub ApagaTodosRegistrosResultado(ByRef objtransacao As IDbTransaction)
+        Dim qtdLinhas As Integer
+        Dim strSQL As String
+
+        strSQL = $"delete from BRINT_CARGA_GT_RESULTADO"
+
+        Try
+            Using cmd As IDbCommand = objtransacao.Connection.CreateCommand()
+                cmd.Transaction = objtransacao
+                cmd.CommandText = strSQL
+
+                qtdLinhas = DbHelper.AcessoDados.ExecutarNonQuery(CONEXAO_MARTE, cmd)
+            End Using
+        Catch ex As Exception
+            Throw ex
+        End Try
+    End Sub
+
+#End Region
+
+#Region "MAPEAR ENTIDADES"
+    Public Shared Function BuscarPostos() As DataTable
+
+        'BUSCA A TABELA TEMPORÁRIA, SE TIVER DADOS VAI POR ELA.
+        'SENÃO, VAI BUSCAR OS ÚLTIMOS POSTOS APROVADOS (COMO CONFIGURAR A DATA DE FILTRAGEM?)
+
+        Dim strSQL As String
+        strSQL = "select * from BRINT_BUSCAR_POSTOS"
+
+        'TODO: melhorar, se não encontrar esta tabela ir pelas últimas OTs aprovadas, posto a posto.
+
+        Using cmd As IDbCommand = DbHelper.AcessoDados.CriarComando(CONEXAO_MARTE)
+
+            cmd.CommandText = String.Format(strSQL, String.Empty)
+
+            Return DbHelper.AcessoDados.ExecutarDataTable(CONEXAO_MARTE, cmd)
+        End Using
+
+    End Function
+
+
+#End Region
 End Class

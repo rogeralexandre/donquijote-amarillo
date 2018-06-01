@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.IO;
+using Newtonsoft.Json;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Prosegur.Processo.BuscarLatLong.Comum
 {
@@ -26,6 +25,37 @@ namespace Prosegur.Processo.BuscarLatLong.Comum
             Log.AddLog($"Endereço: {sbEndereco.ToString()}", Enum.ETipoLog.Info);
 
             return sbEndereco.ToString();
+        }
+
+        public static void GravarJSON(string pCaminho, ChamadasAPI pChamadas)
+        {
+            String nomeArquivo;
+            nomeArquivo = pCaminho + Constantes.NomeJSONControleExecucoes;
+
+            // serialize JSON to a string and then write string to a file
+            //File.WriteAllText(nomeArquivo, JsonConvert.SerializeObject(pChamadas));
+
+            // serialize JSON directly to a file
+            using (StreamWriter file = File.CreateText(nomeArquivo))
+            {
+                JsonSerializer serializer = new JsonSerializer();
+                serializer.Serialize(file, pChamadas);
+            }
+        }
+        
+        public static ChamadasAPI LerJSON(string pCaminho)
+        {
+            ChamadasAPI Chamadas;
+            String nomeArquivo;
+            nomeArquivo = pCaminho + Constantes.NomeJSONControleExecucoes;
+
+            // deserialize JSON directly from a file
+            using (StreamReader file = File.OpenText(nomeArquivo))
+            {
+                JsonSerializer serializador = new JsonSerializer();
+                Chamadas = (ChamadasAPI)serializador.Deserialize(file, typeof(ChamadasAPI));
+            }
+            return Chamadas;
         }
     }
 }
